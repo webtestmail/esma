@@ -1,0 +1,14 @@
+[20-Nov-2025 09:48:58 UTC] PHP Fatal error:  Cannot declare class App\Models\User because the name is already in use in /home2/matebyas/public_html/social-fox/app/Models/User.php on line 11
+[29-Nov-2025 10:50:53 UTC] PHP Fatal error:  Cannot declare class App\Http\Controllers\InstagramController, because the name is already in use in /home2/matebyas/public_html/social-fox/app/Http/Controllers/facebookController.php on line 13
+[03-Dec-2025 12:14:28 UTC] PHP Fatal error:  Cannot declare class App\Services\InstagramService, because the name is already in use in /home2/matebyas/public_html/social-fox/app/Services/InstagramGraphService.php on line 7
+[10-Dec-2025 09:50:38 UTC] PHP Fatal error:  Trait "App\Http\Controllers\Illuminate\Support\Facades\Auth" not found in /home2/matebyas/socialfox.matebiz.co/app/Http/Controllers/facebookController.php on line 15
+[10-Dec-2025 09:51:08 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::userprofile() in /home2/matebyas/socialfox.matebiz.co/app/Models/User.php on line 82
+[28-Dec-2025 09:07:31 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\BrandPaymentController::initiatePayment() in /home2/matebyas/socialfox.matebiz.co/app/Http/Controllers/BrandPaymentController.php on line 78
+[05-Jan-2026 07:20:29 UTC] PHP Fatal error:  Trait "App\Jobs\Dispatchable" not found in /home2/matebyas/socialfox.matebiz.co/app/Jobs/ProcessCampaignImages.php on line 8
+[05-Jan-2026 07:22:01 UTC] PHP Fatal error:  Trait "App\Jobs\Dispatchable" not found in /home2/matebyas/socialfox.matebiz.co/app/Jobs/ProcessCampaignImages.php on line 8
+[05-Jan-2026 07:43:42 UTC] PHP Fatal error:  Trait "App\Jobs\Dispatchable" not found in /home2/matebyas/socialfox.matebiz.co/app/Jobs/ProcessCampaignImages.php on line 8
+[05-Jan-2026 07:49:10 UTC] PHP Fatal error:  Trait "App\Jobs\Queueable" not found in /home2/matebyas/socialfox.matebiz.co/app/Jobs/ProcessCampaignImages.php on line 12
+[04-Feb-2026 08:04:41 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Admin\PlansController::featurePlans() in /home2/matebyas/socialfox.matebiz.co/app/Http/Controllers/Admin/PlansController.php on line 24
+[05-Feb-2026 21:42:03 UTC] PHP Fatal error:  Trait "App\Models\HasApiTokens" not found in /home2/matebyas/socialfox.matebiz.co/app/Models/User.php on line 11
+[06-Feb-2026 10:08:40 UTC] PHP Fatal error:  Trait "App\Models\HasApiTokens" not found in /home2/matebyas/socialfox.matebiz.co/app/Models/User.php on line 11
+[10-Feb-2026 10:40:43 UTC] PHP Fatal error:  Trait "App\Models\Admin\HasFactory" not found in /home2/matebyas/socialfox.matebiz.co/app/Models/Admin/DashboardFeatures.php on line 7
