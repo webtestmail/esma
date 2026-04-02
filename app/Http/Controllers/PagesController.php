@@ -34,6 +34,12 @@ class PagesController extends Controller
         ];
     }
 
+    public function get_pagesection($id) {
+        return Pages::select('header_footer_name', 'client_page_urls')
+            ->whereIn('visibility', ['both', 'header'])
+            ->where('status', 'active')->where('id', $id)->first();
+    }
+
     private function footer()
     {
         $company = Company::find(1);
@@ -76,9 +82,9 @@ class PagesController extends Controller
             $data['meta_title'] = $page->meta_title;
             $data['meta_keyword'] = $page->meta_keyword;
             $data['meta_description'] = $page->meta_description;
-            $data['breadcrumb_headline'] = $page->breadcrumb_headline;
-            $data['breadcrumb_image'] = $page->page_image;
-            $data['breadcrumb_description'] = $page->breadcrumb_description;
+            // $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            // $data['breadcrumb_image'] = $page->page_image;
+            // $data['breadcrumb_description'] = $page->breadcrumb_description;
             $headerData = $this->header();
             $footerData = $this->footer();
             return response()->view('about', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);

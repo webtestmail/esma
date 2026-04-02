@@ -17,7 +17,8 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
    
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+       {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,9 +81,15 @@ input.is-invalid, select.is-invalid {
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('about') }}">About</a>
+                    <a href="javascript:void(0)">About</a>
+                    @php
+                        
+                        $aboutData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 6]);
+                    @endphp
                     <ul class="dropdown-menu">
-                        <li><a href="">ESMA International Network</a></li>
+                        @if(isset($aboutData))
+                        <li><a href="{{ $aboutData->client_page_urls }}">{{ $aboutData->header_footer_name }}</a></li>
+                        @endif
                         <li><a href="{{ route('membership') }}">Membership</a></li>
                         <li><a href="{{ route('contact') }}">Contact Us</a></li>
                         <li><a href="{{ route('help.center') }}">Help Center</a></li>

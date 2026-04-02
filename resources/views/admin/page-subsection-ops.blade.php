@@ -96,8 +96,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="subsection_headline" class="form-label">Sub-Section Headline <span
-                                            class="text-danger">*</span></label>
+                                    <label for="subsection_headline" class="form-label">Sub-Section Headline </label>
                                     <input type="text" class="form-control" id="subsection_headline"
                                         name="subsection_headline"
                                         value="{{ !empty($subsection->encrypted_id) ? $subsection->section_headline : old('subsection_headline') }}"
@@ -117,8 +116,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="description" class="form-label">Description <span
-                                            class="text-danger">*</span></label>
+                                    <label for="description" class="form-label">Description </label>
                                     <textarea name="description" id="description" cols="30" rows="10" class="form-control"
                                         placeholder="Enter Description">{{ !empty($subsection->encrypted_id) ? htmlspecialchars_decode($subsection->description) : old('description') }}</textarea>
                                     @error('description')
@@ -126,8 +124,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="botton" class="form-label">Button <span
-                                            class="text-danger">*</span></label>
+                                    <label for="botton" class="form-label">Button</label>
                                     <div class="row">
                                         <div class="col-6">
                                             <input type="text" class="form-control" id="button_name"
@@ -156,8 +153,7 @@
                         <div class="card stretch stretch-full">
                             <div class="card-body">
                                 <div class="mb-4">
-                                    <label for="subsection_image" class="form-label">Sub-Section Image <span
-                                            class="text-danger">*</span></label>
+                                    <label for="subsection_image" class="form-label">Sub-Section Image</label>
                                     @if (!empty($subsection->encrypted_id) && !empty($subsection->section_image))
                                         <div class="my-3">
                                             <div class="img-group lh-0 ms-3 justify-content-start d-none d-sm-flex">
