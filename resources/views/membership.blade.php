@@ -336,20 +336,7 @@
                                 </div>
                             </div>
                          @endforeach
-                            {{-- <div class="col-lg-4">
-                                <div class="join-card">
-                                    <div class="join-icon"><img src="images/j-4.png" alt=""></div>
-                                    <div class="join-title">Recommendation</div>
-                                    <p>A recommendation by an existing ESMA member strengthens your application.</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="join-card">
-                                    <div class="join-icon"><img src="images/j-5.png" alt=""></div>
-                                    <div class="join-title">Governance</div>
-                                    <p>Each application is screened by ESMA’s CEO and requires Board approval.</p>
-                                </div>
-                            </div> --}}
+                          
                         </div>
                     </div>
                     @endif
@@ -360,106 +347,82 @@
                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                 </svg>
 
+
+                   @php
+                        $section_four = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(79);
+                    @endphp
+                    @if($section_four)
                 <div class="step-flow">
                     <div class="steps-count">
                         <div>
                             <span>Step 02</span>
-                            <p class="m-0">Learn About Membership Categories</p>
+                            <p class="m-0">{{ $section_four->section_title ?? ''}}</p>
                         </div>
                         <svg class="svg-icon">
-                            <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                            <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                         </svg>
                     </div>
+                    @if($section_four->sub_sections)
                     <div class="steps-content ">
                         <div class="row mobilejoinSlider">
+                            @foreach($section_four->sub_sections as $section)
                             <div class="col-lg-4">
                                 <div class="join-card card-two">
-                                    <div class="join-icon"><img src="images/j-6.png" alt=""></div>
-                                    <div class="join-title">International Membership</div>
-                                    <p>Open to non-European agents, distributors, and manufacturers of packaged consumer
-                                        goods worldwide.</p>
+                                    <div class="join-icon"><img src="{{ asset($section->section_image ?? '')}}" alt=""></div>
+                                    <div class="join-title">{{ $section->section_title ?? '' }}</div>
+                                    {!! $section->section_subtitle ?? '' !!}
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="join-card card-two">
-                                    <div class="join-icon"><img src="images/j-7.png" alt=""></div>
-                                    <div class="join-title">Associate Membership</div>
-                                    <p>Available to associations and organizations working in the packaged consumer
-                                        goods industry.</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="join-card card-two">
-                                    <div class="join-icon"><img src="images/j-8.png" alt=""></div>
-                                    <div class="join-title">Corporate Membership</div>
-                                    <p>Available to organizations with interests associated with the packaged consumer
-                                        goods industry.</p>
-                                </div>
-                            </div>
+                            @endforeach
+                           
                         </div>
                     </div>
+                    @endif
                 </div>
+                @endif
 
                 <!-- Mobile arrow  -->
                 <svg class="d-lg-none step-out-arrow">
-                    <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                 </svg>
 
+
+                    @php
+                        $section_five = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(83);
+                    @endphp
+
+                @if($section_five)
                 <div class="step-flow">
                     <div class="steps-count">
                         <div>
                             <span>Step 03</span>
-                            <p class="m-0">Step-by-step instructions on how to apply</p>
+                            <p class="m-0">{{ $section_five->section_title ?? '' }}</p>
                         </div>
                         <svg class="svg-icon">
-                            <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                            <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                         </svg>
                     </div>
+                    @if($section_five->sub_sections)
                     <div class="steps-content">
                         <div class="row mobilejoinSlider">
+                            @foreach($section_five->sub_sections as $key => $section)
                             <div class="col-lg-3">
                                 <div class="join-card card-three">
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <div class="join-icon"><img src="images/j-8.png" alt=""></div>
+                                        <div class="join-icon"><img src="{{ asset($section->section_image ?? '') }}" alt=""></div>
                                         <div class="line"></div>
-                                        <div class="join-title">01</div>
+                                        <div class="join-title">0{{ $key + 1 }}</div>
                                     </div>
-                                    <p>Request an invitation by submitting the application form below.</p>
+                                    <p>{{ $section->section_title ?? '' }}</p>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="join-card card-three">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="join-icon"><img src="images/j-10.png" alt=""></div>
-                                        <div class="line"></div>
-                                        <div class="join-title">02</div>
-                                    </div>
-                                    <p>Review and CEO screening.</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="join-card card-three">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="join-icon"><img src="images/j-11.png" alt=""></div>
-                                        <div class="line"></div>
-                                        <div class="join-title">03</div>
-                                    </div>
-                                    <p>Board decision.</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="join-card card-three">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="join-icon"><img src="images/j-12.png" alt=""></div>
-                                        <div class="line"></div>
-                                        <div class="join-title">04</div>
-                                    </div>
-                                    <p>Onboarding, member profile setup, and access to benefits.</p>
-                                </div>
-                            </div>
+                            @endforeach
+                           
                         </div>
                     </div>
+                    @endif
                 </div>
+                @endif
 
                 <!-- Mobile arrow  -->
                 <svg class="d-lg-none step-out-arrow">
