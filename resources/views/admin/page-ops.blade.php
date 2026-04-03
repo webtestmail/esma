@@ -143,7 +143,7 @@
                                     @enderror
                                 </div>
 
-                                @if($page->id == 6)
+                              @if(isset($page) && !empty($page->encrypted_id) && $page->id == 6)
                                   <div class="mb-4">
                                     <label for="description" class="form-label">Video Link</label>
                                     <input type="text" name="video_link" class="form-control"

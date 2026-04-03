@@ -85,12 +85,16 @@ input.is-invalid, select.is-invalid {
                     @php
                         
                         $aboutData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 6]);
+
+                        $memberData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 9]);
                     @endphp
                     <ul class="dropdown-menu">
                         @if(isset($aboutData))
                         <li><a href="{{ $aboutData->client_page_urls }}">{{ $aboutData->header_footer_name }}</a></li>
                         @endif
-                        <li><a href="{{ route('membership') }}">Membership</a></li>
+                        @if(isset($memberData))
+                        <li><a href="{{ $memberData->client_page_urls }}">{{ $memberData->header_footer_name }}</a></li>
+                        @endif
                         <li><a href="{{ route('contact') }}">Contact Us</a></li>
                         <li><a href="{{ route('help.center') }}">Help Center</a></li>
                     </ul>

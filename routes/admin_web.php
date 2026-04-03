@@ -130,9 +130,9 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_member', [TeamController::class, 'addMember'])->name('add.member');
     Route::match(['get', 'post'], '/edit_member/{member}', [TeamController::class, 'editMember'])->name('edit.member');
 
-    // Route::get('/manage_brands', [BrandsController::class, 'manageBrands'])->name('manage_brands');
-    // Route::match(['get', 'post'], '/add_brand', [BrandsController::class, 'addBrand'])->name('add.brand');
-    // Route::match(['get', 'post'], '/edit_brand/{brand}', [BrandsController::class, 'editBrand'])->name('edit.brand');
+    Route::get('/manage_brands', [BrandsController::class, 'manageBrands'])->name('manage_brands');
+    Route::match(['get', 'post'], '/add_brand', [BrandsController::class, 'addBrand'])->name('add.brand');
+    Route::match(['get', 'post'], '/edit_brand/{brand}', [BrandsController::class, 'editBrand'])->name('edit.brand');
 
     Route::get('/manage_testimonials', [TestimonialsController::class, 'manageTestimonials'])->name('manage_testimonials');
     Route::match(['get', 'post'], '/add_testimonial', [TestimonialsController::class, 'addTestimonial'])->name('add.testimonial');

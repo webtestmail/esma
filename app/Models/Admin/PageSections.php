@@ -18,13 +18,15 @@ class PageSections extends Model
         'position_order',
         'section_title',
         'section_headline',
-        'section_icon',
+        'section_subheading',
         'description',
         'button_name',
         'button_link',
         'section_image',
         'more_images',
-        'status'
+        'status',
+        'video_link',
+        'section_subtitle'
     ];
 
     protected $casts = [
@@ -40,7 +42,6 @@ class PageSections extends Model
         'button_name' => 'string',
         'button_link' => 'string',
         'section_image' => 'string',
-        'more_images' => 'string',
         'status' => 'string',
     ];
 }

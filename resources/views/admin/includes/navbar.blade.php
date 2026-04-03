@@ -189,7 +189,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nxl-item nxl-hasmenu d-none">
+                <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-tag"></i></span>
                         <span class="nxl-mtext">Brands</span><span class="nxl-arrow"><i

@@ -10,6 +10,7 @@ class StatusController extends Controller
 {
     function index(Request $request)
     {
+       // dd($request->all());
         $request->validate([
             'model' => 'required|string',
             'encrypted_id' => 'required|string',
@@ -18,8 +19,12 @@ class StatusController extends Controller
         $modelClass = 'App\\Models\\Admin\\' . Crypt::decrypt($request->model);
         if (!class_exists($modelClass)) {
             return response()->json(['status' => 'error', 'message' => "Can't find the table!"]);
-        } else {
+        }
+        
+        else {
             $id = Crypt::decrypt($request->encrypted_id);
+
+            // dd($id);
             $model = $modelClass::find($id);
             if ($model) {
                 if ($model->status == 'active') {

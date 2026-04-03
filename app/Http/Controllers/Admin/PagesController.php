@@ -92,6 +92,8 @@ class PagesController extends Controller
                     'client_page_urls' => $request->client_page_link,
                     'header_footer_name' => $request->header_footer_name,
                     'page_headline' => $request->page_headline,
+                     'video_link' => $request->video_link,
+                    'visibility' => 'none', 
                     'breadcrumb_headline' => $request->breadcrumb_headline,
                     'breadcrumb_description' => htmlspecialchars($request->breadcrumb_description, ENT_QUOTES),
                     'description' => htmlspecialchars($request->description, ENT_QUOTES),
@@ -274,6 +276,7 @@ class PagesController extends Controller
                     'description' => htmlspecialchars($request->description, ENT_QUOTES),
                     'button_name' => $request->button_name,
                     'button_link' => $request->button_link,
+                    'video_link' => $request->video_link,
                 ];
                 if (!empty($request->file('section_image'))) {
                     $path = 'images/pages/sections/';
@@ -345,7 +348,7 @@ class PagesController extends Controller
             $section->description = htmlspecialchars($request->description, ENT_QUOTES);
             $section->button_name = $request->button_name;
             $section->button_link = $request->button_link;
-
+            $section->video_link = $request->video_link;
             if (!empty($request->file('section_image'))) {
                 $path = 'images/pages/sections/';
                 $filePath = $this->storeImage($request->file("section_image"), $path, $section->section_image);
@@ -430,7 +433,9 @@ class PagesController extends Controller
                 'position_order' => $position_order,
                 'section_title' => $request->subsection_title,
                 'section_headline' => $request->subsection_headline,
-                'section_icon' => $request->subsection_icon,
+                'section_subheading' => $request->section_subheading,
+                'section_subtitle' => $request->section_subtitle,
+                'button_link' => $request->button_link,
                 'description' => htmlspecialchars($request->description, ENT_QUOTES)
             ];
             if (session('role') == 'superadmin') {
@@ -442,6 +447,12 @@ class PagesController extends Controller
                 $subsection['section_image'] = $filePath;
             }
 
+            if (!empty($request->file('more_images'))) {
+                $path = 'images/pages/sections/';
+                $filePath = $this->storeImage($request->file("more_images"), $path);
+                $subsection['more_images']= $filePath;
+            }
+            
             if (PageSections::create($subsection)) {
                 $request->session()->flash('success', 'Sub-Section is inserted Successfully!');
                 return redirect()->route('admin.edit.page.section', ["page" => $request->page, "section" => $request->section]);
@@ -486,13 +497,21 @@ class PagesController extends Controller
             }
             $subsection->section_title = $request->subsection_title;
             $subsection->section_headline = $request->subsection_headline;
-            $subsection->section_icon = $request->subsection_icon;
+            $subsection->section_subheading = $request->section_subheading;
+             $subsection->button_link = $request->button_link;
+             $subsection->section_subtitle = $request->section_subtitle;
             $subsection->description = htmlspecialchars($request->description, ENT_QUOTES);
 
             if (!empty($request->file('subsection_image'))) {
                 $path = 'images/pages/sections/';
                 $filePath = $this->storeImage($request->file("subsection_image"), $path, $subsection->section_image);
                 $subsection->section_image = $filePath;
+            }
+
+             if (!empty($request->file('more_images'))) {
+                $path = 'images/pages/sections/';
+                $filePath = $this->storeImage($request->file("more_images"), $path, $subsection->more_images);
+                $subsection->more_images = $filePath;
             }
 
             if ($subsection->save()) {

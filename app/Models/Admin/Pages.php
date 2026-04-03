@@ -25,7 +25,8 @@ class Pages extends Model
         'meta_title',
         'meta_keyword',
         'meta_description',
-        'status'
+        'status',
+        'video_link'
     ];
 
     protected $casts = [

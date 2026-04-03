@@ -53,6 +53,7 @@
                                         <tr>
                                             <th>S. No.</th>
                                             <th>Name</th>
+                                            <th>Brand Image</th>
                                             <th>Status</th>
                                             <th>Created at</th>
                                             <th class="text-end">Actions</th>
@@ -88,6 +89,7 @@
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
             { data: 'name', name: 'name'},
+            { data: 'brand_image', name: 'brand_image'},
             { data: 'is_active', name:'is_active' },
             { data: 'created_at', name: 'created_at' },
             { data: 'action', orderable: false, searchable: false }

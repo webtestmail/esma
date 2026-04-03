@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
 class MasterController extends Controller
 {
     public function manageMemberCategories()
@@ -363,6 +364,13 @@ class MasterController extends Controller
         $data = \App\Models\Brand::latest()->get();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('brand_image', function ($row) {
+                if ($row->brand_image) {
+                    $url = asset($row->brand_image); 
+                    return '<img src="'. $url .'" width="60" height="50" class="rounded">';
+                }
+                return '';
+            })
             ->addColumn('action', function ($row) {
                 $editUrl = route('admin.brand.edit', encrypt($row->id));
                 $deleteId = encrypt($row->id);
@@ -382,7 +390,7 @@ class MasterController extends Controller
             ->addColumn('is_active',function($row){
                 return $row->is_active ? 'Active' : 'Inactive';
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['brand_image','action'])
             ->make(true);
     }
        public function add_product_category(Request $request)
@@ -438,12 +446,19 @@ class MasterController extends Controller
         if($request->isMethod('post')){
             $request->validate([
                 'name' => 'required|unique:brands,name',
+                  'brand_image' => 'required|image|mimes:jpeg,png,jpg,gif,webp,svg,bmp,tiff|max:5120',
                 'is_active' => 'required|in:0,1'
             ]);
             $memberCategory = new \App\Models\Brand();
             $memberCategory->name = $request->name;
             $memberCategory->slug = \Str::slug($request->name);
             $memberCategory->is_active = $request->is_active == 1 ? true : false;
+
+             if (!empty($request->file('brand_image'))) {
+                $path = 'images/brands/';
+                $filePath = $this->storeImage($request->file('brand_image'), $path);
+                $memberCategory->brand_image = $filePath;
+            }
             $memberCategory->save();
             return redirect()->route('admin.manage_brands')->with('success', 'Brand added successfully.');
         }
@@ -517,6 +532,12 @@ class MasterController extends Controller
             $memberCategory->name = $request->name;
             $memberCategory->slug = \Str::slug($request->name);
             $memberCategory->is_active = $request->is_active == 1 ? true : false;
+
+             if (!empty($request->file('brand_image'))) {
+                $path = 'images/brands/';
+                $filePath = $this->storeImage($request->file("brand_image"), $path, $memberCategory->brand_image);
+                $memberCategory->brand_image = $filePath;
+            }
             $memberCategory->save();
             return redirect()->route('admin.manage_brands')->with('success', 'Brand updated successfully.');
         }
@@ -530,5 +551,10 @@ class MasterController extends Controller
         }
     }
       
+
+      public function getBrands()
+    {
+        return \App\Models\Brand::where('is_active', 1)->get();
+    }
 
 }

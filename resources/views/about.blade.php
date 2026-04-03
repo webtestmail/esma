@@ -50,7 +50,7 @@
 
         <div class="ab-col ab-col-1">
           <div class="about-img">
-            <img src="{{ $section_one->section_image}}" alt="Our History">
+            <img src="{{ asset($section_one->section_image) }}" alt="Our History">
           </div>
         </div>
 
@@ -102,62 +102,71 @@
 
           @php
           $section_three = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(44);
-        @endphp
         
+          @endphp
+        
+       
         <div class="dark-bg">
+           @if($section_three->sub_sections)
           <div class="ab-col ab-col-5">
             <div class="img-grid">
+                @foreach($section_three->sub_sections as $subsection)
               <div class="grid-box endorsment-box">
-                <img src="images/about-pg/endorsement1.jpg" alt="Endorsement 1">
+                @if($subsection->section_image)
+                <img src="{{ asset($subsection->section_image) }}" alt="Endorsement {{ $loop->iteration }}">
+                @endif
+
+                @if($subsection->section_title || $subsection->section_headline)
                 <div class="endorsment-info">
-                  <span>178 +</span>
-                  <p class="m-0 text-white">We boasts more than 178 experienced and trustworthy
-                    members.</p>
+                  @if($subsection->section_title)
+                  <span>{{ $subsection->section_title ?? '' }}</span>
+                  @endif
+                  @if($subsection->section_headline)
+                  <p class="m-0 text-white"> {{ $subsection->section_headline ?? '' }}</p>
+                  @endif
                 </div>
+                @endif
               </div>
-              <div class="grid-box"><img src="images/about-pg/endorsement2.jpg" alt="Endorsement 2"></div>
-              <div class="grid-box"><img src="images/about-pg/endorsement3.jpg" alt="Endorsement 3"></div>
-              <div class="grid-box endorsment-box">
-                <img src="images/event-6.jpg" alt="Event">
-                <div class="endorsment-info">
-                  <span>60 +</span>
-                  <p class="m-0 text-white">We are across 62 countries in Europe and Internationally.
-                  </p>
-                </div>
-              </div>
+              @endforeach
+             
             </div>
           </div>
+         @endif
 
+
+          @if($section_three)
           <div class="ab-col ab-col-6">
             <div class="about-content">
-              <p class="about-subtitle text-white">ESMA International Network Benefits</p>
-              <div class="about-title">Endorsement That Matters</div>
-              <p>Companies will have been in business for at least 1 year, should represent or manufacture
-                brands that
-                form part of the value chain, and come recommended by another ESMA member.</p>
-              <p>By adhering to this strict criteria, we cultivate a thriving ecosystem of businesses in
-                which we can
-                facilitate the exchange of knowledge.</p>
-              <a href="#" class="btn-style-3 btn-secondary-outline">
+              <p class="about-subtitle text-white">{{ $section_three->section_title }}</p>
+              <div class="about-title">{{ $section_three->section_headline }}</div>
+            {!! html_entity_decode($section_three->description) !!}
+              <a href="{{ $section_three->button_link }}" class="btn-style-3 btn-secondary-outline">
                 <svg class="svg-icon ">
-                  <use href="images/icons/icons-sprite.svg#icon-play"></use>
-                </svg> Watch our Intro Video
+                  <use href="{{ asset('images/icons/icons-sprite.svg#icon-play') }}"></use>
+                </svg> {{ $section_three->button_name }}
                 <svg class="svg-icon arrow-svg">
-                  <use href="images/icons/icons-sprite.svg#icon-short-arrow-right"></use>
+                  <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-short-arrow-right"></use>
                 </svg>
               </a>
             </div>
           </div>
+          @endif
 
+
+          @php
+            $section_four = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(49);
+        
+          @endphp
+          @if($section_four)
           <div class="ab-col ab-col-7">
             <div class="position-relative">
               <div class="about-img">
-                <img src="images/about-pg/promotion.jpg" alt="Events">
+                <img src="{{ asset($section_four->section_image) }}" alt="Events">
               </div>
               <!-- On click - Video Play  -->
               <div class="btn-play-primary large-play-btn position-absolute top-50 start-50 translate-middle">
-                <a data-bs-toggle="modal" data-bs-target="#promostionVideoModal"><svg class="svg-icon ">
-                    <use href="images/icons/icons-sprite.svg#icon-play"></use>
+                <a data-bs-toggle="modal" data-bs-target="#eventVideoModal"><svg class="svg-icon ">
+                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-play"></use>
                   </svg></a>
               </div>
             </div>
@@ -166,88 +175,106 @@
 
           <div class="ab-col ab-col-8">
             <div class="about-content">
-              <p class="about-subtitle text-white">ESMA International Network Benefits</p>
-              <div class="about-title">Promotion Where It Counts</div>
-              <p>The ESMA membership directory attracts attention from around the world. Our website has
-                proven to be
-                the
-                most effective tool for searching companies with an interest in Europe and
-                Internationally.</p>
-              <p>We are in constant contact with major trade magazines, committed to promoting outsourcing
-                and
-                third-party
-                sales associations to all members of the value chain.</p>
+              <p class="about-subtitle text-white">{{ $section_four->section_title }}</p>
+              <div class="about-title">{{ $section_four->section_headline }}</div>
+             {!! html_entity_decode($section_four->description) !!}
             </div>
           </div>
+          @endif
 
+
+           @php
+            $section_five = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(50);
+        
+          @endphp
+
+          @if($section_five)
           <div class="ab-col ab-col-9">
             <div class="about-img">
-              <img src="images/about-pg/insights1.jpg" alt="Events">
+              <img src="{{ asset($section_five->section_image) }}" alt="Events">
             </div>
           </div>
+          @endif
         </div>
 
         
+        @if($section_five)
         <div class="ab-col ab-col-10">
           <div class="about-content">
-            <p class="about-subtitle">ESMA International Network Benefits</p>
-            <div class="about-title">Insights For Tomorrow</div>
-            <p>ESMA members benefit from unlimited access to a library of news, global trade show events,
-              business
-              opportunities, seminars and market information.</p>
-            <p>We regularly organise seminars, host social events at international trade shows, and host our
-              annual
-              convention where member companies can learn from one another.</p>
-            <p>To build your business on an international level you need to know what trends are on the
-              horizon – the
-              ESMA International Network helps you stay ahead.</p>
+            <p class="about-subtitle">{{ $section_five->section_title }}</p>
+            <div class="about-title">{{ $section_five->section_headline }}</div>
+            {!! html_entity_decode($section_five->description) !!}
           </div>
         </div>
+        @endif
+
+
+
+
+         @php
+            $section_six = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(51);
+        
+          @endphp
 
         <div class="ab-col ab-col-11">
           <div class="about-img board-mission position-relative">
-            <img src="images/about-pg/board-main.jpg" alt="Events" class="board-mission-img">
+            <img src="{{ asset($section_six->section_image) }}" alt="Events" class="board-mission-img">
+            @if($section_six->sub_sections)
+            @foreach($section_six->sub_sections->take(1) as $section)
             <div class="missio-box blur-card-bg">
               <div class="mission-felx">
                 <div class="d-flex align-items-center">
-                  <img src="images/__icon.svg" alt="" class="me-3">
-                  <span>Vision</span>
+                  <img src="{{ asset($section->section_image) }}" alt="" class="me-3">
+                  <span>{{ $section->section_title }}</span>
                 </div>
                 <!--<i class="bi bi-arrow-up-right"></i>-->
               </div>
 
-              <p>A world leading distributor manufacturer organisation, ensuring our members gain a global
-                understanding of the value chain.</p>
+              {!! html_entity_decode($section->description) !!}
             </div>
+            @endforeach
+             @foreach($section_six->sub_sections->skip(1) as $section)
             <div class="missio-box blur-card-bg vision-box">
               <div class="mission-felx">
                 <div class="d-flex align-items-center">
-                  <img src="images/mission__icon.svg" alt="" class="me-3">
-                  <span>Mission</span>
+                  <img src="{{ asset($section->section_image) }}" alt="" class="me-3">
+                  <span>{{ $section->section_title }}</span>
                 </div>
                 <!--<i class="bi bi-arrow-up-right"></i>-->
               </div>
-              <p>Stimulate the exchange of ideas, offer superior information and knowledge transfer. To
-                represent
-                the
-                interests of our members</p>
+             {!! html_entity_decode($section->description) !!}
             </div>
+            @endforeach
+            @endif
           </div>
         </div>
 
+
+
+           @php
+            $section_seven = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(54);
+        
+          @endphp
+
+
+     @if($section_seven)
         <div class="ab-col ab-col-12">
           <div class="board-members">
-            <div class="about-title mb-4">Our Board</div>
+            <div class="about-title mb-4">{{ $section_seven->section_title }}</div>
+            @if($section_seven->sub_sections)
             <div class="board-members-flex">
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board6.jpg" alt="" class="board-img">
+              
+              @foreach ($section_seven->sub_sections as $key => $section)
+              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal{{ $key + 1 }}">
+                <img src="{{ asset($section->section_image) }}" alt="{{ $section->section_title }}" class="board-img">
                 <div class="board-member-info">
-                  <img src="images/f-1.png" alt="" class="flag">
+                  <img src="{{ asset($section->more_images) }}" alt="" class="flag">
                   <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
+                  <span>{{ $section->section_title }} @if($section->section_subheading) | {{ $section->section_subheading }} @endif</span>
                 </div>
               </div>
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
+               @endforeach
+              {{-- <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
                 <img src="images/about-pg/board1.jpg" alt="" class="board-img">
                 <div class="board-member-info">
                   <img src="images/f-2.png" alt="" class="flag">
@@ -294,11 +321,12 @@
                   <p>Name</p>
                   <span>Michael Robinson | United Kingdom</span>
                 </div>
-              </div>
+              </div> --}}
             </div>
+            @endif
           </div>
         </div>
-
+         @endif
 
 
 
@@ -351,6 +379,7 @@
 
 
 <!-- Modal -->
+@if($page->video_link)
 <div class="modal fade videoModal" id="promostionVideoModal" tabindex="-1" aria-labelledby="promostionVideoModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -367,54 +396,61 @@
     </div>
   </div>
 </div>
+@endif
+
+@if($section_four->video_link)
+<div class="modal fade videoModal" id="eventVideoModal" tabindex="-1" aria-labelledby="eventVideoModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg
+          class="svg-icon arrow-svg">
+          <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-cross"></use>
+        </svg></button>
+      <div class="modal-body">
+        <iframe src="{{ $section_four->video_link }}" width="100%" height="100%" frameborder="0"
+          allow="autoplay; fullscreen" allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
 
 <!-- Bootstrap Modal -->
-<div class="modal fade" id="boardmemberModal" tabindex="-1" aria-hidden="true">
+@if($section_seven->sub_sections)
+@foreach ($section_seven->sub_sections as $key => $section)
+<div class="modal fade" id="boardmemberModal{{ $key + 1 }}" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog side-panel board-member-panel modal-fullscreen-sm-down">
     <div class="modal-content border-0">
       <div class="modal-header side-header mb-0 p-0 border-0">
         <button type="button" class="btn-close close-btn" data-bs-dismiss="modal" aria-label="Close"><svg
             class="svg-icon arrow-svg">
-            <use href="images/icons/icons-sprite.svg#icon-cross"></use>
+            <use href="{{ asset('images/icons/icons-sprite') }}.svg#icon-cross"></use>
           </svg></button>
       </div>
       <div class="modal-body side-body p-0">
         <div class="board-heading">
-          <h2 class="heading-36">Christos Dedoussis</h2>
-          <p><b>Vice President | Greece</b></p>
+          <h2 class="heading-36">{{ $section->section_title }}</h2>
+          <p><b>{{ $section->section_headline }} @if($section->section_subheading) | {{ $section->section_subheading }} @endif</b></p>
           <div class="line my-3"></div>
           <div class="short-info">
-            <p class="lead">Christos is the CEO, President, and co-owner of Flavour Factory S.A, has a
-              Bachelor’s in
-              Food Technology with Masters and Doctorate in Molecular Biology.</p>
+            <p class="lead">{!! html_entity_decode($section->section_subtitle)  !!}</p>
           </div>
-          <div class="img mt-2"><img src="images/about-pg/board6.jpg" alt="" class="board-img-pop"></div>
-          <a class="mail-info" href="mailto:willian.rochford@esma.org">
-            willian.rochford@esma.org
+          <div class="img mt-2"><img src="{{ asset($section->section_image) }}" alt="{{ $section->section_title }}" class="board-img-pop"></div>
+          <a class="mail-info" href="mailto:{{ $section->button_link ?? '' }}">
+            {{ $section->button_link ?? ' ' }}
           </a>
           <div class="long-info">
-            <p>His passion in entrepreneurship, led him to quit his career in the UK and return to Greece to
-              fulfil his
-              dream.</p>
-            <p>Flavour Factory is focused on innovative products, new ideas and over the years established
-              an “Ethnic”
-              food category in Greece.
-            </p>
-            <p>The product portfolio evolved and expanded to other categories like snacking, protein,
-              breakfast, tea,
-              confectionary and organic.
-            </p>
-            <p>With accumulated experience, next steps involved the launch of his own Brands and the
-              establishment of
-              the first production unit for Rice Cakes in Greece. One step leads to the next, and now
-              Exports form an
-              important development in the next chapter of Flavour Factory.</p>
+            {!! html_entity_decode($section->description) !!}
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+@endforeach
+@endif
 
 @endsection
 

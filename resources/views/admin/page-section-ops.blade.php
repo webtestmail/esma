@@ -111,6 +111,14 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="mb-4">
+                                    <label for="video_link" class="form-label">Video Link </label>
+                                    <input type="text" class="form-control" id="video_link" name="video_link"
+                                        value="{{ !empty($section->encrypted_id) ? $section->video_link : old('video_link') }}"
+                                        placeholder="Enter Video Link" />
+                                   
+                                </div>
                                 <div class="mb-4">
                                     <label for="botton" class="form-label">Button </label>
                                     <div class="row">
