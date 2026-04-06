@@ -100,9 +100,10 @@
     <div class="container contact-container">
         <div class="row contact-row">
             <div class="col-lg-6 col-sm-12 map contact-map order-2 order-lg-1">
+                @if($data['company']->map_link_visibility == 'yes')
                 <div class="map-wrapper">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d76323.6828514371!2d-6.764030575181483!3d53.28747338912581!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48677be3abb6a709%3A0xa00c7a99731ef90!2sClane%2C%20Co.%20Kildare%2C%20Ireland!5e0!3m2!1sen!2sin!4v1772447239823!5m2!1sen!2sin"
+                        src="{{ $data['company']->map_link ?? '' }}"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                     <!--<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16">-->
@@ -110,6 +111,7 @@
                     <!--      <circle cx="8" cy="6" r="2.5" fill="white"/>-->
                     <!--    </svg>-->
                 </div>
+                @endif
             </div>
             <div class="col-lg-6 col-sm-12 p-lg-5 pe-lg-0 order-1 order-lg-2 contact-form-outer">
                 <div class="d-lg-none mt-5 pt-5 mb-4 text-center">
