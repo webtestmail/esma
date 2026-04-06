@@ -11,25 +11,25 @@
         <div class="row align-items-start mb-5 pt-100 align-items-center">
             <div class="col-lg-3">
                 <a href="#" class="logo-footer">
-                    <img src="images/logo-white.png" alt="">
+                    <img src="{{ asset($contact->company_footer_logo ?? '') }}" alt="">
                 </a>
             </div>
 
             <div class="col-lg-6">
                 <ul class="list-unstyled d-flex align-items-start  mb-0 justify-content-lg-between footer-contact-info">
                     <li>
-                        <a href="tel:" class="d-flex gap-2">
-                            <i class="bi bi-chat-dots"></i> + 353 (87) 444 2121
+                        <a href="tel:{{ $contact->phone ?? '' }}" class="d-flex gap-2">
+                            <i class="bi bi-chat-dots"></i>{{ $contact->phone ?? '' }}
                         </a>
                     </li>
                     <li>
-                        <a href="" class="d-flex gap-2">
-                            <i class="bi bi-envelope"></i> david.oneill@esma.org
+                        <a href="mailto:{{ $contact->email ?? '' }}" class="d-flex gap-2">
+                            <i class="bi bi-envelope"></i>{{ $contact->email ?? '' }}
                         </a>
                     </li>
                     <li>
-                        <a href="" class="d-flex gap-2">
-                            <i class="bi bi-envelope"></i> olga.mulcahy@esma.org
+                        <a href="mailto:{{ $contact->alternate_email ?? '' }}" class="d-flex gap-2">
+                            <i class="bi bi-envelope"></i> {{ $contact->alternate_email ?? '' }}
                         </a>
                     </li>
                 </ul>
@@ -38,22 +38,22 @@
             <div class="col-lg-3 text-lg-end">
                 <ul class="list-inline mb-0 footer-social-icons">
                     <li class="list-inline-item">
-                        <a href="#">
+                        <a href="{{ $contact->linkedin_url ?? '' }}" target="_blank">
                             <i class="bi bi-linkedin"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">
+                        <a href="{{ $contact->x_url ?? '' }}" target="_blank">
                             <i class="bi bi-twitter-x"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">
+                        <a href="{{ $contact->facebook_url ?? '' }}" target="_blank">
                             <i class="bi bi-facebook"></i>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">
+                        <a href="{{ $contact->instagram_url ?? '' }}" target="_blank">
                             <i class="bi bi-instagram"></i>
                         </a>
                     </li>
@@ -65,37 +65,7 @@
         <hr>
 
         <!-- MAIN FOOTER CONTENT -->
-        <div class="row  mt-5 mb-5">
-
-            <div class="col-lg-5">
-                <h4 class="mb-3 section-title text-white">
-                    Curated Insights.<br>
-                    Direct to You.
-                </h4>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="footer-news-letter">
-                    <div class="footer-news-flex d-flex align-items-start gap-3 mb-3">
-                        <!-- <i class="bi bi-newspaper"></i> -->
-                        <img src="images/journal 1.webp" alt="">
-                        <p class="m-0">Subscribe to receive handpicked luxury listings, exclusive previews, and market
-                            insights —
-                            all delivered straight to your inbox. Stay effortlessly connected to the finest properties,
-                            tailored to
-                            your taste.</p>
-                    </div>
-                    <form class="d-flex gap-2">
-                        <input type="email" class="form-control" placeholder="Enter your email" required>
-                        <button type="submit" class="btn">
-                            <i class="bi bi-megaphone"></i> Sign Up
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-
-        </div>
+       @include('components.newsletter')
 
         <hr>
 

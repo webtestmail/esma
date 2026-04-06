@@ -126,6 +126,10 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_faq', [FaqsController::class, 'addFaq'])->name('add.faq');
     Route::match(['get', 'post'], '/edit_faq/{faq}', [FaqsController::class, 'editFaq'])->name('edit.faq');
 
+    Route::get('/manage_faq_category', [FaqsController::class, 'manageFaqCategory'])->name('manage_faqcategory');
+    Route::match(['get', 'post'], '/add_faq_catetgory', [FaqsController::class, 'addFaqcategory'])->name('add.faqcategory');
+    Route::match(['get', 'post'], '/edit_faq_catetgory/{faqcategory}', [FaqsController::class, 'editFaqcategory'])->name('edit.faqcategory');
+
     Route::get('/manage_team', [TeamController::class, 'manageTeam'])->name('manage_team');
     Route::match(['get', 'post'], '/add_member', [TeamController::class, 'addMember'])->name('add.member');
     Route::match(['get', 'post'], '/edit_member/{member}', [TeamController::class, 'editMember'])->name('edit.member');

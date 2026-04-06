@@ -36,7 +36,10 @@ class Company extends Model
         'alternate_location',
         'map_link_visibility',
         'copyright',
-        'map_link'
+        'map_link',
+        'newsletter_title',
+        'newsletter_description',
+        'newsletter_image'
     ];
 
     protected $casts = [

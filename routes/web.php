@@ -5,6 +5,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\auth\AuthModuleController;
 // use App\Http\Controllers\admin\auth\AuthController as AdminAuthController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\facebookController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\NewsletterController;
@@ -56,6 +57,7 @@ Route::get('/pricing', [PagesController::class, 'pricing_view'])->name('pricing'
 Route::get('/services', [PagesController::class, 'services_view'])->name('services');
 Route::get('/service/{service_url}', [PagesController::class, 'single_service_view'])->name('single.service');
 Route::get('/page-not-found', [PagesController::class, 'page_not_found_view'])->name('page.not.found');
+Route::get('/help-center', [PagesController::class, 'help_center_view'])->name('help_center');
 
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
@@ -69,7 +71,9 @@ Route::post('/register',[AuthController::class,'register'])->name('register');
 Route::get('/email/verify',[AuthController::class,'email_verify_notice'])->name('verification.notice');
 Route::post('/application/submit',[AuthController::class,'application_submit'])->name('application.submit');
 
-
+Route::post('/contact/verify', [ContactController::class, 'sendVerification'])->name('contact.verify');
+Route::get('/contact/verify/{token}', [ContactController::class, 'verifyToken'])->name('contact.verify.token');
+Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 
 
 

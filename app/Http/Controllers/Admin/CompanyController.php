@@ -22,7 +22,7 @@ class CompanyController extends Controller
 
     function manageContact()
     {
-        $contact = Company::select('id', 'phone', 'whatsapp_phone', 'alternate_phone', 'email', 'alternate_email', 'footer_location', 'location', 'alternate_location', 'map_link_visibility', 'map_link')->findOrFail(1);
+        $contact = Company::select('id', 'phone', 'whatsapp_phone', 'alternate_phone', 'email', 'alternate_email', 'footer_location', 'location', 'alternate_location', 'map_link_visibility', 'map_link', 'newsletter_title', 'newsletter_description', 'newsletter_image')->findOrFail(1);
         $contact->encrypted_id = Crypt::encrypt($contact->id);
 
         $main_page = "settings";
@@ -105,6 +105,17 @@ class CompanyController extends Controller
         $contact->location = htmlspecialchars($request->location);
         $contact->alternate_location = htmlspecialchars($request->alternate_location);
         $contact->map_link_visibility = $request->map_link_visibility;
+        $contact->newsletter_title = $request->newsletter_title;
+        $contact->newsletter_description = $request->newsletter_description;
+       
+
+          if (!empty($request->file('newsletter_image'))) {
+                    $path = 'images/company/';
+                    $filePath = $this->storeImage($request->file('newsletter_image'), $path);
+                    $contact['newsletter_image'] = $filePath;
+                }
+
+
         if ($request->map_link_visibility == 'yes') {
             $contact->map_link = htmlspecialchars($request->map_link);
         }

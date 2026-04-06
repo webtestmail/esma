@@ -274,54 +274,7 @@
                 </div>
               </div>
                @endforeach
-              {{-- <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board1.jpg" alt="" class="board-img">
-                <div class="board-member-info">
-                  <img src="images/f-2.png" alt="" class="flag">
-                  <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
-                </div>
-              </div>
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board3.jpg" alt="" class="board-img">
-                <div class="board-member-info">
-                  <img src="images/f-3.png" alt="" class="flag">
-                  <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
-                </div>
-              </div>
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board4.jpg" alt="" class="board-img">
-                <div class="board-member-info">
-                  <img src="images/f-1.png" alt="" class="flag">
-                  <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
-                </div>
-              </div>
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board5.jpg" alt="" class="board-img">
-                <div class="board-member-info">
-                  <img src="images/f-2.png" alt="" class="flag">
-                  <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
-                </div>
-              </div>
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board7.jpg" alt="" class="board-img">
-                <div class="board-member-info">
-                  <img src="images/f-3.png" alt="" class="flag">
-                  <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
-                </div>
-              </div>
-              <div class="board-member-box" data-bs-toggle="modal" data-bs-target="#boardmemberModal">
-                <img src="images/about-pg/board2.jpg" alt="" class="board-img">
-                <div class="board-member-info">
-                  <img src="images/f-1.png" alt="" class="flag">
-                  <p>Name</p>
-                  <span>Michael Robinson | United Kingdom</span>
-                </div>
-              </div> --}}
+             
             </div>
             @endif
           </div>
@@ -350,7 +303,9 @@
     </div>
 
   </div>
-  <div class="home-logos bg-white">
+
+  @include('components.brand')
+  {{-- <div class="home-logos bg-white">
     <div class="container-fluid">
       <div class="row align-items-center">
         <div class="home-logos-header">
@@ -372,7 +327,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 
   <!-- - Logos  -->
 </section>

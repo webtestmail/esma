@@ -221,6 +221,9 @@
                     </a>
                     <ul class="nxl-submenu">
                         <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_faqcategory') }}">Manage FAQ Category</a>
+                        </li>
+                        <li class="nxl-item">
                             <a class="nxl-link" href="{{ route('admin.manage_faqs') }}">Manage FAQs</a>
                         </li>
                     </ul>

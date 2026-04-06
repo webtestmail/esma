@@ -76,14 +76,14 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-md-6 mb-5">
+                                    {{-- <div class="col-md-6 mb-5">
                                         <label for="youtube_url" class="form-label">YouTube URL</label>
                                         <input type="text" class="form-control" id="youtube_url" name="youtube_url"
                                             value="{{ $socials->youtube_url }}" placeholder="Enter YouTube URL">
                                         @error('youtube_url')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-6 mb-5">
                                         <label for="instagram_url" class="form-label">Instagram URL</label>
                                         <input type="text" class="form-control" id="instagram_url" name="instagram_url"
