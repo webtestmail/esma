@@ -516,6 +516,78 @@
 
 @stack('page-js')   
 
+
+
+   <script>
+   $(document).ready(function() {
+    const $form = $('#newsletterForm');
+    const $input = $form.find('input[name="email"]');
+    const $btn = $form.find('button[type="submit"]');
+    const $error = $form.find('.error');
+    const $loading = $form.find('.loading');
+    const $signupText = $form.find('.signup-text');
+    const $successText = $form.find('.success-text');
+
+    function clearErrors() {
+        $error.text('').removeClass('text-danger');
+        $input.removeClass('is-invalid');
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        const email = $input.val().trim();
+        let hasError = false;
+
+        // Client validation
+        if (!email) {
+            $error.text('Email is required.').addClass('text-danger');
+            $input.addClass('is-invalid');
+            hasError = true;
+        } else if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            $error.text('Please enter valid email.').addClass('text-danger');
+            $input.addClass('is-invalid');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        // AJAX submit
+        $btn.prop('disabled', true);
+        $loading.show();
+        $signupText.hide();
+
+        $.ajax({
+            url: '{{ route("newsletter.subscribe") }}',
+            method: 'POST',
+            data: { email: email },
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: function(data) {
+                $error.removeClass('text-danger').text('✓ ' + data.message);
+                $successText.removeClass('d-none').show();
+                $input.val('');
+                setTimeout(() => {
+                clearErrors();
+                $successText.addClass('d-none');
+                $signupText.show();
+                $btn.html('<i class="bi bi-megaphone"></i> <span class="signup-text">Sign Up</span>');
+            }, 2000);
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    $error.text(xhr.responseJSON.errors.email[0]).addClass('text-danger');
+                }
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+                $loading.hide();
+                $signupText.show();
+            }
+        });
+    });
+});
+    </script>
 <script>
     new WOW().init();
 </script>

@@ -13,12 +13,18 @@
                         <img src="{{ asset($contact->newsletter_image) }}" alt="">
                         <p class="m-0">{!! $contact->newsletter_description ?? '' !!}</p>
                     </div>
-                    <form class="d-flex gap-2">
-                        <input type="email" class="form-control" placeholder="Enter your email" required>
+                    <form  id="newsletterForm"  class="d-flex gap-2">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email">
+                         <span class="error text-danger small position-absolute" style="bottom: -25px; left: 0;"></span>
+                                <div class="spinner-border spinner-border-sm position-absolute loading" 
+                                     style="right: 10px; top: 50%; transform: translateY(-50%); display: none; width: 1rem; height: 1rem;">
+                                </div>
                         <button type="submit" class="btn">
-                            <i class="bi bi-megaphone"></i> Sign Up
+                            <i class="bi bi-megaphone"></i>  <span class="signup-text">Sign Up</span>
+                                <span class="success-text d-none">✓ Done!</span>
                         </button>
                     </form>
+                       <div id="responseMsg" class="mt-3"></div>
                 </div>
             </div>
 

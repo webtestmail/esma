@@ -51,6 +51,26 @@ input.is-invalid, select.is-invalid {
     color: white;
 }
 
+
+/* newsletter */
+#newsletterForm {
+    position: relative;
+}
+#newsletterForm .error {
+    position: absolute !important;
+    bottom: -25px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+#newsletterForm .loading {
+    position: absolute !important;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
 </style>
  @stack('page-css')
 
