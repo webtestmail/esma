@@ -33,10 +33,7 @@ class MemberController extends Controller
         $user = auth()->user();
         return view('user-dashboard.library', compact('user'));
     }
-    public function users(){
-        $user = auth()->user();
-        return view('user-dashboard.users', compact('user'));
-    }
+
     public function help_center(){
         $user = auth()->user();
         return view('user-dashboard.help-center', compact('user'));

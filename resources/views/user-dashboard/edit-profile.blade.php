@@ -101,7 +101,7 @@
                                         <div id="products" class="accordion-collapse collapse"
                                             aria-labelledby="headingProducts" data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form>
+                                                <form id="productsBrandsForm" >
                                                     <!-- Trade Sectors -->
                                                     <div class="mb-4">
                                                         <label class="form-label fw-semibold">Trade Sectors <span
@@ -150,7 +150,7 @@
                                                                 @foreach($column as $value)
                                                                 <div class="form-check">
                                                                     <input type="checkbox"
-                                                                        id="product_{{ \Illuminate\Support\Str::slug($value['name']) }}">
+                                                                        id="product_{{ \Illuminate\Support\Str::slug($value['name']) }}" name="product_category[]" value="{{ $value['id'] }}">
                                                                     <label class="form-check-label"
                                                                         for="product_{{ \Illuminate\Support\Str::slug($value['name']) }}">
                                                                         {{ $value['name'] }}
@@ -167,31 +167,35 @@
                                                         <label class="form-label fw-semibold">Temperature <span
                                                                 class="text-danger">*</span></label>
                                                         <div class="row">
-@foreach(array_chunk($temperatures->toArray(),
-ceil(count($temperatures)/3)) as $column)
+                                                            @foreach(array_chunk($temperatures->toArray(),
+                                                            ceil(count($temperatures)/3)) as $column)
                                                             <div class="col-md-4">
                                                                 @foreach($column as $value)
                                                                 <div class="form-check">
-                                                                    <input type="checkbox" id="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}">
+                                                                    <input type="checkbox" id="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}" name="temperature[]" value="{{ $value['id'] }}">
                                                                     <label class="form-check-label"
-                                                                        for="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}">
+                                                                        for="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}" name="temperature[]" value="{{ $value['id'] }}">
                                                                         {{ $value['name'] }}
                                                                     </label>
                                                                 </div>
                                                                 @endforeach
                                                             </div>
 
-      @endforeach
+                                                       @endforeach
                                                         </div>
                                                     </div>
                                                     <!-- Highlight Your Brands -->
-                                                    <div class="mb-4">
-                                                        <label class="form-label fw-semibold">Highlight Your
-                                                            Brands</label>
-                                                        <input type="text" class="form-control">
-                                                        <span class="text-muted form-span"><em>Type the name of each
-                                                                brand with a
-                                                                comma space between each one</em></span>
+                                                   <div class="mb-4">
+                                                        <label class="form-label fw-semibold">Highlight Your Brands</label>
+                                                        <select class="form-control select2-brands" name="brands[]" multiple="multiple">
+                                                            @foreach($brands as $brand)
+                                                                <option value="{{ $brand->id }}" 
+                                                                    {{ in_array($brand->id, $user->brands->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                                    {{ $brand->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span class="text-muted form-span"><em>Search and select your brands from the list</em></span>
                                                     </div>
                                                     <div class="col-lg-12 text-end">
                                                         <button type="submit" class="form-submit-btn"> <svg
@@ -199,7 +203,8 @@ ceil(count($temperatures)/3)) as $column)
                                                                 <use href="../images/icons/icons-sprite.svg#icon-tick">
                                                                 </use>
                                                             </svg>
-                                                            Save & Publish</button>
+                                                            Save & Publish
+                                                        </button>
                                                     </div>
                                                 </form>
 
@@ -219,45 +224,45 @@ ceil(count($temperatures)/3)) as $column)
                                         <div id="links" class="accordion-collapse collapse"
                                             aria-labelledby="headingLinks" data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form action="">
+                                                <form id="companyLinksForm" >
                                                     <div class="row g-4">
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Website URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="website_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Linkedin URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="linkedin_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Facebook URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="facebook_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">X URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="twitter_urls" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Instagram URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="instagram_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Youtube URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="youtube_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Pinterest URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="pinterest_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Whatsapp URL or Number</label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="whatsapp_url_or_number" class="form-control">
                                                         </div>
                                                         <!-- If add btn is click this is for that container  -->
                                                         <div id="customLinksContainerLinks" class="m-0"></div>
                                                         <div class="d-flex align-items-center justify-content-between">
-                                                            <div class="col-lg-4 text-start">
-                                                                <button type="button" id="addCustomLinkBtnLinks"
+                                                            <!-- <div class="col-lg-4 text-start">
+                                                                <button type="submit" id="addCustomLinkBtnLinks"
                                                                     class="btn-submit-2 form-submit-btn">
                                                                     <svg class="svg-icon">
                                                                         <use
@@ -265,7 +270,7 @@ ceil(count($temperatures)/3)) as $column)
                                                                         </use>
                                                                     </svg> Add Custom Link
                                                                 </button>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="col-lg-4 text-end">
                                                                 <button type="submit" class="form-submit-btn"> <svg
                                                                         class="svg-icon">
@@ -667,6 +672,133 @@ ceil(count($temperatures)/3)) as $column)
 
 @push('user-custom-js')
 <script>
+    $(document).ready(function() {
+       $("#companyLinksForm").validate({
+            rules: {
+                facebook_url: {
+                    url: true
+                },
+                twitter_urls: {
+                    url: true
+                },
+                instagram_url: {
+                    url: true
+                },
+                youtube_url: {
+                    url: true
+                },
+                pinterest_url: {
+                    url: true
+                },
+                whatsapp_url_or_number: {
+                    required: true
+                }
+            },
+            messages: {
+                facebook_url: {
+                    url: "Please enter a valid URL"
+                },
+                twitter_urls: {
+                    url: "Please enter a valid URL"
+                },
+                instagram_url: {
+                    url: "Please enter a valid URL"
+                },
+                youtube_url: {
+                    url: "Please enter a valid URL"
+                },
+                pinterest_url: {
+                    url: "Please enter a valid URL"
+                },
+                whatsapp_url_or_number: {
+                    required: "Whatsapp URL or number is required"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+            submitHandler: function(form) {
+                
+                $.ajax({
+                    url: "{{ route('member.company.link') }}",
+                    type: "POST",
+                    data: $(form).serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        if (res.success === false) {
+                            alertify.error(res.message);
+                            return;
+                        }
+                        alertify.success("Company profile updated successfully");
+                    },
+                    error: function(xhr, status, error) {
+                        alertify.error("Something went wrong");
+                    }
+                });
+            }
+    });   
+    });
+    $(document).ready(function() {
+        $('#productsBrandsForm').submit(function(e) {
+            e.preventDefault();
+
+            let tradeSectors = $('input[name="trade[]"]:checked').length;
+            let productCats = $('input[name="product_category[]"]:checked').length;
+            let temps = $('input[name="temperature[]"]:checked').length;
+
+            if (tradeSectors === 0 ) {
+                alertify.error('Please select at least one item from Trade sector section.');
+                return false;
+            }
+            if (productCats === 0) {
+                alertify.error('Please select at least one item from Product category section.');
+                return false;
+            }
+            if (temps === 0) {
+                alertify.error('Please select at least one item from Temperature section.');
+                return false;
+            }
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('member.profile.product_category.store') }}", 
+                method: "POST",
+                data: formData,
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    // Disable button to prevent double clicks
+                    $('.form-submit-btn').prop('disabled', true).text('Saving...');
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alertify.success(response.message);
+                        
+                    }
+                },
+                error: function(xhr) {
+                    $('.form-submit-btn').prop('disabled', false).html('Save & Publish');
+                    
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            alertify.error(value[0]);
+                        });
+                    } else {
+                        alertify.error('Something went wrong. Please try again.');
+                    }
+                }
+            });
+        });
+});
+</script>
+<script>
 $(document).ready(function() {
 
     $("#companyDetails").submit(function(e) {
@@ -711,7 +843,6 @@ $(document).ready(function() {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-
             success: function(res) {
                 if (res.success === false) {
                     alertify.error(res.message);

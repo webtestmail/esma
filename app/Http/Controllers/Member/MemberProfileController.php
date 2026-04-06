@@ -10,6 +10,42 @@ use Illuminate\Support\Str;
 
 class MemberProfileController extends Controller
 {
+    public function product_category_store(Request $request)
+    {
+        // 1. Validation
+        $request->validate([
+            'trade' => 'required|array|min:1',
+            'product_category' => 'required|array|min:1',
+            'temperature' => 'required|array|min:1',
+            'brands' => 'required|array|min:1',
+        ]);
+
+        try {
+            
+            $user = auth()->user(); 
+
+            $user->tradeSectors()->sync($request->trade);
+            $user->productCategories()->sync($request->product_category);
+            $user->temperatures()->sync($request->temperature);
+            $user->brands()->sync($request->brands);
+
+            // 3. Handle the Brands (comma separated string)
+            $user->update([
+                'highlight_brands' => $request->brands 
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data saved successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
    public function company_detail_update(Request $request) {
     try {
         $validated = $request->validate([
@@ -49,5 +85,44 @@ class MemberProfileController extends Controller
             'message' => 'An error occurred while updating company details'
         ], 500);
     }
-}
+   }
+   public function social_links_store(Request $request){
+    try {
+        $validated = $request->validate([
+            'twitter_urls' => 'nullable|url',
+            'instagram_url' => 'nullable|url',
+            'youtube_url' => 'nullable|url',
+            'pinterest_url' => 'nullable|url',
+            'whatsapp_url_or_number' => 'nullable|string|max:255',
+        ]);
+
+        $user = Auth::user();
+
+        // Using updateOrCreate to find the record or create it if it doesn't exist
+        $user->userprofile()->updateOrCreate(
+            ['user_id' => $user->id], 
+            [
+                'twitter_urls' => $validated['twitter_urls'] ?? null,
+                'instagram_url' => $validated['instagram_url'] ?? null,
+                'youtube_url' => $validated['youtube_url'] ?? null,
+                'pinterest_url' => $validated['pinterest_url'] ?? null,
+                'whatsapp_url_or_number' => $validated['whatsapp_url_or_number'] ?? null,
+            ]
+        );
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Social links updated successfully'
+        ]);
+
+    } catch (\Exception $e) {
+        // Log the error so you can actually debug it!
+        \Log::error("Social Links Update Error: " . $e->getMessage());
+
+        return response()->json([
+            'success' => false, 
+            'message' => 'An error occurred while updating social links'
+        ], 500);
+    }
+   }
 }

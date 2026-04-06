@@ -17,31 +17,45 @@
                     <div class="dashboard-content-inner">
                         <div class="c-spacer__horizontal my-4"></div>
                         <div class="d-flex align-items-center justify-content-between w-100">
-                            <h2 class="dashboard-page-title">Users</h2>
-                            <a href="{{ route('add-user') }}" class="dashboard-page-title d-flex gap-1"> <svg class="svg-icon">
-                                    <use href="../images/icons/icons-sprite.svg#icon-user-plus"></use>
-                                </svg> <span class="user-title">Add User</span>
+                            <h2 class="dashboard-page-title">Add User</h2>
+                            <a href="{{ route('users') }}" class="dashboard-page-title d-flex gap-1"> <i class="bi bi-arrow-left-short"></i> Back
+                                to Users
                             </a>
                         </div>
                         <div class="col-lg-12 col-md-12 mb-4">
-                            <div class="dashboard-stat-card">
-
-                                <div class="table-responsive">
-                                    <table id="users-table" class="table align-middle mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>S. No.</th>
-                                                <th>Username</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th class="">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                           
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="dashboard-stat-card dash-form">
+                                <form id="add-user-form">
+                                    <div class="row g-3">
+                                        <div class="col-lg-6 form-box">
+                                            <label for="">Email <span>*</span></label>
+                                            <input type="email" name="email" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="col-lg-6 form-box">
+                                            <label for="">Display Name <span>*</span></label>
+                                            <input type="text" name="display_name" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="col-lg-6 form-box">
+                                            <label for="">Username <span>*</span></label>
+                                            <input type="text" name="username" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="col-lg-6 form-box">
+                                            <label for="">Password <span>*</span></label>
+                                            <input type="password" name="password" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="col-lg-6 form-box">
+                                            <label for="">Confirm Password <span>*</span></label>
+                                            <input type="password" name="password_confirmation" placeholder=""
+                                                class="form-control">
+                                        </div>
+                                        <div class="c-spacer__horizontal mt-4"></div>
+                                        <div class="col-lg-12 text-end">
+                                            <button type="submit" class="form-submit-btn"> <svg class="svg-icon">
+                                                    <use href="../images/icons/icons-sprite.svg#icon-user-plus"></use>
+                                                </svg> Register
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -138,57 +152,77 @@
         </div>
     </div>
 </div>
-
 @push('user-custom-js')
-    <script>
-        let table;
-        $(document).ready(function(){ 
-        table = new DataTable('#users-table', {
-        responsive: true,
-        paging: true,
-        searching: true,
-        ordering: true,
-        "order": [[ 8, "desc" ]],
-        info: true,
-        lengthChange: true,
-        pageLength: 10,
-        ajax: '{{ route("users.data") }}',
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-            { data: 'username', name: 'username'},
-            { data: 'name', name: 'name'},
-            { data: 'email', name: 'email'},
-            { data: 'action', orderable: false, searchable: false }
-        ]
+<script>
+$(document).ready(function() {
+    $('#add-user-form').validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            display_name: {
+                required: true,
+                minlength: 3
+            },
+            username: {
+                required: true,
+                minlength: 3
+            },
+            password: {
+                required: true,
+                minlength: 6
+            },
+            password_confirmation: { // Changed from confirm_password
+                        required: true,
+                        equalTo: '[name="password"]'
+         }
+        },
+        messages: {
+            email: {
+                required: "Please enter an email address",
+                email: "Please enter a valid email address"
+            },
+            display_name: {
+                required: "Please enter a display name",
+                minlength: "Display name must be at least 3 characters long"
+            },
+            username: {
+                required: "Please enter a username",
+                minlength: "Username must be at least 3 characters long"
+            },
+            password: {
+                required: "Please provide a password",
+                minlength: "Password must be at least 6 characters long"
+            },
+            password_confirmation: {
+                required: "Please confirm your password",
+                equalTo: "Passwords do not match"
+            }
+        },
+        submitHandler: function(form, e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: "{{ route('add-user') }}",
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: $(form).serialize(),
+                success: function(response) {
+                    alertify.success('User added successfully!');
+                    e.target.reset();
+                },
+                error: function(xhr) {
+                    alertify.error('An error occurred while adding the user.');
+                }
+            });
+        }
     });
 });
-$(document).on('click', '.user-del-btn', function(e) {
-    e.preventDefault();
-    
-    var userId = $(this).data('id');
-    var row = $(this).closest('tr'); // Optional: to remove row without reload
+</script>
 
-    if (confirm('Are you sure you want to delete this user?')) {
-        $.ajax({
-            url: '/delete-user/' + userId,
-            type: 'DELETE',
-            data: {
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                alertify.success('User deleted successfully.');
-
-                table.row(row).remove().draw(false); 
-                $('#your-datatable-id').DataTable().ajax.reload(null, false); 
-            },
-            error: function(xhr) {
-                alertify.error('An error occurred while deleting the user.');
-            }
-        });
-    }
-});
-
-    </script>
 @endpush
 
 @endsection

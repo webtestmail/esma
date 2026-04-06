@@ -14,7 +14,7 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
     <link rel="shortcut icon" href="{{ asset($company->company_icon) }}" type="image/x-icon">
 
     <link rel="stylesheet" href="{{ asset('css/outer.css') }}">
-   
+
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
@@ -23,42 +23,51 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet"/>
-   <style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+
+    <style>
     /* Styling the validation messages */
-span.text-danger.small {
-    display: block;
-    color: #ff4d4d; /* Bright red */
-    font-size: 12px;
-    margin-top: 5px;
-    font-weight: 500;
-}
+    span.text-danger.small {
+        display: block;
+        color: #ff4d4d;
+        /* Bright red */
+        font-size: 12px;
+        margin-top: 5px;
+        font-weight: 500;
+    }
 
-input.is-invalid, select.is-invalid {
-    border: 1px solid #ff4d4d !important;
-}
-.submit-btn{
-   display: inline-flex;
-    align-items: center;
-    padding: 14px 28px 14px 32px;
-    gap: 14px;
-    background: var(--gradient-primary);
-    border: 2px solid rgba(107, 109, 196, 0.3);
-    backdrop-filter: blur(13px);
-    border-radius: var(--radius-58);
-    font-size: 18px;
-    color: white;
-}
+    input.is-invalid,
+    select.is-invalid {
+        border: 1px solid #ff4d4d !important;
+    }
 
-</style>
- @stack('page-css')
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 14px 28px 14px 32px;
+        gap: 14px;
+        background: var(--gradient-primary);
+        border: 2px solid rgba(107, 109, 196, 0.3);
+        backdrop-filter: blur(13px);
+        border-radius: var(--radius-58);
+        font-size: 18px;
+        color: white;
+    }
+    </style>
+    @stack('page-css')
 
 </head>
 
 <body class="preload">
     <header class="header">
         <div class="container">
-            <div class="logo"><a href="{{ route('home') }}"><img src="{{ !empty($headerData['company']->company_logo) ? asset($headerData['company']->company_logo) : asset('imgs/logo.png') }}" alt=""></a></div>
+            <div class="logo"><a href="{{ route('home') }}"><img
+                        src="{{ !empty($headerData['company']->company_logo) ? asset($headerData['company']->company_logo) : asset('imgs/logo.png') }}"
+                        alt=""></a></div>
             <ul class="menus">
                 <li><a href="{{ route('member.directory') }}">Member Directory</a></li>
                 <li>
@@ -104,7 +113,9 @@ input.is-invalid, select.is-invalid {
                             <div class="form-group">
                                 <label>Keyword</label>
                                 <div class="input-box">
-                                    <svg class="svg-icon input-icon"><use href="images/icons/icons-sprite.svg#icon-search"></use></svg>
+                                    <svg class="svg-icon input-icon">
+                                        <use href="images/icons/icons-sprite.svg#icon-search"></use>
+                                    </svg>
                                     <input type="search" placeholder="Type what you want to find">
                                 </div>
                             </div>
@@ -240,7 +251,7 @@ input.is-invalid, select.is-invalid {
         </div>
     </header>
 
-       <!--Sign Up Form -->
+    <!--Sign Up Form -->
     <!-- Bootstrap Modal -->
     <div class="modal fade" id="joinModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog side-panel modal-fullscreen-sm-down">
@@ -389,23 +400,25 @@ input.is-invalid, select.is-invalid {
                                 <input type="checkbox" name="category[]" value="associates">
                                 <span class="checkmark"></span>
                                 <span class="label-text"> I have read and Understood the application rules</span>
-                            </label> 
-                            <label class="filter-checkbox mb-3">
-                                <input type="checkbox" name="category[]" value="associates">
-                                <span class="checkmark"></span>
-                                <span class="label-text"> I have read and accept the terms of use and privacy  policies of the ESMA  International Network Website </span>
                             </label>
                             <label class="filter-checkbox mb-3">
                                 <input type="checkbox" name="category[]" value="associates">
                                 <span class="checkmark"></span>
-                                <span class="label-text"> Occasionally I would like to receive update directly to my email (sign up for the newsletter). </span>
+                                <span class="label-text"> I have read and accept the terms of use and privacy policies
+                                    of the ESMA International Network Website </span>
+                            </label>
+                            <label class="filter-checkbox mb-3">
+                                <input type="checkbox" name="category[]" value="associates">
+                                <span class="checkmark"></span>
+                                <span class="label-text"> Occasionally I would like to receive update directly to my
+                                    email (sign up for the newsletter). </span>
                             </label>
                         </div>
                         <div class="button-row mt-4">
                             <a href="#" class="btn-style-5"> <svg class="svg-icon">
                                     <use href="images/icons/icons-sprite.svg#icon-captcha"></use>
                                 </svg> Click to verify</a>
-                            <button type="submit"  class="btn-style-4 btn"> <svg class="svg-icon">
+                            <button type="submit" class="btn-style-4 btn"> <svg class="svg-icon">
                                     <use href="images/icons/icons-sprite.svg#icon-plane"></use>
                                 </svg> Submit</button>
                         </div>
@@ -415,77 +428,90 @@ input.is-invalid, select.is-invalid {
         </div>
     </div>
 
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script> -->
-@push('page-js')
+    @push('page-js')
     <script>
-$(document).ready(function() {
-    // 1. Initialize Validation
-    $("#registerForm").validate({
-        errorElement: 'span',
-        errorClass: 'text-danger small',
-        rules: {
-            email: { required: true, email: true },
-            phone: { required: true },
-            company_name: { required: true },
-            contact_name: { required: true },
-            country: { required: true },
-            address: { required: true },
-            organization_type: { required: true },
-            website: { required: true }
-        },
-        highlight: function(element) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function(element) {
-            $(element).removeClass('is-invalid');
-        },
-        
-        // 2. This handles the actual submission
-        submitHandler: function(form, event) {
-            event.preventDefault(); // Stop the page from reloading
-            
-            // Show loading state on button
-            const submitBtn = $(form).find('button[type="submit"]');
-            submitBtn.prop('disabled', true).text('Processing...');
-
-            // 3. AJAX Submission
-            $.ajax({
-                url: "{{ route('application.submit') }}", // Replace with your actual route
-                type: "POST",
-                data: $(form).serialize(), 
-                success: function(response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.message || 'Application submitted successfully!',
-                        timer: 3000
-                    }).then(() => {
-                        window.location.reload(); // Or redirect
-                    });
+    $(document).ready(function() {
+        // 1. Initialize Validation
+        $("#registerForm").validate({
+            errorElement: 'span',
+            errorClass: 'text-danger small',
+            rules: {
+                email: {
+                    required: true,
+                    email: true
                 },
-                error: function(xhr) {
-                    submitBtn.prop('disabled', false).text('Submit');
-                    
-                    let errorText = "Something went wrong.";
-                    if(xhr.responseJSON && xhr.responseJSON.message) {
-                        errorText = xhr.responseJSON.message;
-                    }
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorText
-                    });
+                phone: {
+                    required: true
+                },
+                company_name: {
+                    required: true
+                },
+                contact_name: {
+                    required: true
+                },
+                country: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+                organization_type: {
+                    required: true
+                },
+                website: {
+                    required: true
                 }
-            });
-        }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            },
+
+            // 2. This handles the actual submission
+            submitHandler: function(form, event) {
+                event.preventDefault(); // Stop the page from reloading
+
+                // Show loading state on button
+                const submitBtn = $(form).find('button[type="submit"]');
+                submitBtn.prop('disabled', true).text('Processing...');
+
+                // 3. AJAX Submission
+                $.ajax({
+                    url: "{{ route('application.submit') }}", // Replace with your actual route
+                    type: "POST",
+                    data: $(form).serialize(),
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message ||
+                                'Application submitted successfully!',
+                            timer: 3000
+                        }).then(() => {
+                            window.location.reload(); // Or redirect
+                        });
+                    },
+                    error: function(xhr) {
+                        submitBtn.prop('disabled', false).text('Submit');
+
+                        let errorText = "Something went wrong.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorText = xhr.responseJSON.message;
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorText
+                        });
+                    }
+                });
+            }
+        });
     });
-});
     </script>
     @endpush
-
-   
-   
-
-

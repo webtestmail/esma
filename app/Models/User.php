@@ -34,42 +34,29 @@ class User extends Authenticatable
         'is_active'
     ];
     
-    public const ROLE_INFLUENCER = 0;
+    public const ROLE_MEMBER = 0;
     public const ROLE_ADMIN  = 1;
-    public const ROLE_BRAND  = 2;
-    public const ROLE_HR = 3;
+    public const ROLE_SUBMEMBER = 2;
     public const ROLE_SUBADMIN = 4;
-    public const ROLE_BRANDMANAGER = 5;
-    public const ROLE_INFLUENCERMANAGER = 6;
+
 
     public function getIsAdminAttribute()
     {
         return $this->role === self::ROLE_ADMIN;
     }
-        public function getIsInfluencerAttribute(): bool
+        public function getIsMemberAttribute(): bool
     {
-        return $this->role === self::ROLE_INFLUENCER;
+        return $this->role === self::ROLE_MEMBER;
     }
-        public function getIsBrandAttribute(): bool
+        public function getIsSubMemberAttribute(): bool
     {
-        return $this->role === self::ROLE_BRAND;
+        return $this->role === self::ROLE_SUBMEMBER;
     }
             public function getIsSubAdmin(): bool
     {
         return $this->role === self::ROLE_SUBADMIN;
     }
-            public function getIsHr(): bool
-    {
-        return $this->role === self::ROLE_HR;
-    }
-            public function getIsBrandManager(): bool
-    {
-        return $this->role === self::ROLE_BRANDMANAGER;
-    }
-            public function getIsInfluencerManager(): bool
-    {
-        return $this->role === self::ROLE_INFLUENCERMANAGER;
-    }
+
 
     protected $hidden = [
         'password',
@@ -95,12 +82,7 @@ class User extends Authenticatable
     public function application(){
         return $this->hasOne(Application::class,'user_id');
     }
-    public function bankaccount(){
-        return $this->hasMany(BankAccount::class,'user_id');
-    }
-    public function payment_request(){
-        return $this->hasMany(PaymentRequest::class,'user_id');
-    }
+
     
     public function subscription(){
         return $this->hasMany(Subscription::class,'user_id');
@@ -109,5 +91,23 @@ class User extends Authenticatable
     public function hasActiveSubscription()
     {
         return $this->subscription()->active()->first();
+    }
+
+    public function tradeSectors()
+    {
+        return $this->belongsToMany(TradeSector::class, 'member_trade_sector');
+    }
+    public function productCategories()
+    {
+        // If your table name isn't standard, specify it as the 2nd argument
+        return $this->belongsToMany(ProductCategory::class, 'category_member');
+    }
+    public function temperatures()
+    {
+        return $this->belongsToMany(Temperature::class, 'member_temperature');
+    }
+    public function brands()
+    {
+        return $this->belongsToMany(Brand::class, 'brand_member');
     }
 }

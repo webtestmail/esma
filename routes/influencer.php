@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Member\MemberController;
 use App\Http\Controllers\Member\MemberProfileController;
+use App\Http\Controllers\Member\UserController;
 
 
 Route::middleware(['auth',Member::class])->group(function(){
@@ -16,10 +17,14 @@ Route::middleware(['auth',Member::class])->group(function(){
    Route::get('/edit-profile',[MemberController::class,'edit_profile'])->name('edit-profile');
    Route::get('/events',[MemberController::class,'events'])->name('events');
    Route::get('liberary',[MemberController::class,'library'])->name('library');
-   Route::get('/users',[MemberController::class,'users'])->name('users');
+   Route::get('/users',[UserController::class,'users'])->name('users');
+   Route::get('/users/data',[UserController::class,'users_data'])->name('users.data');
+   Route::match(['get', 'post'], '/add-user',[UserController::class,'add_user'])->name('add-user');
+   Route::delete('/delete-user/{id}',[UserController::class,'delete_user'])->name('delete-user');
    Route::get('/member-help-center',[MemberController::class,'help_center'])->name('member-help-center');
    Route::post('/member-company-detials',[MemberProfileController::class,'company_detail_update'])->name('member.company.details');
-
+   Route::post('/member-profile-product-category',[MemberProfileController::class,'product_category_store'])->name('member.profile.product_category.store');
+   Route::post('/member-social-links',[MemberProfileController::class,'social_links_store'])->name('member.company.link');
 
    // Route::get('/settings',[AuthController::class,'complete_profile'])->name('settings');
    // Route::get('/find-campagins',[InfluencerController::class,'find_campagins'])->name('find-campagins');
