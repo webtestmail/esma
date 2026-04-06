@@ -299,23 +299,23 @@
                                         <div id="contact" class="accordion-collapse collapse"
                                             aria-labelledby="headingContact" data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form action="">
+                                                <form action="company-contact-details" class="profile-form">
                                                     <div class="row g-4">
                                                         <div class="col-lg-12 form-box">
                                                             <label for="">Main Address</label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" name="main_address" placeholder="" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Google Maps URL</label>
-                                                            <input type="url" placeholder="" class="form-control">
+                                                            <input type="url" placeholder="" name="map_url" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Country</label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="country" class="form-control">
                                                         </div>
 
                                                         <!-- If add btn is click this is for that container  -->
-                                                        <div id="customLinksContainerAddress" class="m-0"></div>
+                                                        <div id="customLinksContainerAddress"  class="m-0"></div>
                                                         <div class="d-flex align-items-center justify-content-between">
                                                             <div class="col-lg-4 text-start">
                                                                 <button type="button" id="addCustomLinkBtnAddress"
@@ -673,6 +673,49 @@
 @push('user-custom-js')
 <script>
     $(document).ready(function() {
+  $('.profile-form').on('submit', function(e) {
+        e.preventDefault();
+        // Reference the form element
+        var $form = $(this);
+        
+        $.ajax({
+            url: "{{ route('member.company.contact_details') }}",
+            method: "POST",
+            data: $form.serialize(), 
+            headers: {
+                // Ensure this meta tag exists in your <head>
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function() {
+                // Optional: Disable button to prevent double-click
+                $form.find('button[type="submit"]').prop('disabled', true);
+            },
+            success: function(response) {
+                alertify.success('All addresses have been updated.');
+                // If you want to clear dynamic fields after save:
+                // $('#customLinksContainerAddress').empty();
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    // Handle Laravel Validation Errors
+                    let errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        alertify.error(value[0]);
+                    });
+                } else {
+                    alertify.error('An error occurred. Check the console.');
+                }
+                console.error(xhr.responseText);
+            },
+            complete: function() {
+                // Re-enable button
+                $form.find('button[type="submit"]').prop('disabled', false);
+            }
+        });
+    });
+});
+
+    $(document).ready(function() {
        $("#companyLinksForm").validate({
             rules: {
                 facebook_url: {
@@ -689,6 +732,9 @@
                 },
                 pinterest_url: {
                     url: true
+                },
+                website_url:{
+                  url:true
                 },
                 whatsapp_url_or_number: {
                     required: true
@@ -714,9 +760,6 @@
                     required: "Whatsapp URL or number is required"
                 }
             },
-            submitHandler: function(form) {
-                form.submit();
-            }
             submitHandler: function(form) {
                 
                 $.ajax({

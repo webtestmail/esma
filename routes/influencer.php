@@ -25,6 +25,7 @@ Route::middleware(['auth',Member::class])->group(function(){
    Route::post('/member-company-detials',[MemberProfileController::class,'company_detail_update'])->name('member.company.details');
    Route::post('/member-profile-product-category',[MemberProfileController::class,'product_category_store'])->name('member.profile.product_category.store');
    Route::post('/member-social-links',[MemberProfileController::class,'social_links_store'])->name('member.company.link');
+   Route::post('/company-contact-details',[MemberProfileController::class,'contact_details_store'])->name('member.company.contact_details');
 
    // Route::get('/settings',[AuthController::class,'complete_profile'])->name('settings');
    // Route::get('/find-campagins',[InfluencerController::class,'find_campagins'])->name('find-campagins');

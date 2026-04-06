@@ -7,9 +7,46 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserProfile;
 use Illuminate\Support\Str;
+use App\Models\CompanyLink;
+use App\Models\MemberCompanyContact;
 
 class MemberProfileController extends Controller
 {
+    public function contact_details_store(Request $request){
+        try {
+            $user_id = auth()->id();
+            $data = $request->all();
+
+            foreach ($data as $key => $value) {
+       
+            if (strpos($key, 'extra_address_') === 0) {
+                $id = str_replace('extra_address_', '', $key);
+
+                MemberCompanyContact::create([
+                    'user_id'         => $user_id,
+                    'main_address'    => $value, // The address string
+                    'google_map_link' => $data["extra_map_{$id}"] ?? null,
+                    'country'         => $data["extra_country_{$id}"] ?? null,
+                    'is_active'       => 1,
+                ]);
+            }
+            }
+
+            return response()->json([
+                'success' => true, 
+                'message' => 'Contact details updated successfully'
+            ]);
+
+        
+        } catch (\Exception $e) {
+            \Log::error("Contact Details Update Error: " . $e->getMessage());
+
+            return response()->json([
+                'success' => false, 
+                'message' => 'An error occurred while updating contact details'
+            ], 500);
+        }
+    }
     public function product_category_store(Request $request)
     {
         // 1. Validation
@@ -93,19 +130,24 @@ class MemberProfileController extends Controller
             'instagram_url' => 'nullable|url',
             'youtube_url' => 'nullable|url',
             'pinterest_url' => 'nullable|url',
+            'linkedin_url' => 'nullable|url',
+            'facebook_url' => 'nullable|url',
+            'website_url' => 'nullable|url',
             'whatsapp_url_or_number' => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
 
-        // Using updateOrCreate to find the record or create it if it doesn't exist
-        $user->userprofile()->updateOrCreate(
+        CompanyLink::updateOrCreate(
             ['user_id' => $user->id], 
             [
-                'twitter_urls' => $validated['twitter_urls'] ?? null,
+                'website_url'=> $validated['website_url'] ?? null,
+                'twitter_url' => $validated['twitter_urls'] ?? null,
                 'instagram_url' => $validated['instagram_url'] ?? null,
                 'youtube_url' => $validated['youtube_url'] ?? null,
                 'pinterest_url' => $validated['pinterest_url'] ?? null,
+                'linkedin_url' => $validated['linkedin_url'] ?? null,
+                'facebook_url' => $validated['facebook_url'] ?? null,
                 'whatsapp_url_or_number' => $validated['whatsapp_url_or_number'] ?? null,
             ]
         );

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMember;
 use App\Mail\ApplicationRejected;
+use App\Models\UserProfile;
 
 class ApplicationController extends Controller
 {
@@ -78,6 +79,13 @@ class ApplicationController extends Controller
                 'company_name' => $application->company_name,
                 'is_active'    => 1,
                 'role'         => 'member',
+            ]);
+
+            $userProfile = UserProfile::updateOrCreate([
+                'user_id' => $user->id,
+            ], [
+                'company_name' => $application->company_name,
+                'slug'         => Str::slug($application->company_name) . '-' . uniqid(),
             ]);
 
             // 3. Update Application with link to User

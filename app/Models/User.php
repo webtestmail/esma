@@ -110,4 +110,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Brand::class, 'brand_member');
     }
+    public function companylinks()
+    {
+        return $this->hasOne(CompanyLink::class, 'user_id');
+    }
 }

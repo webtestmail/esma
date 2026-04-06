@@ -9,8 +9,8 @@
                         <div class="side-user-content">
                             <div class="side-use-logo"><img src="{{ asset($user->userprofile->brand_logo ?? 'images/c-brands__circles.png') }}" alt=""></div>
                             <div class="dashboard-sidebar-name">{{ $user->application->company_name  }}</div>
-                            <div class="dashboard-sidebar-email">{{ $user->email }}</div>
-                            <a href="" class="btn-style-1"> <svg class="svg-icon"><use href="../images/icons/icons-sprite.svg#icon-eye"></use></svg> View Profile</a>
+                            <div class="dashboard-sidebar-email">{{ $user->userprofile->slogan ?? 'No slogan provided' }}</div>
+                            <a href="{{ route('view-profile',[$user->userprofile->slug]) }}" class="btn-style-1"> <svg class="svg-icon"><use href="../images/icons/icons-sprite.svg#icon-eye"></use></svg> View Profile</a>
                         </div>
                     </div>
                     

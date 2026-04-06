@@ -70,7 +70,7 @@ Route::get('/email/verify',[AuthController::class,'email_verify_notice'])->name(
 Route::post('/application/submit',[AuthController::class,'application_submit'])->name('application.submit');
 
 
-
+Route::get('/view-profile/{slug}',[PagesController::class,'view_profile'])->name('view-profile');
 
 
 Route::get('/password/request',[ForgotPasswordController::class,'password_request'])->name('password.request'); 

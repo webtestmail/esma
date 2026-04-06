@@ -10,6 +10,8 @@ use App\Models\Admin\Plan;
 use App\Models\Admin\Services;
 use App\Models\Admin\ServiceSections;
 use Illuminate\Http\Request;
+use App\Models\UserProfile;
+use App\Models\User;
 
 class PagesController extends Controller
 {
@@ -259,4 +261,20 @@ class PagesController extends Controller
             return redirect()->route('page.not.found');
         }
     }   
+    public function view_profile($slug){
+        $userProfile = UserProfile::where('slug', $slug)->first();
+        $user = User::where('id', $userProfile->user_id)->first();
+        if($userProfile){
+            $employeeCount = $userProfile->number_of_employees ?? 0;
+            $tradeSectorCount = $user->tradeSectors()->count() ?? 0;
+            $productCategoryCount = $user->productCategories()->count() ?? 0;
+            $brandCount = $user->brands()->count() ?? 0;
+            $page_name = 'view-profile';
+            $headerData = $this->header();
+            $footerData = $this->footer();
+            return response()->view('member-profile', compact('page_name', 'userProfile', 'user','headerData', 'footerData','employeeCount', 'tradeSectorCount', 'productCategoryCount', 'brandCount'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
 }

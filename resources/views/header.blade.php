@@ -204,7 +204,8 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
                     <!--Profile will show when the user loged in / sinup -->
                     <!-- ================= PROFILE DROPDOWN ================= -->
                     <!--only d-block when account logged in -->
-                    <div class="dropdown-item-wrapper d-none">
+                    @auth
+                    <div class="dropdown-item-wrapper">
 
                         <a href="#" class="dropdown-toggle-btn">
                             <svg class="svg-icon">
@@ -215,29 +216,30 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
                         <div class="custom-dropdown profile-dropdown">
 
                             <div class="profile-header">
-                                <img src="./images/A. Loacker SpaAG/Untitled-2.png" class="profile-img w-25 me-3">
+                                <img src="{{ asset('images/A. Loacker SpaAG/Untitled-2.png') }}" class="profile-img w-25 me-3">
                                 <div>
-                                    <h6 class="m-0">A. Loacker Spa/AG</h6>
-                                    <small>Pure goodness / Che bontà</small>
+                                    <h6 class="m-0">{{ $user->name }}</h6>
+                                    <small>{{ $user->userprofile->slogan }}</small>
                                 </div>
                             </div>
 
                             <ul class="mt-2">
-                                <li><a href="#">Dashboard</a></li>
-                                <li><a href="#">See Profile</a></li>
-                                <li><a href="#">Edit Profile</a></li>
-                                <li><a href="#">Events</a></li>
-                                <li><a href="#">Library</a></li>
-                                <li><a href="#">Users</a></li>
-                                <li><a href="#">Help Center</a></li>
-                                <li><a href="#">Logout</a></li>
+                                <li><a href="{{ route('my-dashboard') }}">Dashboard</a></li>
+                                <li><a href="{{ route('view-profile',[$user->userprofile->slug]) }}">See Profile</a></li>
+                                <li><a href="{{ route('edit-profile') }}">Edit Profile</a></li>
+                                <li><a href="{{ route('events') }}">Events</a></li>
+                                <li><a href="{{ route('library') }}">Library</a></li>
+                                <li><a href="{{ route('users') }}">Users</a></li>
+                                <li><a href="{{ route('help.center') }}">Help Center</a></li>
+                                <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                             </ul>
 
                         </div>
                     </div>
+                    @endauth
 
                 </div>
-
+                @guest
                 <div class="nav-btns d-flex align-items-center gap-2">
                     <a class="btn-style-4" id="signupBtn" data-bs-toggle="modal" data-bs-target="#joinModal"><svg
                             class="svg-icon">
@@ -247,6 +249,7 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
                             <use href="images/icons/icons-sprite.svg#icon-arrow-right-box"></use>
                         </svg> Login </a>
                 </div>
+                @endguest
             </div>
         </div>
     </header>

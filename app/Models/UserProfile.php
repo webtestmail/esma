@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\TradeSector;
 
 class UserProfile extends Model
 {
@@ -20,5 +22,10 @@ class UserProfile extends Model
         ];
     public function user(){
         return $this->belongsTo(User::class);
+    }
+        public function tradeSectors()
+    {
+        // Links this profile to TradeSectors using the shared user_id
+        return $this->hasMany(TradeSector::class, 'user_id', 'user_id');
     }
 }

@@ -8,11 +8,14 @@ class CompanyLink extends Model
 {
     protected $fillable = [
         'user_id',
-        'twitter_urls',
+        'twitter_url',
         'instagram_url',
         'youtube_url',
         'pinterest_url',
         'whatsapp_url_or_number',
+        'website_url',
+        'linkedin_url',
+        'facebook_url',
     ];
 
     public function company()
