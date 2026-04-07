@@ -66,7 +66,6 @@ class PagesController extends Controller
     public function index()
     {
         $page = Pages::where(["id" => 1, "status" => 'active'])->first();
-
         $data['meta_title'] = $page->meta_title;
         $data['meta_keyword'] = $page->meta_keyword;
         $data['meta_description'] = $page->meta_description;
@@ -307,6 +306,50 @@ class PagesController extends Controller
             $headerData = $this->header();
             $footerData = $this->footer();
             return response()->view('help_center', compact('page', 'page_name', 'data', 'headerData', 'footerData', 'faqcategory'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
+
+
+     public function resource_hub_view()
+    {
+        $page = Pages::where(["id" => 11, "status" => 'active'])->first();
+        if ($page) {
+            $page_name = 'resources_hub';
+            $data['company'] = Company::where('id', 1)->first();
+
+            $data['meta_title'] = $page->meta_title;
+            $data['meta_keyword'] = $page->meta_keyword;
+            $data['meta_description'] = $page->meta_description;
+            $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            $data['breadcrumb_image'] = $page->page_image;
+            $data['breadcrumb_description'] = $page->breadcrumb_description;
+            $headerData = $this->header();
+            $footerData = $this->footer();
+            return response()->view('resources_hub', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
+
+     public function resource_news_view()
+    {
+        $page = Pages::where(["id" => 12, "status" => 'active'])->first();
+        if ($page) {
+            $page_name = 'resources_news';
+            $data['company'] = Company::where('id', 1)->first();
+
+            $data['meta_title'] = $page->meta_title;
+            $data['meta_keyword'] = $page->meta_keyword;
+            $data['meta_description'] = $page->meta_description;
+            $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            $data['breadcrumb_image'] = $page->page_image;
+            $data['breadcrumb_description'] = $page->breadcrumb_description;
+            $headerData = $this->header();
+            $footerData = $this->footer();
+            $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
+            return response()->view('resource_news', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
         } else {
             return redirect()->route('page.not.found');
         }

@@ -24,7 +24,9 @@ use App\Http\Controllers\Admin\TestimonialsController;
 use App\Http\Controllers\Admin\VisibilityController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\FormController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Middleware\AdminChangeStatusMiddleware;
 use App\Http\Middleware\AdminChangeVisibilityMiddleware;
 use App\Http\Middleware\AdminDeleteMiddleware;
@@ -192,4 +194,15 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_event', [EventController::class, 'addEvent'])->name('add.event');
     Route::match(['get', 'post'], '/edit_event/{event}', [EventController::class, 'event_edit'])->name('event.edit');
     Route::delete('/delete-event', [EventController::class, 'deleteData'])->name('event.delete');
+
+
+
+    Route::get('/manage_news_category', [NewsController::class, 'managenewsCategory'])->name('managenewsCategory');
+    Route::match(['get', 'post'], '/add_newsCategory', [NewsController::class, 'addnewsCategory'])->name('add.newsCategory');
+    Route::match(['get', 'post'], '/editnewscategory/{category}', [NewsController::class, 'editnewscategory'])->name('edit.newscategory');
+    // Route::delete('/delete-brand', [PagesController::class, 'NewsController'])->name('brand.delete');
+
+    //Forms
+    Route::get('/manage_subscriber', [FormController::class, 'manage_subscriber'])->name('manage_subscriber');
+    // Route::get('/events-data', [FormController::class, 'events_data'])->name('events.data');
 });

@@ -58,6 +58,8 @@ Route::get('/services', [PagesController::class, 'services_view'])->name('servic
 Route::get('/service/{service_url}', [PagesController::class, 'single_service_view'])->name('single.service');
 Route::get('/page-not-found', [PagesController::class, 'page_not_found_view'])->name('page.not.found');
 Route::get('/help-center', [PagesController::class, 'help_center_view'])->name('help_center');
+Route::get('/resources-hub', [PagesController::class, 'resource_hub_view'])->name('resource_hub');
+Route::get('/resources-news', [PagesController::class, 'resource_news_view'])->name('resource_news');
 
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 

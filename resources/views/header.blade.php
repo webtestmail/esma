@@ -91,15 +91,26 @@ input.is-invalid, select.is-invalid {
                         <li><a href="">Trade Fairs</a></li>
                     </ul>
                 </li>
+                @php 
+              $resources_hub = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 11]);
+                $news = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 12]);
+                @endphp
+                 @if(isset($resources_hub))
                 <li class="has-dropdown">
-                    <a href="">Resources Hub</a>
+                    <a href="{{ $resources_hub->client_page_urls }}">{{ $resources_hub->header_footer_name }}</a>
+                    @if(isset($news))
                     <ul class="dropdown-menu">
-                        <li><a href="">News & Announcements</a></li>
+                        @if(isset($news))
+                        <li><a href="{{ $news->client_page_urls }}">{{ $news->header_footer_name }}</a></li>
+                        @endif
                         <li><a href="">Articles & Reports</a></li>
                         <li><a href="">Document Library</a></li>
                         <li><a href="">Regulatory Updates</a></li>
                     </ul>
+                    @endif
+                    
                 </li>
+                @endif
                 <li>
                     <a href="javascript:void(0)">About</a>
                     @php
