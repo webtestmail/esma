@@ -200,7 +200,12 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::get('/manage_news_category', [NewsController::class, 'managenewsCategory'])->name('managenewsCategory');
     Route::match(['get', 'post'], '/add_newsCategory', [NewsController::class, 'addnewsCategory'])->name('add.newsCategory');
     Route::match(['get', 'post'], '/editnewscategory/{category}', [NewsController::class, 'editnewscategory'])->name('edit.newscategory');
-    // Route::delete('/delete-brand', [PagesController::class, 'NewsController'])->name('brand.delete');
+   
+
+    Route::get('/manage_news', [NewsController::class, 'managenews'])->name('managenews');
+    Route::match(['get', 'post'], '/add_news', [NewsController::class, 'addnews'])->name('add.news');
+    Route::match(['get', 'post'], '/editnews/{news}', [NewsController::class, 'editnews'])->name('edit.news');
+
 
     //Forms
     Route::get('/manage_subscriber', [FormController::class, 'manage_subscriber'])->name('manage_subscriber');

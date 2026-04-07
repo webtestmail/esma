@@ -7,6 +7,8 @@ use App\Models\Admin\BlogSections;
 use App\Models\Admin\Company;
 use App\Models\Admin\Pages;
 use App\Models\Admin\Plan;
+use App\Models\Admin\News;
+use App\Models\Admin\NewsCategory;
 use App\Models\Admin\Faqs;
 use App\Models\Admin\Services;
 use App\Models\Admin\ServiceSections;
@@ -350,6 +352,39 @@ class PagesController extends Controller
             $footerData = $this->footer();
             $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
             return response()->view('resource_news', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
+
+
+         public function news_detail_view($slug)
+    {
+        $news = News::where(['slug' => $slug, "status" => 'active'])->first();
+        if ($news) {
+            $page_name = 'news';
+            $data['company'] = Company::where('id', 1)->first();
+
+            $data['meta_title'] = $news->meta_title;
+            $data['meta_keyword'] = $news->meta_keyword;
+            $data['meta_description'] = $news->meta_description;
+
+            $headerData = $this->header();
+            $footerData = $this->footer();
+
+            $categoryIds = !empty($news->category_ids) 
+                ? explode(',', $news->category_ids) 
+                : [];
+
+            // Fetch categories
+            $categories = NewsCategory::whereIn('id', $categoryIds)
+                ->where('status', 'active')
+                ->get();
+
+            // Get only names (optional)
+            $categoryNames = $categories->pluck('name');
+            // $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
+            return response()->view('news_detail', compact('news','page_name', 'data', 'headerData', 'footerData', 'categoryNames'), 200);
         } else {
             return redirect()->route('page.not.found');
         }

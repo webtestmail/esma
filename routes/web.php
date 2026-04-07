@@ -60,6 +60,8 @@ Route::get('/page-not-found', [PagesController::class, 'page_not_found_view'])->
 Route::get('/help-center', [PagesController::class, 'help_center_view'])->name('help_center');
 Route::get('/resources-hub', [PagesController::class, 'resource_hub_view'])->name('resource_hub');
 Route::get('/resources-news', [PagesController::class, 'resource_news_view'])->name('resource_news');
+Route::get('/news/{slug}', [PagesController::class, 'news_detail_view'])->name('news_detail');
+
 
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
