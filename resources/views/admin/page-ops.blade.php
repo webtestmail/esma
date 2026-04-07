@@ -142,6 +142,15 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                              @if(isset($page) && !empty($page->encrypted_id) && $page->id == 6)
+                                  <div class="mb-4">
+                                    <label for="description" class="form-label">Video Link</label>
+                                    <input type="text" name="video_link" class="form-control"
+                                        placeholder="Enter Video Link" value="{{ !empty($page->encrypted_id) ? ($page->video_link) : old('video_link') }}">
+                                 
+                                </div>
+                                @endif
                                 <div class="mb-4">
                                     <label for="meta_title" class="form-label">Meta Title <span
                                             class="text-danger">*</span></label>
@@ -183,12 +192,32 @@
                                     @if (!empty($page->encrypted_id) && !empty($page->page_image))
                                         <div class="my-3">
                                             <div class="img-group lh-0 ms-3 justify-content-start d-none d-sm-flex">
-                                                <a href="javascript:void(0)" class="avatar-image avatar-md"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    title="{{ $page->page_image }}">
-                                                    <img src="{{ asset($page->page_image) }}" class="img-fluid"
-                                                        alt="image" />
-                                                </a>
+                                                    @php
+                                                        $ext = pathinfo($page->page_image, PATHINFO_EXTENSION);
+                                                        $isVideo = in_array(strtolower($ext), ['mp4', 'webm', 'ogg']);
+                                                    @endphp
+                                                  @if ($isVideo)
+                                                        <!-- Show video thumbnail -->
+                                                        <a href="javascript:void(0)"
+                                                        class="avatar-image avatar-md"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-trigger="hover"
+                                                        title="{{ $page->page_image }}">
+                                                            <video class="img-fluid" controls>
+                                                                <source src="{{ asset($page->page_image) }}" type="video/{{ $ext }}">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </a>
+                                                    @else
+                                                        <!-- Show image -->
+                                                        <a href="javascript:void(0)"
+                                                        class="avatar-image avatar-md"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-trigger="hover"
+                                                        title="{{ $page->page_image }}">
+                                                            <img src="{{ asset($page->page_image) }}" class="img-fluid" alt="image" />
+                                                        </a>
+                                                    @endif
                                             </div>
                                         </div>
                                     @endif

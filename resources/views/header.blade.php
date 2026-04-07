@@ -13,11 +13,12 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
     <title>@yield('title')</title>
     <link rel="shortcut icon" href="{{ asset($company->company_icon) }}" type="image/x-icon">
 
+    
     <link rel="stylesheet" href="{{ asset('css/outer.css') }}">
-
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,25 +41,24 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
         font-weight: 500;
     }
 
-    input.is-invalid,
-    select.is-invalid {
-        border: 1px solid #ff4d4d !important;
-    }
+input.is-invalid, select.is-invalid {
+    border: 1px solid #ff4d4d !important;
+}
+.submit-btn{
+   display: inline-flex;
+    align-items: center;
+    padding: 14px 28px 14px 32px;
+    gap: 14px;
+    background: var(--gradient-primary);
+    border: 2px solid rgba(107, 109, 196, 0.3);
+    backdrop-filter: blur(13px);
+    border-radius: var(--radius-58);
+    font-size: 18px;
+    color: white;
+}
 
-    .submit-btn {
-        display: inline-flex;
-        align-items: center;
-        padding: 14px 28px 14px 32px;
-        gap: 14px;
-        background: var(--gradient-primary);
-        border: 2px solid rgba(107, 109, 196, 0.3);
-        backdrop-filter: blur(13px);
-        border-radius: var(--radius-58);
-        font-size: 18px;
-        color: white;
-    }
-    </style>
-    @stack('page-css')
+</style>
+ @stack('page-css')
 
 </head>
 
@@ -89,12 +89,30 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('about') }}">About</a>
+                    <a href="javascript:void(0)">About</a>
+                    @php
+                        
+                        $aboutData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 6]);
+
+                        $memberData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 9]);
+
+                         $contactData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 7]);
+
+                          $help_centerData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 10]);
+                    @endphp
                     <ul class="dropdown-menu">
-                        <li><a href="">ESMA International Network</a></li>
-                        <li><a href="{{ route('membership') }}">Membership</a></li>
-                        <li><a href="{{ route('contact') }}">Contact Us</a></li>
-                        <li><a href="{{ route('help.center') }}">Help Center</a></li>
+                        @if(isset($aboutData))
+                        <li><a href="{{ $aboutData->client_page_urls }}">{{ $aboutData->header_footer_name }}</a></li>
+                        @endif
+                        @if(isset($memberData))
+                        <li><a href="{{ $memberData->client_page_urls }}">{{ $memberData->header_footer_name }}</a></li>
+                        @endif
+                        @if(isset($contactData))
+                        <li><a href="{{ $contactData->client_page_urls }}">{{ $contactData->header_footer_name }}</a></li>
+                        @endif
+                        @if(isset($help_centerData))
+                        <li><a href="{{ $help_centerData->client_page_urls }}">{{ $help_centerData->header_footer_name }}</a></li>
+                        @endif
                     </ul>
                 </li>
             </ul>

@@ -7,8 +7,10 @@ use App\Models\Admin\BlogSections;
 use App\Models\Admin\Company;
 use App\Models\Admin\Pages;
 use App\Models\Admin\Plan;
+use App\Models\Admin\Faqs;
 use App\Models\Admin\Services;
 use App\Models\Admin\ServiceSections;
+use App\Models\Admin\FaqCategory;   
 use Illuminate\Http\Request;
 use App\Models\UserProfile;
 use App\Models\User;
@@ -34,6 +36,12 @@ class PagesController extends Controller
             'pages' => $pages,
             'services' => $services
         ];
+    }
+
+    public function get_pagesection($id) {
+        return Pages::select('header_footer_name', 'client_page_urls')
+            ->whereIn('visibility', ['both', 'header'])
+            ->where('status', 'active')->where('id', $id)->first();
     }
 
     private function footer()
@@ -78,9 +86,9 @@ class PagesController extends Controller
             $data['meta_title'] = $page->meta_title;
             $data['meta_keyword'] = $page->meta_keyword;
             $data['meta_description'] = $page->meta_description;
-            $data['breadcrumb_headline'] = $page->breadcrumb_headline;
-            $data['breadcrumb_image'] = $page->page_image;
-            $data['breadcrumb_description'] = $page->breadcrumb_description;
+            // $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            // $data['breadcrumb_image'] = $page->page_image;
+            // $data['breadcrumb_description'] = $page->breadcrumb_description;
             $headerData = $this->header();
             $footerData = $this->footer();
             return response()->view('about', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
@@ -261,20 +269,38 @@ class PagesController extends Controller
             return redirect()->route('page.not.found');
         }
     }   
-    public function view_profile($slug){
+     public function view_profile($slug)
+    {
+        // 1. Fetch the profile first
         $userProfile = UserProfile::where('slug', $slug)->first();
-        $user = User::where('id', $userProfile->user_id)->first();
-        if($userProfile){
-            $employeeCount = $userProfile->number_of_employees ?? 0;
-            $tradeSectorCount = $user->tradeSectors()->count() ?? 0;
-            $productCategoryCount = $user->productCategories()->count() ?? 0;
-            $brandCount = $user->brands()->count() ?? 0;
-            $page_name = 'view-profile';
-            $headerData = $this->header();
-            $footerData = $this->footer();
-            return response()->view('member-profile', compact('page_name', 'userProfile', 'user','headerData', 'footerData','employeeCount', 'tradeSectorCount', 'productCategoryCount', 'brandCount'), 200);
-        } else {
-            return redirect()->route('page.not.found');
+
+        if (!$userProfile) {
+            // Handle the case where the profile isn't found (e.g., 404 error)
+            abort(404, 'Profile not found');
         }
+
+        $user = User::find($userProfile->user_id);
+
+        if (!$user) {
+            abort(404, 'User associated with this profile does not exist');
+        }
+
+        $employeeCount = $userProfile->number_of_employees ?? 0;
+        
+        $tradeSectorCount = $user->tradeSectors()->count();
+        $productCategoryCount = $user->productCategories()->count();
+        $brandCount = $user->brands()->count();
+
+        $page_name = 'view-profile';
+        $headerData = $this->header();
+        $footerData = $this->footer();
+
+        return response()->view('member-profile', compact(
+            'page_name', 'userProfile', 'user', 'headerData', 
+            'footerData', 'employeeCount', 'tradeSectorCount', 
+            'productCategoryCount', 'brandCount'
+        ), 200);
     }
 }
+
+    

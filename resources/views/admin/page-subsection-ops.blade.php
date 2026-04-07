@@ -96,8 +96,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="subsection_headline" class="form-label">Sub-Section Headline <span
-                                            class="text-danger">*</span></label>
+                                    <label for="subsection_headline" class="form-label">Sub-Section Headline </label>
                                     <input type="text" class="form-control" id="subsection_headline"
                                         name="subsection_headline"
                                         value="{{ !empty($subsection->encrypted_id) ? $subsection->section_headline : old('subsection_headline') }}"
@@ -107,18 +106,21 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="subsection_icon" class="form-label">Sub-Section Icon <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="subsection_icon" name="subsection_icon"
-                                        value="{{ !empty($subsection->encrypted_id) ? $subsection->section_icon : old('subsection_icon') }}"
-                                        placeholder="Enter <i></i> Tag Icon" />
-                                    @error('subsection_icon')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    <label for="section_subheading" class="form-label">Sub-Section Subheading </label>
+                                    <input type="text" class="form-control" id="section_subheading" name="section_subheading"
+                                        value="{{ !empty($subsection->encrypted_id) ? $subsection->section_subheading : old('section_subheading') }}"
+                                        placeholder="Enter Subheading" />
+                                    
+                                </div>
+
+                                 <div class="mb-4">
+                                    <label for="description" class="form-label">Short Description </label>
+                                    <textarea name="section_subtitle" id="section_subtitle" cols="30" rows="6" class="form-control"
+                                        placeholder="Enter Short Description">{{ !empty($subsection->encrypted_id) ? htmlspecialchars_decode($subsection->section_subtitle) : old('section_subtitle') }}</textarea>
+                                
                                 </div>
                                 <div class="mb-4">
-                                    <label for="description" class="form-label">Description <span
-                                            class="text-danger">*</span></label>
+                                    <label for="description" class="form-label">Description </label>
                                     <textarea name="description" id="description" cols="30" rows="10" class="form-control"
                                         placeholder="Enter Description">{{ !empty($subsection->encrypted_id) ? htmlspecialchars_decode($subsection->description) : old('description') }}</textarea>
                                     @error('description')
@@ -126,8 +128,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="botton" class="form-label">Button <span
-                                            class="text-danger">*</span></label>
+                                    <label for="botton" class="form-label">Button</label>
                                     <div class="row">
                                         <div class="col-6">
                                             <input type="text" class="form-control" id="button_name"
@@ -156,8 +157,7 @@
                         <div class="card stretch stretch-full">
                             <div class="card-body">
                                 <div class="mb-4">
-                                    <label for="subsection_image" class="form-label">Sub-Section Image <span
-                                            class="text-danger">*</span></label>
+                                    <label for="subsection_image" class="form-label">Sub-Section Image</label>
                                     @if (!empty($subsection->encrypted_id) && !empty($subsection->section_image))
                                         <div class="my-3">
                                             <div class="img-group lh-0 ms-3 justify-content-start d-none d-sm-flex">
@@ -176,32 +176,27 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                {{-- <div class="mb-4">
-                                    <label for="more_images" class="form-label">More Images <span
-                                            class="text-danger">*</span></label>
+                                <div class="mb-4">
+                                    <label for="more_images" class="form-label">Other Image </label>
                                     @if (!empty($subsection->encrypted_id) && !empty($subsection->more_images))
-                                        @php
-                                            $more_images = json_decode($subsection->more_images);
-                                        @endphp
+                                      
                                         <div class="my-3">
                                             <div class="img-group lh-0 ms-3 justify-content-start d-none d-sm-flex">
-                                                @foreach ($more_images as $image)
+                                               
                                                     <a href="javascript:void(0)" class="avatar-image avatar-md"
                                                         data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                         title="More Images">
-                                                        <img src="{{ asset($image) }}" class="img-fluid"
+                                                        <img src="{{ asset($subsection->more_images) }}" class="img-fluid"
                                                             alt="image" />
                                                     </a>
-                                                @endforeach
+                                             
                                             </div>
                                         </div>
                                     @endif
-                                    <input class="form-control" type="file" id="more_images" name="more_images[]"
-                                        accept="image/*" multiple />
-                                    @error('more_images')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div> --}}
+                                    <input class="form-control" type="file" id="more_images" name="more_images"
+                                        accept="image/*" />
+                                  
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -11,12 +11,18 @@ class Faqs extends Model
 
     protected $table = 'faqs';
 
+        public function category()
+    {
+        return $this->belongsTo(FaqCategory::class, 'category_id');
+    }
+
     protected $fillable = [
         'position_order',
         'faq_type',
         'question',
         'answer',
-        'status'
+        'status',
+        'category_id'
     ];
 
     protected $casts = [
@@ -27,4 +33,6 @@ class Faqs extends Model
         'answer' => 'string',
         'status' => 'string',
     ];
+
+    
 }

@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\VisibilityController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\MasterController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Middleware\AdminChangeStatusMiddleware;
 use App\Http\Middleware\AdminChangeVisibilityMiddleware;
 use App\Http\Middleware\AdminDeleteMiddleware;
@@ -126,13 +127,17 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_faq', [FaqsController::class, 'addFaq'])->name('add.faq');
     Route::match(['get', 'post'], '/edit_faq/{faq}', [FaqsController::class, 'editFaq'])->name('edit.faq');
 
+    Route::get('/manage_faq_category', [FaqsController::class, 'manageFaqCategory'])->name('manage_faqcategory');
+    Route::match(['get', 'post'], '/add_faq_catetgory', [FaqsController::class, 'addFaqcategory'])->name('add.faqcategory');
+    Route::match(['get', 'post'], '/edit_faq_catetgory/{faqcategory}', [FaqsController::class, 'editFaqcategory'])->name('edit.faqcategory');
+
     Route::get('/manage_team', [TeamController::class, 'manageTeam'])->name('manage_team');
     Route::match(['get', 'post'], '/add_member', [TeamController::class, 'addMember'])->name('add.member');
     Route::match(['get', 'post'], '/edit_member/{member}', [TeamController::class, 'editMember'])->name('edit.member');
 
-    // Route::get('/manage_brands', [BrandsController::class, 'manageBrands'])->name('manage_brands');
-    // Route::match(['get', 'post'], '/add_brand', [BrandsController::class, 'addBrand'])->name('add.brand');
-    // Route::match(['get', 'post'], '/edit_brand/{brand}', [BrandsController::class, 'editBrand'])->name('edit.brand');
+    Route::get('/manage_brands', [BrandsController::class, 'manageBrands'])->name('manage_brands');
+    Route::match(['get', 'post'], '/add_brand', [BrandsController::class, 'addBrand'])->name('add.brand');
+    Route::match(['get', 'post'], '/edit_brand/{brand}', [BrandsController::class, 'editBrand'])->name('edit.brand');
 
     Route::get('/manage_testimonials', [TestimonialsController::class, 'manageTestimonials'])->name('manage_testimonials');
     Route::match(['get', 'post'], '/add_testimonial', [TestimonialsController::class, 'addTestimonial'])->name('add.testimonial');
@@ -188,4 +193,10 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_event', [EventController::class, 'addEvent'])->name('add.event');
     Route::match(['get', 'post'], '/edit_event/{event}', [EventController::class, 'event_edit'])->name('event.edit');
     Route::delete('/delete-event', [EventController::class, 'deleteData'])->name('event.delete');
+
+    Route::get('/manage_document_categories', [DocumentController::class, 'manageDocumentCategories'])->name('manage_document_categories');
+    Route::get('/document-category-data', [DocumentController::class, 'document_category_data'])->name('documents-categories.data');
+    Route::match(['get','post'], '/document-category-edit/{id}', [DocumentController::class, 'document_category_edit'])->name('document_category.edit');
+    Route::match(['get','post'],'/add-document-category', [DocumentController::class, 'addDocumentCategory'])->name('add.document_category');
+    Route::delete('/delete-document-category', [DocumentController::class, 'deleteData'])->name('document_category.delete');
 });

@@ -92,6 +92,8 @@ class PagesController extends Controller
                     'client_page_urls' => $request->client_page_link,
                     'header_footer_name' => $request->header_footer_name,
                     'page_headline' => $request->page_headline,
+                     'video_link' => $request->video_link,
+                    'visibility' => 'none', 
                     'breadcrumb_headline' => $request->breadcrumb_headline,
                     'breadcrumb_description' => htmlspecialchars($request->breadcrumb_description, ENT_QUOTES),
                     'description' => htmlspecialchars($request->description, ENT_QUOTES),
@@ -142,6 +144,7 @@ class PagesController extends Controller
             $page->header_footer_name = $request->header_footer_name;
             $page->page_headline = $request->page_headline;
             $page->breadcrumb_headline = $request->breadcrumb_headline;
+            $page->video_link = $request->video_link;
             $page->breadcrumb_description = htmlspecialchars($request->breadcrumb_description, ENT_QUOTES);
             $page->description = htmlspecialchars($request->description, ENT_QUOTES);
             $page->meta_title = $request->meta_title;
@@ -248,16 +251,16 @@ class PagesController extends Controller
             if ($request->isMethod('post')) {
                 $request->validate([
                     'default_section_name' => 'required|string',
-                    'section_headline' => 'required|string',
-                    'section_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+                    // 'section_headline' => 'required|string',
+                    // 'section_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
                 ], [
-                    'default_section_name.required' => 'Default section name is required!',
-                    'default_section_name.string' => 'Default section name must be a string!',
-                    'section_headline.required' => 'Section headline is required!',
-                    'section_headline.string' => 'Section headline must be a string!',
-                    'section_image.image' => 'The file must be an image!',
-                    'section_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
-                    'section_image.max' => 'The image must not be larger than 2MB!'
+                    // 'default_section_name.required' => 'Default section name is required!',
+                    // 'default_section_name.string' => 'Default section name must be a string!',
+                    // 'section_headline.required' => 'Section headline is required!',
+                    // 'section_headline.string' => 'Section headline must be a string!',
+                    // 'section_image.image' => 'The file must be an image!',
+                    // 'section_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
+                    // 'section_image.max' => 'The image must not be larger than 2MB!'
                 ]);
 
                 $page_id = Crypt::decrypt($request->page);
@@ -273,6 +276,7 @@ class PagesController extends Controller
                     'description' => htmlspecialchars($request->description, ENT_QUOTES),
                     'button_name' => $request->button_name,
                     'button_link' => $request->button_link,
+                    'video_link' => $request->video_link,
                 ];
                 if (!empty($request->file('section_image'))) {
                     $path = 'images/pages/sections/';
@@ -310,27 +314,27 @@ class PagesController extends Controller
             if (session('role') == 'superadmin') {
                 $request->validate([
                     'default_section_name' => 'required|string',
-                    'section_headline' => 'required|string',
-                    'section_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+                    // 'section_headline' => 'required|string',
+                    // 'section_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
                 ], [
                     'default_section_name.required' => 'Default section name is required!',
                     'default_section_name.string' => 'Default section name must be a string!',
-                    'section_headline.required' => 'Section headline is required!',
-                    'section_headline.string' => 'Section headline must be a string!',
-                    'section_image.image' => 'The file must be an image!',
-                    'section_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
-                    'section_image.max' => 'The image must not be larger than 2MB!'
+                    // 'section_headline.required' => 'Section headline is required!',
+                    // 'section_headline.string' => 'Section headline must be a string!',
+                    // 'section_image.image' => 'The file must be an image!',
+                    // 'section_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
+                    // 'section_image.max' => 'The image must not be larger than 2MB!'
                 ]);
             } elseif (session('role') == 'admin') {
                 $request->validate([
-                    'section_headline' => 'required|string',
-                    'section_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+                    // 'section_headline' => 'required|string',
+                    // 'section_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
                 ], [
-                    'section_headline.required' => 'Section headline is required!',
-                    'section_headline.string' => 'Section headline must be a string!',
-                    'section_image.image' => 'The file must be an image!',
-                    'section_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
-                    'section_image.max' => 'The image must not be larger than 2MB!'
+                    // 'section_headline.required' => 'Section headline is required!',
+                    // 'section_headline.string' => 'Section headline must be a string!',
+                    // 'section_image.image' => 'The file must be an image!',
+                    // 'section_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
+                    // 'section_image.max' => 'The image must not be larger than 2MB!'
                 ]);
             }
 
@@ -344,7 +348,7 @@ class PagesController extends Controller
             $section->description = htmlspecialchars($request->description, ENT_QUOTES);
             $section->button_name = $request->button_name;
             $section->button_link = $request->button_link;
-
+            $section->video_link = $request->video_link;
             if (!empty($request->file('section_image'))) {
                 $path = 'images/pages/sections/';
                 $filePath = $this->storeImage($request->file("section_image"), $path, $section->section_image);
@@ -394,27 +398,27 @@ class PagesController extends Controller
             if (session('role') == 'superadmin') {
                 $request->validate([
                     'default_subsection_name' => 'required|string',
-                    'subsection_headline' => 'required|string',
-                    'subsection_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+                    // 'subsection_headline' => 'required|string',
+                    // 'subsection_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
                 ], [
                     'default_subsection_name.required' => 'Default section name is required!',
                     'default_subsection_name.string' => 'Default section name must be a string!',
-                    'subsection_headline.required' => 'Section headline is required!',
-                    'subsection_headline.string' => 'Section headline must be a string!',
-                    'subsection_image.image' => 'The file must be an image!',
-                    'subsection_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
-                    'subsection_image.max' => 'The image must not be larger than 2MB!'
+                    // 'subsection_headline.required' => 'Section headline is required!',
+                    // 'subsection_headline.string' => 'Section headline must be a string!',
+                    // 'subsection_image.image' => 'The file must be an image!',
+                    // 'subsection_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
+                    // 'subsection_image.max' => 'The image must not be larger than 2MB!'
                 ]);
             } elseif (session('role') == 'admin') {
                 $request->validate([
-                    'subsection_headline' => 'required|string',
-                    'subsection_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+                    // 'subsection_headline' => 'required|string',
+                    // 'subsection_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
                 ], [
-                    'subsection_headline.required' => 'Section headline is required!',
-                    'subsection_headline.string' => 'Section headline must be a string!',
-                    'subsection_image.image' => 'The file must be an image!',
-                    'subsection_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
-                    'subsection_image.max' => 'The image must not be larger than 2MB!'
+                    // 'subsection_headline.required' => 'Section headline is required!',
+                    // 'subsection_headline.string' => 'Section headline must be a string!',
+                    // 'subsection_image.image' => 'The file must be an image!',
+                    // 'subsection_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
+                    // 'subsection_image.max' => 'The image must not be larger than 2MB!'
                 ]);
             }
 
@@ -429,7 +433,9 @@ class PagesController extends Controller
                 'position_order' => $position_order,
                 'section_title' => $request->subsection_title,
                 'section_headline' => $request->subsection_headline,
-                'section_icon' => $request->subsection_icon,
+                'section_subheading' => $request->section_subheading,
+                'section_subtitle' => $request->section_subtitle,
+                'button_link' => $request->button_link,
                 'description' => htmlspecialchars($request->description, ENT_QUOTES)
             ];
             if (session('role') == 'superadmin') {
@@ -441,6 +447,12 @@ class PagesController extends Controller
                 $subsection['section_image'] = $filePath;
             }
 
+            if (!empty($request->file('more_images'))) {
+                $path = 'images/pages/sections/';
+                $filePath = $this->storeImage($request->file("more_images"), $path);
+                $subsection['more_images']= $filePath;
+            }
+            
             if (PageSections::create($subsection)) {
                 $request->session()->flash('success', 'Sub-Section is inserted Successfully!');
                 return redirect()->route('admin.edit.page.section', ["page" => $request->page, "section" => $request->section]);
@@ -485,13 +497,21 @@ class PagesController extends Controller
             }
             $subsection->section_title = $request->subsection_title;
             $subsection->section_headline = $request->subsection_headline;
-            $subsection->section_icon = $request->subsection_icon;
+            $subsection->section_subheading = $request->section_subheading;
+             $subsection->button_link = $request->button_link;
+             $subsection->section_subtitle = $request->section_subtitle;
             $subsection->description = htmlspecialchars($request->description, ENT_QUOTES);
 
             if (!empty($request->file('subsection_image'))) {
                 $path = 'images/pages/sections/';
                 $filePath = $this->storeImage($request->file("subsection_image"), $path, $subsection->section_image);
                 $subsection->section_image = $filePath;
+            }
+
+             if (!empty($request->file('more_images'))) {
+                $path = 'images/pages/sections/';
+                $filePath = $this->storeImage($request->file("more_images"), $path, $subsection->more_images);
+                $subsection->more_images = $filePath;
             }
 
             if ($subsection->save()) {
@@ -521,8 +541,8 @@ class PagesController extends Controller
 
     function getPageSection($section_id)
     {
-        $page_section = PageSections::findOrFail($section_id);
-        $page_section->sub_sections = PageSections::where(["parent_id" => $page_section->id])->get();
+        $page_section = PageSections::where('status', 'active')->findOrFail($section_id);
+        $page_section->sub_sections = PageSections::where('status', 'active')->where(["parent_id" => $page_section->id])->get();
 
         return $page_section;
     }

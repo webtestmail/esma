@@ -97,7 +97,7 @@
                     @endif
 
      <div class="row">
-    <div class="col-xl-6 col-md-12 mb-4">
+    <div class="col-xl-12 col-md-12 mb-4">
         <div class="card h-100">
             <div class="card-header bg-white py-3">
                 <h6 class="m-0 fw-bold text-primary"><i class="feather-user me-2"></i>{{ $currentPageName }} Information</h6>
@@ -105,9 +105,26 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label small text-uppercase text-muted">Name</label>
+                        <label class="form-label small text-uppercase text-muted">Name </label>
                         <input type="text" name="name" class="form-control" value="{{ old('name', $memberCategory->name ?? '') }}">
-                        @error('name')<span>{{ $message }}</span>@endif
+                        {{-- @error('name')
+                         <span class="text-danger">{{ $message }}</span>
+                         @endif --}}
+                    </div>
+
+                   <div class="col-md-6">
+                        <label class="form-label small text-uppercase text-muted">Brand Image <span class="text-danger">*</span></label>
+                        <input type="file" name="brand_image" class="form-control" accept="image/*">
+                        @if(!empty($memberCategory->brand_image))
+                            <div class="mt-2">
+                                <img src="{{ asset($memberCategory->brand_image) }}" 
+                                    alt="Brand Image" 
+                                    style="max-width: 100px; max-height: 100px; border-radius: 4px;">
+                            </div>
+                        @endif
+                        @error('brand_image')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="col-md-6">

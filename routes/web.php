@@ -5,6 +5,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\auth\AuthModuleController;
 // use App\Http\Controllers\admin\auth\AuthController as AdminAuthController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\facebookController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\NewsletterController;
@@ -57,6 +58,7 @@ Route::get('/services', [PagesController::class, 'services_view'])->name('servic
 Route::get('/service/{service_url}', [PagesController::class, 'single_service_view'])->name('single.service');
 Route::get('/page-not-found', [PagesController::class, 'page_not_found_view'])->name('page.not.found');
 
+
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
 Route::get('/privacy-policy',[PagesController::class,'privacy_policy_page_view'])->name('privacy.policy');
@@ -69,8 +71,8 @@ Route::post('/register',[AuthController::class,'register'])->name('register');
 Route::get('/email/verify',[AuthController::class,'email_verify_notice'])->name('verification.notice');
 Route::post('/application/submit',[AuthController::class,'application_submit'])->name('application.submit');
 
-
 Route::get('/view-profile/{slug}',[PagesController::class,'view_profile'])->name('view-profile');
+
 
 
 Route::get('/password/request',[ForgotPasswordController::class,'password_request'])->name('password.request'); 
@@ -82,59 +84,61 @@ Route::post('/profile.password.update',[AuthController::class,'profile_password_
 
 
 //Auth Route  
-Route::middleware('auth')->group(function(){
+// Route::middleware('auth')->group(function(){
     
 
-Route::get('profile',[AuthModuleController::class, 'profile_page_view'])->name('profile');
+// Route::get('profile',[AuthModuleController::class, 'profile_page_view'])->name('profile');
 
-Route::put('/update/settings',[AuthController::class,'profile_update'])->name('update.settings');
+// Route::put('/update/settings',[AuthController::class,'profile_update'])->name('update.settings');
 
-Route::get('/otp/verify/route',[AuthController::class,'otp_verify_page'])->name('otp.verify.route');
+// Route::get('/otp/verify/route',[AuthController::class,'otp_verify_page'])->name('otp.verify.route');
 
-Route::post('/otp/verify',[AuthController::class,'verifyOtp'])->name('otp.verify');
+// Route::post('/otp/verify',[AuthController::class,'verifyOtp'])->name('otp.verify');
 
-Route::get('/otp/resend',[AuthController::class,'otp_resend'])->name('otp.resend');
+// Route::get('/otp/resend',[AuthController::class,'otp_resend'])->name('otp.resend');
 
-Route::get('/sign-out',[AuthController::class,'logout'])->name('sign-out');
+// Route::get('/sign-out',[AuthController::class,'logout'])->name('sign-out');
 
 // Route::post('/campaigns/initiate-payment',[BrandPaymentController::class,'initiatePayment']);
 
 
-Route::get('/payment/callback', [BrandPaymentController::class, 'paymentCallback'])
-    ->name('payment.callback');
+// Route::get('/payment/callback', [BrandPaymentController::class, 'paymentCallback'])
+//     ->name('payment.callback');
     
-Route::post('/wallet/withdraw-request',[BrandPaymentController::class,'withdrawRequest']);
+// Route::post('/wallet/withdraw-request',[BrandPaymentController::class,'withdrawRequest']);
 
 //Bank account
 
-Route::post('/wallet/bank-accounts/store',[WalletController::class,'wallet_bank_accounts_store']);
+// Route::post('/wallet/bank-accounts/store',[WalletController::class,'wallet_bank_accounts_store']);
 
-Route::post('/settings/instagram/update',[InstagramSettingController::class,'settings_instagram_update']);
+// Route::post('/settings/instagram/update',[InstagramSettingController::class,'settings_instagram_update']);
 
-Route::post('/settings/notification/update',[NotificationSettingsController::class,'settings_notification_update']);
+// Route::post('/settings/notification/update',[NotificationSettingsController::class,'settings_notification_update']);
 
 
 
-Route::post('/messages/send',[CampaignController::class,'messages_store']);
+// Route::post('/messages/send',[CampaignController::class,'messages_store']);
 
-Route::post('/payments/create-order',[CampaignController::class,'payments_create_order']);
+// Route::post('/payments/create-order',[CampaignController::class,'payments_create_order']);
 
-Route::post('/payments/verify',[CampaignController::class,'handlePaymentSuccess']);
+// Route::post('/payments/verify',[CampaignController::class,'handlePaymentSuccess']);
 
-Route::get('/get-messages/{encrypted_id}',[CampaignController::class, 'get_messages']);
+// Route::get('/get-messages/{encrypted_id}',[CampaignController::class, 'get_messages']);
 
-//Subscription route
-Route::post('/razorpay/create-subscription',[SubscriptionController::class,'razorpay_create_subscription']);
+// //Subscription route
+// Route::post('/razorpay/create-subscription',[SubscriptionController::class,'razorpay_create_subscription']);
 
-Route::post('/razorpay/verify-subscription',[SubscriptionController::class,'verifySubscription']);
+// Route::post('/razorpay/verify-subscription',[SubscriptionController::class,'verifySubscription']);
 
-Route::get('/subscription-success', function () {
-    $user = Auth::user();
-    $plan = $user->hasActiveSubscription();
-    return view('user-dashboard.subscription-success',compact('plan','user')); // Or 'thank-you' if you create a separate file
-})->name('subscription-success');
+// Route::get('/subscription-success', function () {
+//     $user = Auth::user();
+//     $plan = $user->hasActiveSubscription();
+//     return view('user-dashboard.subscription-success',compact('plan','user')); // Or 'thank-you' if you create a separate file
+// })->name('subscription-success');
 
-});
+
+
+// });
 
 
 // Admin routes

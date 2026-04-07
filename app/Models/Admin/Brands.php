@@ -22,7 +22,6 @@ class Brands extends Model
         'id' => 'integer',
         'position_order' => 'integer',
         'brand_name' => 'string',
-        'brand_image' => 'string',
         'status' => 'string',
     ];
 }

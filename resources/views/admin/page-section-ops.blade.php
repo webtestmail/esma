@@ -94,8 +94,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="section_headline" class="form-label">Section Headline <span
-                                            class="text-danger">*</span></label>
+                                    <label for="section_headline" class="form-label">Section Headline </label>
                                     <input type="text" class="form-control" id="section_headline" name="section_headline"
                                         value="{{ !empty($section->encrypted_id) ? $section->section_headline : old('section_headline') }}"
                                         placeholder="Enter Headline" />
@@ -112,9 +111,16 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-4">
-                                    <label for="botton" class="form-label">Button <span
-                                            class="text-danger">*</span></label>
+                                    <label for="video_link" class="form-label">Video Link </label>
+                                    <input type="text" class="form-control" id="video_link" name="video_link"
+                                        value="{{ !empty($section->encrypted_id) ? $section->video_link : old('video_link') }}"
+                                        placeholder="Enter Video Link" />
+                                   
+                                </div>
+                                <div class="mb-4">
+                                    <label for="botton" class="form-label">Button </label>
                                     <div class="row">
                                         <div class="col-6">
                                             <input type="text" class="form-control" id="button_name" name="button_name"
@@ -142,8 +148,7 @@
                         <div class="card stretch stretch-full">
                             <div class="card-body">
                                 <div class="mb-4">
-                                    <label for="section_image" class="form-label">Section Image <span
-                                            class="text-danger">*</span></label>
+                                    <label for="section_image" class="form-label">Section Image </label>
                                     @if (!empty($section->encrypted_id) && !empty($section->section_image))
                                         <div class="my-3">
                                             <div class="img-group lh-0 ms-3 justify-content-start d-none d-sm-flex">
@@ -163,8 +168,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="more_images" class="form-label">More Images <span
-                                            class="text-danger">*</span></label>
+                                    <label for="more_images" class="form-label">More Images </label>
                                     @if (!empty($section->encrypted_id) && !empty($section->more_images))
                                         @php
                                             $more_images = json_decode($section->more_images);

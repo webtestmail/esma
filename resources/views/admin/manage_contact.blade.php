@@ -85,7 +85,7 @@
                                     <div class="col-md-6 mb-5">
                                         <label for="mail" class="form-label">Company E-Mail</label>
                                         <input type="email" class="form-control" id="mail" name="mail"
-                                            value="{{ $contact->mail }}" placeholder="Company E-Mail">
+                                            value="{{ $contact->email }}" placeholder="Company E-Mail">
                                         @error('mail')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -138,6 +138,31 @@
                                             Location</label>
                                         <textarea name="alternate_location" id="alternate_location" cols="30" rows="5" class="form-control"
                                             placeholder="Enter Company Alternate Location">{!! htmlspecialchars_decode($contact->alternate_location) !!}</textarea>
+                                    </div>
+
+                                     <div class="col-md-12 mb-5">
+                                        <label for="title" class="form-label">Newsletter Title</label>
+                                        <textarea  name="newsletter_title" id="newsletter_title" cols="30" rows="4" 
+                                  class="form-control" placeholder="Enter Newsletter Title">{{ $contact->newsletter_title ?? '' }}</textarea>
+                                    </div>
+
+                                     <div class="col-md-12 mb-5">
+                                        <label for="alternate_location" class="form-label">Newsletter Description</label>
+                                        <textarea name="newsletter_description" id="newsletter_description" cols="30" rows="5" class="form-control"
+                                            placeholder="Enter Company Alternate Location">{!! htmlspecialchars_decode($contact->newsletter_description ?? '') !!}</textarea>
+                                    </div>
+
+                                   <div class="col-md-12 mb-5">
+                                        <label for="alternate_location" class="form-label">Newsletter Image</label>
+                                        
+                                        <!-- Existing image preview -->
+                                        @if($contact->newsletter_image)
+                                            <div class="mb-3">
+                                                <img src="{{ asset($contact->newsletter_image) }}"  alt="Newsletter Image" class="img-fluid rounded" style="max-width: 300px; max-height: 200px;">
+                                            </div>
+                                        @endif
+
+                                        <input type="file" name="newsletter_image" id="newsletter_image" class="form-control" accept="image/*">
                                     </div>
                                 </div>
                             </div>

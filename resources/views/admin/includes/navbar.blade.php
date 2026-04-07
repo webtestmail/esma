@@ -189,7 +189,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nxl-item nxl-hasmenu d-none">
+                <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-tag"></i></span>
                         <span class="nxl-mtext">Brands</span><span class="nxl-arrow"><i
@@ -213,15 +213,33 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nxl-item nxl-hasmenu">
+                    <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-help-circle"></i></span>
-                        <span class="nxl-mtext">FAQs</span><span class="nxl-arrow"><i
+                        <span class="nxl-mtext">Documents & Libraries</span><span class="nxl-arrow"><i
                                 class="feather-chevron-right"></i></span>
                     </a>
                     <ul class="nxl-submenu">
                         <li class="nxl-item">
-                            <a class="nxl-link" href="{{ route('admin.manage_faqs') }}">Manage FAQs</a>
+                            <a class="nxl-link" href="{{ route('admin.manage_document_categories') }}">Documents Categories</a>
+                        </li>
+                        <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_faqs') }}">Manage documents</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nxl-item nxl-hasmenu">
+                    <a href="javascript:void(0);" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-help-circle"></i></span>
+                        <span class="nxl-mtext">Help center</span><span class="nxl-arrow"><i
+                                class="feather-chevron-right"></i></span>
+                    </a>
+                    <ul class="nxl-submenu">
+                        <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_faqcategory') }}">Manage Category</a>
+                        </li>
+                        <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_faqs') }}">Manage help center faqs</a>
                         </li>
                     </ul>
                 </li>
@@ -241,7 +259,7 @@
                 <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-settings"></i></span>
-                        <span class="nxl-mtext">Master</span><span class="nxl-arrow"><i
+                        <span class="nxl-mtext">Master Management</span><span class="nxl-arrow"><i
                                 class="feather-chevron-right"></i></span>
                     </a>
                     <ul class="nxl-submenu">
