@@ -7,6 +7,7 @@ use App\Models\Admin\Faqs;
 use App\Models\Admin\FaqCategory;   
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Yajra\DataTables\Facades\DataTables;
 
 class FaqsController extends Controller
 {
@@ -21,6 +22,35 @@ class FaqsController extends Controller
         // dd($faqs);
         $currentPage = "manage_faqs";
         return view('admin.manage_faq', ['faqsData' => $faqs, 'model' => $model, 'currentPage' => $currentPage]);
+    }
+
+
+    public function faqs_data() {
+          $faqs = Faqs::query();
+                return DataTables::of($faqs)
+            ->addIndexColumn()
+            ->addColumn('question', function($faqs){
+                return $faqs->question;
+            })
+            ->addColumn('category_name', function($faqs){
+                return $faqs->category ? $faqs->category->name : 'No Category'; 
+            })
+            ->addColumn('is_active', function($faqs){
+                return $faqs->status == 'active' ? 'Active' : 'In active';
+            })
+            ->addColumn('action', function ($faqs) {
+                return '<div class="dropdown">
+                            <a href="javascript:void(0);" class="avatar-text avatar-md ms-auto" data-bs-toggle="dropdown">
+                                <i class="feather-more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="' . route('admin.edit.faq', encrypt($faqs->id)) . '" class="dropdown-item">Modify</a>
+                                <button class="dropdown-item delete" data-id="' . $faqs->id . '">Delete faqs</button>
+                            </div>
+                        </div>';
+            })
+            // ->rawColumns(['action','question','is_active','category_name'])
+            ->make(true);
     }
 
     function addFaq(Request $request)

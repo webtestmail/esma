@@ -55,6 +55,7 @@ class NewsController extends Controller
             'category_ids' => $category_ids,
             'name' => $request->name,
             'slug' => $request->slug,
+            'header_footer_name' => $request->header_footer_name,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
             'video' => $request->video,
@@ -189,6 +190,7 @@ class NewsController extends Controller
         $news->name = $request->name;
         $news->slug = $request->slug;
         $news->position_order = $request->position_order;
+        $news->header_footer_name = $request->header_footer_name;
         $news->title = $request->title;
         $news->subtitle = $request->subtitle;
         $news->video = $request->video;

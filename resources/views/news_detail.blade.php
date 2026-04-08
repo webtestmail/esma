@@ -5,6 +5,10 @@
 @endsection
 
 
+@php 
+$contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getCompanyData();
+@endphp
+
 
 @section('content')
 
@@ -20,15 +24,15 @@
                 <svg class="svg-icon svg-three-arrow">
                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-three-arrow"></use>
                 </svg>
-                <li>Resources Hub</li>
+                <li>{{ $data['category']->header_footer_name ?? '' }}</li>
                 <svg class="svg-icon svg-three-arrow">
                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-three-arrow"></use>
                 </svg>
-                <li>News Announcements</li>
+                <li>{{ $data['subcategory']->header_footer_name ?? '' }}s</li>
                 <svg class="svg-icon svg-three-arrow">
                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-three-arrow"></use>
                 </svg>
-                <li>USA Food Export...</li>
+               <li>{{ implode(' ', array_slice(explode(' ', $news->header_footer_name ?? ''), 0, 3)) }}...</li>
             </ul>
             <h1 class="inner-heading wow fadeInUp">
                {!! html_entity_decode($news->name ?? '') !!}
@@ -803,18 +807,29 @@
                         </div>
                         <div class="side-newsletter">
                             <div class="news-newsletter-form">
-                                <img src="images/journal-blue.png" alt="" class="py-3">
-                                <p class="m-0">Subscribe to receive handpicked luxury listings, exclusive previews, and
-                                    market insights — all delivered straight to your inbox. Stay effortlessly connected
-                                    to the finest properties, tailored to your taste.</p>
-                                <form class="pt-3">
-                                    <input type="email" placeholder="Enter your email">
+                                <img src="{{ asset($contact->newsletter_image) }}" alt="" class="py-3">
+                                <p class="m-0">{!! $contact->newsletter_description ?? '' !!}</p>
+                                <form id="newsForm" class="pt-3">
+                                    @csrf
+                                    <div class="position-relative mb-3">
+                                     
+                                      <input type="email" name="email" placeholder="Enter your email">
+                                         <div class="error invalid-feedback text-danger small"></div>
+
+                                        <!-- SPINNER -->
+                                        <div class="spinner-border spinner-border-sm loading position-absolute end-0 top-50 translate-middle-y"
+                                            style="display: none; width: 1rem; height: 1rem;">
+                                        </div>
+                                    </div>
+                                </div>
                                     <button type="submit" class="btn-style-2 mt-2 w-100">
                                         <svg class="svg-icon">
                                             <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-megaphone"></use>
-                                        </svg> Sign Up
+                                        </svg> <span class="subscribe-text">Subscribe</span>
+                                <span class="success-text d-none">✓ Done!</span>
                                     </button>
                                 </form>
+                                 <div id="responseMsg" class="mt-3"></div>
                             </div>
                         </div>
                     </div>
@@ -1195,3 +1210,82 @@
     </div>
 </div>
 @endsection
+
+
+@push('page-js')
+<script>
+    $(document).ready(function() {
+    const $form = $('#newsForm');
+    const $input = $form.find('input[name="email"]');
+    const $error = $form.find('.error');
+    const $loading = $form.find('.loading');
+    const $signupText = $form.find('.subscribe-text');
+    const $successText = $form.find('.success-text');
+    const $btn = $form.find('button[type="submit"]');
+
+    function clearErrors() {
+        $error.text('').removeClass('text-danger');
+        $input.removeClass('is-invalid');
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        const email = $input.val().trim();
+        let hasError = false;
+
+        // Client validation
+        if (!email) {
+            showError('Email is required.');
+            hasError = true;
+        } else if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            showError('Please enter valid email.');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Show loading
+        $btn.prop('disabled', true);
+        $loading.show();
+        $signupText.hide();
+
+        $.ajax({
+            url: '{{ route("newsletter.subscribe") }}',
+            method: 'POST',
+            data: { email: email },
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: function(data) {
+                $error.removeClass('text-danger').addClass('text-success').text('✓ ' + data.message);
+                $successText.removeClass('d-none').show();
+                $input.val('');
+                setTimeout(() => {
+                    clearErrors();
+                    $successText.addClass('d-none').hide();
+                    $signupText.show();
+                    $btn.prop('disabled', false);
+                }, 3000);
+            },
+            error: function(xhr) {
+                let errorMsg = 'Something went wrong.';
+                if (xhr.status === 422 && xhr.responseJSON?.errors?.email) {
+                    errorMsg = xhr.responseJSON.errors.email[0];
+                }
+                showError(errorMsg);
+            },
+            complete: function() {
+                $loading.hide();
+                $btn.prop('disabled', false);
+            }
+        });
+    });
+
+    function showError(msg) {
+        $error.text(msg).addClass('text-danger d-block');
+        $input.addClass('is-invalid');
+    }
+});
+</script>
+
+@endpush

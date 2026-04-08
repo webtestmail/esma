@@ -125,6 +125,7 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/edit_featurePlan/{plan}', [PlansController::class, 'editFeaturePlan'])->name('edit.featurePlan');
 
     Route::get('/manage_faqs', [FaqsController::class, 'manageFaqs'])->name('manage_faqs');
+    Route::get('/faqs-data', [FaqsController::class, 'faqs_data'])->name('faqs.data');
     Route::match(['get', 'post'], '/add_faq', [FaqsController::class, 'addFaq'])->name('add.faq');
     Route::match(['get', 'post'], '/edit_faq/{faq}', [FaqsController::class, 'editFaq'])->name('edit.faq');
 

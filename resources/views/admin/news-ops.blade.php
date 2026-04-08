@@ -71,6 +71,12 @@
                             <div class="card-body">
                                 {{-- @if (Auth::guard('admin')->user()->role == 1) --}}
                                    {{-- NAME --}}
+
+                            <div class="mb-4">
+                                <label class="form-label">Header Footer Name </label>
+                                <input type="text" class="form-control" id="header_footer_name" name="header_footer_name" placeholder="Enter Header Footer Name" value="{{ !empty($news->encrypted_id) ? $news->header_footer_name : old('header_footer_name') }}" />
+                            </div>
+
                             <div class="mb-4">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="name" name="name"placeholder="Enter Name" />{{ !empty($news->encrypted_id) ? $news->name : old('name') }}</textarea>

@@ -383,7 +383,8 @@ class PagesController extends Controller
 
             // Get only names (optional)
             $categoryNames = $categories->pluck('name');
-            // $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
+            $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
+            $data['subcategory'] = Pages::select('header_footer_name')->where(["id" => 12, "status" => 'active'])->first();
             return response()->view('news_detail', compact('news','page_name', 'data', 'headerData', 'footerData', 'categoryNames'), 200);
         } else {
             return redirect()->route('page.not.found');
