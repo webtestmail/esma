@@ -49,11 +49,13 @@
       <div class="h-track" id="hTrack">
 
         <div class="ab-col ab-col-1">
+          @if(isset($section_one))
           <div class="about-img">
             <img src="{{ asset($section_one->section_image) }}" alt="Our History">
           </div>
         </div>
-
+        @endif
+     @if(isset($section_one))
         <div class="ab-col ab-col-2">
           <div class="about-content">
             <div class="about-title">{{ $section_one->section_title }}</div>
@@ -69,11 +71,14 @@
               the improvement of resources and knowledge available to members.</p> --}}
           </div>
         </div>
+        @endif
 
         @php
           $section_two = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(43);
 
         @endphp
+
+      @if(isset($section_two))
         <div class="ab-col ab-col-3">
 
             @php
@@ -98,16 +103,15 @@
               </svg> </a>
           </div>
         </div>
+        @endif
 
 
           @php
           $section_three = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(44);
-        
           @endphp
         
-       
         <div class="dark-bg">
-           @if($section_three->sub_sections)
+         @if(isset($section_three) && $section_three->sub_sections && count($section_three->sub_sections) > 0)
           <div class="ab-col ab-col-5">
             <div class="img-grid">
                 @foreach($section_three->sub_sections as $subsection)
@@ -131,10 +135,11 @@
              
             </div>
           </div>
-         @endif
+        @endif
 
 
-          @if($section_three)
+
+          @if(isset($section_three))
           <div class="ab-col ab-col-6">
             <div class="about-content">
               <p class="about-subtitle text-white">{{ $section_three->section_title }}</p>
@@ -157,7 +162,7 @@
             $section_four = resolve(App\Http\Controllers\Admin\PagesController::class)->getPageSection(49);
         
           @endphp
-          @if($section_four)
+          @if(isset($section_four))
           <div class="ab-col ab-col-7">
             <div class="position-relative">
               <div class="about-img">
@@ -188,7 +193,7 @@
         
           @endphp
 
-          @if($section_five)
+          @if(isset($section_five)) 
           <div class="ab-col ab-col-9">
             <div class="about-img">
               <img src="{{ asset($section_five->section_image) }}" alt="Events">
@@ -196,9 +201,10 @@
           </div>
           @endif
         </div>
+       
 
         
-        @if($section_five)
+        @if(isset($section_five))
         <div class="ab-col ab-col-10">
           <div class="about-content">
             <p class="about-subtitle">{{ $section_five->section_title }}</p>
@@ -216,6 +222,7 @@
         
           @endphp
 
+      @if(isset($section_six))
         <div class="ab-col ab-col-11">
           <div class="about-img board-mission position-relative">
             <img src="{{ asset($section_six->section_image) }}" alt="Events" class="board-mission-img">
@@ -248,6 +255,7 @@
             @endif
           </div>
         </div>
+        @endif
 
 
 
@@ -257,7 +265,7 @@
           @endphp
 
 
-     @if($section_seven)
+     @if(isset($section_seven))
         <div class="ab-col ab-col-12">
           <div class="board-members">
             <div class="about-title mb-4">{{ $section_seven->section_title }}</div>

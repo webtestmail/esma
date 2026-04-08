@@ -26,7 +26,9 @@ class FaqsController extends Controller
 
 
     public function faqs_data() {
+
           $faqs = Faqs::query();
+
                 return DataTables::of($faqs)
             ->addIndexColumn()
             ->addColumn('question', function($faqs){
@@ -39,13 +41,19 @@ class FaqsController extends Controller
                 return $faqs->status == 'active' ? 'Active' : 'In active';
             })
             ->addColumn('action', function ($faqs) {
+                $encryptedId = Crypt::encrypt($faqs->id);
+                $model = Crypt::encrypt('Faqs');
                 return '<div class="dropdown">
                             <a href="javascript:void(0);" class="avatar-text avatar-md ms-auto" data-bs-toggle="dropdown">
                                 <i class="feather-more-vertical"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="' . route('admin.edit.faq', encrypt($faqs->id)) . '" class="dropdown-item">Modify</a>
-                                <button class="dropdown-item delete" data-id="' . $faqs->id . '">Delete faqs</button>
+                                     <button class="dropdown-item delete"
+                                    onclick="delete_item(\'' . $model . '\', \'' . $encryptedId . '\');"
+                                    data-id="' . $faqs->id . '">
+                                Delete FAQs
+                            </button>
                             </div>
                         </div>';
             })
@@ -84,6 +92,7 @@ class FaqsController extends Controller
                 'faq_type' => $request->faq_type,
                 'question' => $request->question,
                 'answer' => htmlspecialchars($request->answer, ENT_QUOTES),
+                'status' => $request->status,
             ];
 
             if (Faqs::create($faq)) {
@@ -128,6 +137,7 @@ class FaqsController extends Controller
             $faq->question = $request->question;
             $faq->position_order = $request->position_order;
             $faq->answer = htmlspecialchars($request->answer, ENT_QUOTES);
+            $faq->status = $request->status;
 
             if ($faq->save()) {
                 session()->flash('success', 'FAQ is updated Successfully!');
@@ -168,6 +178,41 @@ class FaqsController extends Controller
     }
 
 
+
+     public function faq_category_data() {
+          $category = FaqCategory::query();
+        
+
+                return DataTables::of($category)
+            ->addIndexColumn()
+            ->addColumn('name', function($category){
+                return $category->name;
+            })
+            ->addColumn('is_active', function($category){
+                return $category->status == 'active' ? 'Active' : 'In active';
+            })
+            ->addColumn('action', function ($category) {
+                 $encryptedId = Crypt::encrypt($category->id);
+                    $model = Crypt::encrypt('FaqCategory');
+                return '<div class="dropdown">
+                            <a href="javascript:void(0);" class="avatar-text avatar-md ms-auto" data-bs-toggle="dropdown">
+                                <i class="feather-more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="' . route('admin.edit.faqcategory', encrypt($category->id)) . '" class="dropdown-item">Modify</a>
+                               <button class="dropdown-item delete"
+                                    onclick="delete_item(\'' . $model . '\', \'' . $encryptedId . '\');"
+                                    data-id="' . $category->id . '">
+                                Delete FAQs
+                            </button>
+                            </div>
+                        </div>';
+            })
+            // ->rawColumns(['action','question','is_active','category_name'])
+            ->make(true);
+    }
+
+
      function addFaqcategory(Request $request)
     {
         // dd($request->all());
@@ -186,6 +231,7 @@ class FaqsController extends Controller
             $category = [
                 'position_order' => $position_order,
                 'name' => $request->name,
+                'status' => $request->status,
             ];
 
             if (FaqCategory::create($category)) {
@@ -220,7 +266,7 @@ class FaqsController extends Controller
             $faq = FaqCategory::findOrFail($ids);
             $faq->name = $request->name;
             $faq->position_order = $request->position_order;
-
+            $faq->status = $request->status;
             if ($faq->save()) {
                 session()->flash('success', 'FAQ Category is updated Successfully!');
                 return redirect()->route('admin.manage_faqcategory');

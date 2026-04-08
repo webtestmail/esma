@@ -7,6 +7,7 @@ use App\Models\Admin\NewsCategory;
 use App\Models\Admin\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Yajra\DataTables\Facades\DataTables;
 
 class NewsController extends Controller
 {
@@ -24,6 +25,41 @@ class NewsController extends Controller
             return view('admin.manage_news', ['news' => $news, 'model' => $model, 'currentPage' => $currentPage]);
         }
 
+
+
+        
+      public function news_data() {
+
+          $news = News::select('id', 'name', 'status')->orderBy('position_order')->get();
+
+                return DataTables::of($news)
+            ->addIndexColumn()
+            ->addColumn('name', function($news){
+                return strip_tags($news->name);
+            })
+            ->addColumn('is_active', function($news){
+                return $news->status == 'active' ? 'Active' : 'In active';
+            })
+            ->addColumn('action', function ($news) {
+                $encryptedId = Crypt::encrypt($news->id);
+                $model = Crypt::encrypt('News');
+                return '<div class="dropdown">
+                            <a href="javascript:void(0);" class="avatar-text avatar-md ms-auto" data-bs-toggle="dropdown">
+                                <i class="feather-more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="' . route('admin.edit.news', encrypt($news->id)) . '" class="dropdown-item">Modify</a>
+                                     <button class="dropdown-item delete"
+                                    onclick="delete_item(\'' . $model . '\', \'' . $encryptedId . '\');"
+                                    data-id="' . $news->id . '">
+                                Delete 
+                            </button>
+                            </div>
+                        </div>';
+            })
+            // ->rawColumns(['action','question','is_active','category_name'])
+            ->make(true);
+    }
 
 
           function addnews(Request $request)
@@ -58,6 +94,7 @@ class NewsController extends Controller
             'header_footer_name' => $request->header_footer_name,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
+            'status' => $request->status,
             'video' => $request->video,
             'short_description' => $request->short_description,
             'description' => $request->description,
@@ -193,6 +230,7 @@ class NewsController extends Controller
         $news->header_footer_name = $request->header_footer_name;
         $news->title = $request->title;
         $news->subtitle = $request->subtitle;
+        $news->status = $request->status;
         $news->video = $request->video;
         $news->short_description = $request->short_description;
         $news->description = $request->description;
@@ -239,6 +277,41 @@ class NewsController extends Controller
     }
 
 
+
+      public function news_category_data() {
+
+          $category = NewsCategory::query();
+
+                return DataTables::of($category)
+            ->addIndexColumn()
+            ->addColumn('name', function($category){
+                return $category->name;
+            })
+            ->addColumn('is_active', function($category){
+                return $category->status == 'active' ? 'Active' : 'In active';
+            })
+            ->addColumn('action', function ($category) {
+                $encryptedId = Crypt::encrypt($category->id);
+                $model = Crypt::encrypt('NewsCategory');
+                return '<div class="dropdown">
+                            <a href="javascript:void(0);" class="avatar-text avatar-md ms-auto" data-bs-toggle="dropdown">
+                                <i class="feather-more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="' . route('admin.edit.newscategory', encrypt($category->id)) . '" class="dropdown-item">Modify</a>
+                                     <button class="dropdown-item delete"
+                                    onclick="delete_item(\'' . $model . '\', \'' . $encryptedId . '\');"
+                                    data-id="' . $category->id . '">
+                                Delete category
+                            </button>
+                            </div>
+                        </div>';
+            })
+            // ->rawColumns(['action','question','is_active','category_name'])
+            ->make(true);
+    }
+
+
        function addnewsCategory(Request $request)
     {
         
@@ -262,6 +335,7 @@ class NewsController extends Controller
                 'position_order' => $position_order,
                 'name' => $request->name,
                 'slug' => $request->slug,
+                'status' => $request->status,
             ];
 
             if (NewsCategory::create($category)) {
@@ -298,6 +372,7 @@ class NewsController extends Controller
        
             $category->name = $request->name;
             $category->slug = $request->slug;
+            $category->status = $request->status;
             $category->position_order = $request->position_order;
 
             if ($category->save()) {

@@ -128,6 +128,20 @@
                                   
                                 </div>
 
+                               <div class="mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="active"
+                                            {{ (!empty($faq->encrypted_id) ? $faq->status : old('status', 'active')) == 'active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ (!empty($faq->encrypted_id) ? $faq->status : old('status')) == 'inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
+
 
 
                             </div>

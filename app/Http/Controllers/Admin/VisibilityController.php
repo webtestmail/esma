@@ -10,11 +10,13 @@ class VisibilityController extends Controller
 {
     function index(Request $request)
     {
+                // dd($request->all());    
         $request->validate([
             'model' => 'required|string',
             'visibility' => 'required|string',
             'encrypted_id' => 'required|string',
-        ]);
+        ]);  
+
 
         $modelClass = 'App\\Models\\Admin\\' . Crypt::decrypt($request->model);
         if (!class_exists($modelClass)) {

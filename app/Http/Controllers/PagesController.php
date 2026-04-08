@@ -381,11 +381,23 @@ class PagesController extends Controller
                 ->where('status', 'active')
                 ->get();
 
+            $recent_news = News::select('id', 'category_ids', 'title', 'header_footer_name', 'created_at', 'slug', 'banner')->where('id', '!=', $news->id)->where('status', 'active')->latest()->get();
+            foreach ($recent_news as $item) {
+                $catidArr = !empty($item->category_ids)
+                    ? explode(',', $item->category_ids)
+                    : [];
+
+                $item->categories = NewsCategory::whereIn('id', $catidArr)
+                                                ->where('status', 'active')
+                                                ->pluck('name')
+                                                ->toArray();
+}
+
             // Get only names (optional)
             $categoryNames = $categories->pluck('name');
             $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
             $data['subcategory'] = Pages::select('header_footer_name')->where(["id" => 12, "status" => 'active'])->first();
-            return response()->view('news_detail', compact('news','page_name', 'data', 'headerData', 'footerData', 'categoryNames'), 200);
+            return response()->view('news_detail', compact('news','page_name', 'data', 'headerData', 'footerData', 'categoryNames', 'recent_news'), 200);
         } else {
             return redirect()->route('page.not.found');
         }

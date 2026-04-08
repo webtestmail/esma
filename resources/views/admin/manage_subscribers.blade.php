@@ -50,7 +50,7 @@
                     <div class="card stretch stretch-full">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="proposalList">
+                                <table class="table table-hover" id="subscriber_table">
                                     <thead>
                                         <tr>
                                             {{-- <th class="wd-30">
@@ -69,26 +69,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php $sno = 1; @endphp
-                                        @foreach ($formData as $form)
-                                            <tr class="single-item">
-                                                {{-- <td>
-                                                    <div class="item-checkbox ms-1">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input checkbox"
-                                                                id="checkBox_1">
-                                                            <label class="custom-control-label" for="checkBox_1"></label>
-                                                        </div>
-                                                    </div>
-                                                </td> --}}
-                                                <td>@php echo $sno; @endphp</td>
-                                                <td>{{ $form->email }}</td>
-                                              
-                                            
-                                       
-                                            </tr>
-                                            @php $sno++; @endphp
-                                        @endforeach
+                                     
                                     </tbody>
                                 </table>
                             </div>
@@ -99,4 +80,25 @@
         </div>
         <!-- [ Main Content ] end -->
     </div>
+
+     <script>
+            $(document).ready(function () {
+            new DataTable('#subscriber_table', {
+                responsive: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                "order": [[ 8, "desc" ]],
+                info: true,
+                lengthChange: true,
+                pageLength: 10,
+                ajax: '{{ route("admin.newsletter.data") }}',
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+                    { data: 'email', name: 'email'},
+                ]
+            });
+        });
+
+    </script>
 @endsection

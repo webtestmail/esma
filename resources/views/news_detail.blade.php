@@ -261,7 +261,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                 <div class="mob-reportcard-info">
 
                                     <div class="line my-3"></div>
-                                    <a href="#" class="download-btn mob">
+                                    <a href="{{ $news->website_url ?? '' }}" class="download-btn mob">
                                         <svg class="svg-icon">
                                             <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-globe"></use>
                                         </svg>
@@ -334,7 +334,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
 
                     <!-- share -->
                 <div class="news-detail-share mt-5 d-none d-lg-flex flex-wrap align-items-center gap-3 justify-content-between"
-                    style="background-image: url(images/detail1.webp);">
+                    style="background-image: url('{{ asset('images/detail1.webp') }}');">
                     <div class="share-overlay"></div>
                     <a href="" class="text-white share-news">
                         <svg class="svg-icon">
@@ -489,16 +489,24 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                             <p class="m-0 news-p">Recent News</p>
                         </div>
 
+                       @if(isset($recent_news) && count($recent_news) > 0)
+                        @foreach($recent_news as $val)
                         <div class="col-lg-12 mb-3">
                             <div class="resource-box wow fadeInUp">
                                 <div class="resource-img">
+                                    @if(isset($val->banner))
                                     <div class="re-img hover-img">
-                                        <img src="images/image 24 (2).webp" alt="">
+                                        <img src="{{ asset($val->banner) }}" alt="{{ $val->header_footer_name ?? '' }}">
                                     </div>
+                                    @endif
+                                  @if (!empty($val->categories))
                                     <div class="d-flex gap-1 resource-tag">
-                                        <div class="category-style-1">Convention</div>
-                                        <div class="category-style-1">Convention</div>
+                                       @foreach ($val->categories as $catName)
+                                        <div class="category-style-1">{{ $catName }}</div>
+                                        @endforeach
+                                        {{-- <div class="category-style-1">Convention</div> --}}
                                     </div>
+                                    @endif
                                     <div class="share-wrap">
                                         <div class="c-share-1">
                                             <a href="#" class="events-share" data-index="3">
@@ -576,21 +584,18 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                 </div>
                                 <div class="resource-text">
                                     <a href="">
-                                        <h5>USA Food Export Group Business Conference</h5>
+                                        <h5>{{ $val->header_footer_name ?? '' }}</h5>
                                     </a>
-                                    <p>Our ESMA International Network CEO, David O’ Neill enjoyed visiting our
-                                        members
-                                        who were
-                                        exhibiting at the Angua Trade Fair…</p>
+                                    <p>{{ $val->title ?? ''}}</p>
                                     <hr class="my-1">
                                     <div class="d-flex w-100 align-items-center justify-content-between">
                                         <div class="date-1 resource-date">
                                             <svg class="svg-icon">
                                                 <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-calender-check"></use>
                                             </svg>
-                                            November 16, 2025
+                                       {{ $val->created_at ? $val->created_at->format('F j, Y') : '' }}
                                         </div>
-                                        <a href="" class="resoure-links">
+                                        <a href="{{ route('news_detail', ['slug' => $val->slug])}}" class="resoure-links">
                                             <svg class="svg-icon">
                                                 <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-dotchat"></use>
                                             </svg> Read More <svg class="svg-icon arrow-svg">
@@ -602,7 +607,9 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        @endforeach
+                        @endif
+                        {{-- <div class="col-lg-12">
                             <div class="resource-box wow fadeInUp">
                                 <div class="resource-img">
                                     <div class="re-img hover-img">
@@ -714,7 +721,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                     </div>
 

@@ -46,4 +46,6 @@ class NewsletterController extends Controller
             'message' => '🎉 Subscribed successfully! Check your email.'
         ]);
     }
+
+
 }

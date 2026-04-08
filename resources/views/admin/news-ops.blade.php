@@ -323,6 +323,20 @@
                             </div>
 
 
+                             <div class="mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="active"
+                                            {{ (!empty($news->encrypted_id) ? $news->status : old('status', 'active')) == 'active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ (!empty($news->encrypted_id) ? $news->status : old('status')) == 'inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
+
                              {{-- <div class="mb-4">
                                 <label class="form-label">Post Meta</label>
                                 <textarea class="form-control" name="post_meta">{{ $news->post_meta ?? old('post_meta') }}</textarea>
