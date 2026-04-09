@@ -14,6 +14,7 @@ use App\Models\Admin\Services;
 use App\Models\Admin\ServiceSections;
 use App\Models\Admin\FaqCategory;   
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PagesController extends Controller
 {
@@ -381,6 +382,9 @@ class PagesController extends Controller
                 ->where('status', 'active')
                 ->get();
 
+            $data['categories'] = $categories; 
+             $categoryNames = $categories->pluck('name');
+                
             $recent_news = News::select('id', 'category_ids', 'title', 'header_footer_name', 'created_at', 'slug', 'banner')->where('id', '!=', $news->id)->where('status', 'active')->latest()->get();
             foreach ($recent_news as $item) {
                 $catidArr = !empty($item->category_ids)
@@ -391,10 +395,10 @@ class PagesController extends Controller
                                                 ->where('status', 'active')
                                                 ->pluck('name')
                                                 ->toArray();
-}
+                  }
 
             // Get only names (optional)
-            $categoryNames = $categories->pluck('name');
+          
             $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
             $data['subcategory'] = Pages::select('header_footer_name')->where(["id" => 12, "status" => 'active'])->first();
             return response()->view('news_detail', compact('news','page_name', 'data', 'headerData', 'footerData', 'categoryNames', 'recent_news'), 200);
@@ -402,4 +406,44 @@ class PagesController extends Controller
             return redirect()->route('page.not.found');
         }
     }
+
+
+  public function searchNews(Request $request)
+{
+    // dd('hello');
+    $query = $request->get('q', '');
+    
+    $news = News::where('status', 'active')
+        ->where(function($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%")
+              ->orWhere('slug', 'LIKE', "%{$query}%");
+        })
+        ->orderBy('created_at', 'DESC')
+        ->limit(10)
+        ->get();
+
+    // Debug: Log the response
+    \Log::info('Search response:', ['news' => $news->toArray()]);
+
+    return response()->json([
+        'success' => true,
+        'news' => $news->toArray(),
+        'count' => $news->count()
+    ]);
+}
+
+// In your NewsController
+        // public function show($slug)
+        // {
+        //     $news = News::where('slug', $slug)->where('status', 'active')->firstOrFail();
+            
+        //     // Pass share data
+        //     $shareData = [
+        //         'url' => url()->current(),
+        //         'title' => $news->name,
+        //         'image' => $news->image ? asset($news->banner) : asset('images/og-image.jpg')
+        //     ];
+            
+        //     return view('news.show', compact('news', 'shareData'));
+        // }
 }

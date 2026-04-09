@@ -61,7 +61,7 @@ Route::get('/help-center', [PagesController::class, 'help_center_view'])->name('
 Route::get('/resources-hub', [PagesController::class, 'resource_hub_view'])->name('resource_hub');
 Route::get('/resources-news', [PagesController::class, 'resource_news_view'])->name('resource_news');
 Route::get('/news/{slug}', [PagesController::class, 'news_detail_view'])->name('news_detail');
-
+Route::get('/news-detail/search', [PagesController::class, 'searchNews'])->name('news.search');
 
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 

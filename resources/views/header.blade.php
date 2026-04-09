@@ -71,6 +71,8 @@ input.is-invalid, select.is-invalid {
     z-index: 20;
 }
 
+
+
 </style>
  @stack('page-css')
 
