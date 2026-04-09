@@ -238,24 +238,24 @@
 }
 
 @keyframes checkPulse {
-    0% { 
-        opacity: 0; 
-        transform: translate(-50%, -50%) scale(0) rotate(-180deg); 
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
     }
-    50% { 
-        opacity: 1; 
-        transform: translate(-50%, -50%) scale(1.2) rotate(0deg); 
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
     }
-    100% { 
-        opacity: 1; 
-        transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
     }
 }
 </style>
 @endpush
 
 
-@php 
+@php
 $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getCompanyData();
 @endphp
 
@@ -278,7 +278,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                 <svg class="svg-icon svg-three-arrow">
                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-three-arrow"></use>
                 </svg>
-                <li>{{ $data['subcategory']->header_footer_name ?? '' }}s</li>
+                <li>{{ $data['subcategory']->header_footer_name ?? '' }}</li>
                 <svg class="svg-icon svg-three-arrow">
                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-three-arrow"></use>
                 </svg>
@@ -346,7 +346,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
 
                       {!! html_entity_decode($news->description ?? '') !!}
 
-                   
+
 
                     <div class="image-grid-section">
 
@@ -374,7 +374,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                             </div>
                             <div class="report-text desk">{{ $news->website_name ?? ''}}</div>
 
-                            <a href="{{ $news->webiste_url ?? '' }}" class="download-btn desk">
+                            <a href="{{ $news->website_url ?? '' }}" target="_blank" class="download-btn desk">
                                 <svg class="svg-icon">
                                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-globe"></use>
                                 </svg>
@@ -392,7 +392,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                 <div class="mob-reportcard-info">
 
                                     <div class="line my-3"></div>
-                                    <a href="{{ $news->website_url ?? '' }}" class="download-btn mob">
+                                    <a href="{{ $news->website_url ?? '' }}" target="_blank" class="download-btn mob">
                                         <svg class="svg-icon">
                                             <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-globe"></use>
                                         </svg>
@@ -412,16 +412,22 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-docs"></use>
                                 </svg>
                             </div>
-                            <div class="report-text desk">Download Lorem Ipsum File</div>
+                            <div class="report-text desk">Download {{ implode(' ', array_slice(explode(' ', $news->header_footer_name ?? ''), 0, 3)) }}... File</div>
                             <div class="meta-info desk">
                                 <svg class="svg-icon">
                                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-calender-check"></use>
                                 </svg>
-                                <span>Jan, 2026</span>
-                                <span class="size">550kb</span>
-                                <span class="pdf-pill">.pdf</span>
+                                <span>{{ $news->created_at ? $news->created_at->format('M, Y') : '' }}</span>
+                          @php
+                            $file = public_path($news->pdf_file);
+                            $size = file_exists($file) ? filesize($file) : 0;
+                            $ext  = file_exists($file) ? pathinfo($file, PATHINFO_EXTENSION) : '';
+                            @endphp
+                                <span class="size">{{ round($size / 1024, 2) }}kb</span>
+                                <span class="pdf-pill">.{{ $ext}}</span>
                             </div>
-                            <a href="#" class="download-btn desk">
+
+                            <a href="{{ asset($news->pdf_file ?? '') }}" target="_blank" class="download-btn desk">
                                 <svg class="svg-icon">
                                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-down-arrow-circle"></use>
                                 </svg>
@@ -433,7 +439,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                     <svg class="svg-icon mob-icon">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-piechart"></use>
                                     </svg>
-                                    <div class="report-text-mob">Download Lorem Ipsum File
+                                    <div class="report-text-mob">Download {{ implode(' ', array_slice(explode(' ', $news->header_footer_name ?? ''), 0, 3)) }}... File
                                     </div>
                                 </div>
                                 <div class="mob-reportcard-info">
@@ -442,13 +448,13 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                             <svg class="svg-icon">
                                                 <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-calender-check"></use>
                                             </svg>
-                                            <span>Jan, 2026</span>
+                                            <span>{{ $news->created_at ? $news->created_at->format('M, Y') : '' }}</span>
                                         </div>
-                                        <span class="size">550kb</span>
-                                        <span class="pdf-pill">.pdf</span>
+                                        <span class="size">{{ round($size / 1024, 2) }}kb</span>
+                                        <span class="pdf-pill">.{{ $ext }}</span>
                                     </div>
                                     <div class="line my-3"></div>
-                                    <a href="#" class="download-btn mob">
+                                    <a href="{{ asset($news->pdf_file ?? '') }}" target="_blank" class="download-btn mob">
                                         <svg class="svg-icon">
                                             <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-down-arrow-circle"></use>
                                         </svg>
@@ -464,8 +470,11 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                     </div>
 
                     <!-- share -->
-                <div class="news-detail-share mt-5 d-none d-lg-flex flex-wrap align-items-center gap-3 justify-content-between"
-                    style="background-image: url('{{ asset('images/detail1.webp') }}');">
+                <div class="news-detail-share mt-5 d-none d-lg-flex flex-wrap align-items-center gap-3 justify-content-between"    style="background-image: url('{{ asset('images/detail1.webp') }}');"
+                    data-url="{{ url()->current() }}"
+                    data-title="{{ $news->header_footer_name ?? 'Check this out!' }}"
+                    data-image="{{ !empty($news->banner) ? asset($news->banner) : asset('images/og-image.jpg') }}">
+
                     <div class="share-overlay"></div>
                     <a href="" class="text-white share-news">
                         <svg class="svg-icon">
@@ -475,31 +484,31 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                     </a>
                     <ul class="share-news-icons">
                         <li class="list-inline-item">
-                            <a href="#">
-                                <i><svg class="svg-icon">
+                            <a href="javascript:void(0)" class="share-btn" data-share="LinkedIn">
+                                <i><svg class="svg-icon" class="share-btn">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-linkedin"></use>
                                     </svg></i>
                             </a>
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
-                                <i><svg class="svg-icon">
+                            <a href="javascript:void(0)" class="share-btn" data-share="Facebook">
+                                <i><svg class="svg-icon" class="share-btn">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-facebook"></use>
                                     </svg></i>
                             </a>
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="javascript:void(0)" class="share-btn" data-share="Instagram">
                                 <i><svg class="svg-icon">
-                                        <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-linkedin"></use>
+                                        <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-instagram"></use>
                                     </svg></i>
                             </a>
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="javascript:void(0)" class="share-btn" data-share="Email">
                                 <i><svg class="svg-icon">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-mail"></use>
                                     </svg></i>
@@ -507,7 +516,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="javascript:void(0)" class="share-btn" data-share="Pinterest">
                                 <i><svg class="svg-icon">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-pinterest"></use>
                                     </svg></i>
@@ -515,7 +524,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="javascript:void(0)" class="share-btn" data-share="WhatsApp">
                                 <i><svg class="svg-icon">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-whatsapp"></use>
                                     </svg></i>
@@ -523,7 +532,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="javascript:void(0)" class="share-btn" data-share="Twitter">
                                 <i><svg class="svg-icon">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-xtwitter"></use>
                                     </svg></i>
@@ -531,7 +540,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="#">
+                            <a href="javascript:void(0)" class="share-btn" data-share="Copy Link">
                                 <i><svg class="svg-icon">
                                         <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-link"></use>
                                     </svg></i>
@@ -594,7 +603,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </div>
-                            
+
                             <!-- Results Dropdown -->
                             <div id="searchResults" class="search-results position-absolute w-100 bg-white shadow-lg border-0 rounded-3 mt-2 overflow-hidden" style="display: none; z-index: 1055; max-height: 450px; overflow-y: auto;">
                                 <div id="resultsContent">
@@ -658,7 +667,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                                 </svg>
                                             </a>
                                         </div>
-                                        <div class="social-popup events-share-popup" data-raw-url="{{ route('news_detail', ['slug' => $val->slug]) }}" data-title="{!! html_entity_decode($val->name) ?? 'Check this out!' !!}" data-image="{{ asset($val->banner) ?? asset('images/og-image.jpg') }}"> 
+                                        <div class="social-popup events-share-popup" data-raw-url="{{ route('news_detail', ['slug' => $val->slug]) }}" data-title="{!! html_entity_decode($val->name) ?? 'Check this out!' !!}" data-image="{{ asset($val->banner) ?? asset('images/og-image.jpg') }}">
                                             <!-- WhatsApp -->
                                             <a class="social-icon si-whatsapp"
                                                 href="https://wa.me/?text=Check this out!" target="_blank"
@@ -726,7 +735,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                     </div>
                                 </div>
                                 <div class="resource-text">
-                                    <a href="">
+                                    <a href="{{ route('news_detail', ['slug' => $val->slug])}}">
                                         <h5>{{ $val->header_footer_name ?? '' }}</h5>
                                     </a>
                                     <p>{{ $val->title ?? ''}}</p>
@@ -752,7 +761,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                         </div>
                         @endforeach
                         @endif
-                     
+
 
                     </div>
 
@@ -850,7 +859,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                 <form id="newsForm" class="pt-3">
                                     @csrf
                                     <div class="position-relative mb-3">
-                                     
+
                                       <input type="email" name="email" placeholder="Enter your email">
                                          <div class="error invalid-feedback text-danger small"></div>
 
@@ -907,7 +916,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                                 </svg>
                                             </a>
                                         </div>
-                                        <div class="social-popup events-share-popup" data-index="3">
+                                        <div class="social-popup events-share-popup"  data-raw-url="{{ route('news_detail', ['slug' => $val->slug]) }}" data-title="{!! html_entity_decode($val->name) ?? 'Check this out!' !!}" data-image="{{ asset($val->banner) ?? asset('images/og-image.jpg') }}">
                                             <!-- WhatsApp -->
                                             <a class="social-icon si-whatsapp"
                                                 href="https://wa.me/?text=Check this out!" target="_blank"
@@ -975,7 +984,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                                     </div>
                                 </div>
                                 <div class="resource-text">
-                                    <a href="">
+                                    <a href="{{ route('news_detail', ['slug' => $val->slug])}}">
                                         <h5>{{ $val->header_footer_name ?? '' }}</h5>
                                     </a>
                                     <p>{{ $val->title ?? ''}}</p>
@@ -1001,7 +1010,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                         </div>
                         @endforeach
                     @endif
-                       
+
                     </div>
 
                 </div>
@@ -1115,7 +1124,7 @@ $(document).ready(function() {
     $('#newsSearch').on('input', function() {
         clearTimeout(searchTimeout);
         const query = $(this).val().trim();
-        
+
         searchTimeout = setTimeout(function() {
             if (query.length >= 2) {
                 performSearch(query);
@@ -1150,9 +1159,9 @@ function displayResults(news) {
     if (!Array.isArray(news)) {
         news = [];
     }
-    
+
     let html = '';
-    
+
     if (news.length > 0) {
         news.forEach(function(item) {
             // Safe property access
@@ -1160,12 +1169,12 @@ function displayResults(news) {
             const slug = item.slug || '';
             const metaDesc = item.meta_description || item.content || 'No description';
             const createdAt = item.created_at || item.updated_at || new Date().toISOString();
-            
+
             html += `
                 <a href="/news/${slug}" class="text-decoration-none search-result-item">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0 me-3">
-                            
+
                                 <svg class="svg-icon text-white" style="width: 20px; height: 20px;">
                                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-news"></use>
                                 </svg>
@@ -1182,15 +1191,15 @@ function displayResults(news) {
     } else {
         html = '<div class="no-results">No news found</div>';
     }
-    
+
     $('#searchResults').html(html).show();
 }
     function formatDate(dateString) {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
         });
     }
 
@@ -1213,67 +1222,82 @@ function displayResults(news) {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+
     const sharePopups = document.querySelectorAll('.social-popup');
-    
+
     sharePopups.forEach(popup => {
-        const url = popup.dataset.url;
-        const title = encodeURIComponent(popup.dataset.title);
-        const description = encodeURIComponent(popup.dataset.description);
-        const image = encodeURIComponent(popup.dataset.image);
-        
+
+       const rawUrl = popup.dataset.rawUrl || window.location.href;
+       const url = encodeURIComponent(rawUrl);
+        const title = encodeURIComponent(popup.dataset.title || document.title);
+        const description = encodeURIComponent(popup.dataset.description || '');
+        const image = encodeURIComponent(popup.dataset.image || '');
+
         const icons = popup.querySelectorAll('.social-icon');
-        
+
         icons.forEach(icon => {
             icon.addEventListener('click', function(e) {
                 e.preventDefault();
+
                 const platform = this.dataset.share;
-                
+
                 switch(platform) {
+
                     case 'WhatsApp':
                         window.open(`https://wa.me/?text=${title}%20${url}`, '_blank');
                         break;
-                        
+
                     case 'Facebook':
                         window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${title}`, '_blank');
                         break;
-                        
+
                     case 'Twitter':
                         window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
                         break;
-                        
+
                     case 'LinkedIn':
                         window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
                         break;
-                        
+
                     case 'Email':
                         window.location.href = `mailto:?subject=${title}&body=${title}%20${url}`;
                         break;
-                        
+
+                    case 'Instagram':
+                        copyToClipboard(decodeURIComponent(url), e);
+                        window.open('https://www.instagram.com/', '_blank');
+                        break;
+
                     case 'Copy':
-                        copyToClipboard(url);
+                       copyToClipboard(rawUrl, e);
                         break;
                 }
             });
         });
     });
-    
-    function copyToClipboard(text) {
+
+
+    function copyToClipboard(text, event) {
+
         navigator.clipboard.writeText(text).then(() => {
+
             const button = event.target.closest('.social-icon');
-            button.classList.add('copying');
-            
-            setTimeout(() => {
-                button.classList.remove('copying');
-            }, 1500);
-            
-            // Optional: Show toast
+            if(button){
+                button.classList.add('copying');
+                setTimeout(() => {
+                    button.classList.remove('copying');
+                }, 1500);
+            }
+
             showToast('Link copied!', 'success');
+
         }).catch(err => {
             console.error('Copy failed:', err);
             fallbackCopy(text);
         });
     }
-    
+
+
     function fallbackCopy(text) {
         const textArea = document.createElement('textarea');
         textArea.value = text;
@@ -1281,31 +1305,109 @@ document.addEventListener('DOMContentLoaded', function() {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
+
         showToast('Link copied!', 'success');
     }
-    
-    function showToast(message, type = 'success') {
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.textContent = message;
-        toast.style.cssText = `
-            position: fixed; top: 20px; right: 20px; 
-            padding: 12px 20px; border-radius: 8px; 
-            color: white; font-weight: 600; z-index: 9999;
-            background: ${type === 'success' ? '#28a745' : '#dc3545'};
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateX(400px); transition: all 0.3s ease;
-        `;
-        
-        document.body.appendChild(toast);
-        setTimeout(() => toast.style.transform = 'translateX(0)', 100);
-        
-        setTimeout(() => {
-            toast.style.transform = 'translateX(400px)';
-            setTimeout(() => document.body.removeChild(toast), 300);
-        }, 2000);
-    }
+
+
+
+
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    document.querySelectorAll('.news-detail-share').forEach(wrapper => {
+
+        const rawUrl = wrapper.dataset.url || window.location.href;
+        const title = encodeURIComponent(wrapper.dataset.title || document.title);
+        const url = encodeURIComponent(rawUrl);
+
+        wrapper.querySelectorAll('.share-btn').forEach(btn => {
+
+            btn.addEventListener('click', function(e){
+                e.preventDefault();
+
+                const platform = this.dataset.share;
+
+                switch(platform) {
+
+                    case 'WhatsApp':
+                        window.open(`https://wa.me/?text=${title}%20${url}`, '_blank');
+                        break;
+
+                  case 'Facebook':
+                    window.open(
+                        'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(rawUrl),
+                        'facebook-share',
+                        'width=600,height=500,top=100,left=100'
+                    );
+                    break;
+
+                    case 'Twitter':
+                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(rawUrl)}&text=${title}`, '_blank');
+                        break;
+
+                  case 'LinkedIn':
+                    window.open(
+                        'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(rawUrl),
+                        'linkedin-share',
+                        'width=600,height=500,top=100,left=100'
+                    );
+                    break;
+
+                    case 'Pinterest':
+                        window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(rawUrl)}&description=${title}`, '_blank');
+                        break;
+
+                    case 'Email':
+                        window.location.href = `mailto:?subject=${title}&body=${title}%20${url}`;
+                        break;
+
+                    case 'Instagram':
+                        navigator.clipboard.writeText(rawUrl).then(() => {
+                            showToast('Link copied! Paste on Instagram');
+                            window.open('https://www.instagram.com/', '_blank');
+                        }).catch(() => {
+                            showToast('Unable to copy link');
+                        });
+                        break;
+
+                    case 'Copy Link':
+                        navigator.clipboard.writeText(rawUrl).then(() => {
+                            showToast('Link copied successfully!');
+                        }).catch(() => {
+                            showToast('Unable to copy link');
+                        });
+                        break;
+                }
+            });
+
+        });
+
+    });
+
+});
+</script>
+
+<script>
+function showToast(message) {
+
+    const toast = document.getElementById('copyToast');
+    const msg = document.getElementById('copyToastMsg');
+
+    if (!toast || !msg) {
+        console.log('Toast div not found');
+        return;
+    }
+
+    msg.textContent = message;
+    toast.style.display = 'block';
+
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2000);
+}
+</script>
 @endpush

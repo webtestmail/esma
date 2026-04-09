@@ -8,6 +8,7 @@ use App\Models\Admin\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class NewsController extends Controller
 {
@@ -27,7 +28,7 @@ class NewsController extends Controller
 
 
 
-        
+
       public function news_data() {
 
           $news = News::select('id', 'name', 'status')->orderBy('position_order')->get();
@@ -52,7 +53,7 @@ class NewsController extends Controller
                                      <button class="dropdown-item delete"
                                     onclick="delete_item(\'' . $model . '\', \'' . $encryptedId . '\');"
                                     data-id="' . $news->id . '">
-                                Delete 
+                                Delete
                             </button>
                             </div>
                         </div>';
@@ -64,9 +65,9 @@ class NewsController extends Controller
 
           function addnews(Request $request)
     {
-        
+
         if ($request->isMethod('post')) {
-                // dd($request->all()); 
+                // dd($request->all());
             $requiredArr = [
                 'name' => 'required',
                 'slug' => 'required|unique:news,slug',
@@ -81,8 +82,8 @@ class NewsController extends Controller
             $order = News::max('position_order');
             $position_order = ($order !== null) ? $order + 1 : 1;
 
-              $category_ids = $request->category_ids 
-                    ? implode(',', $request->category_ids) 
+              $category_ids = $request->category_ids
+                    ? implode(',', $request->category_ids)
                     : null;
 
 
@@ -148,10 +149,11 @@ class NewsController extends Controller
                 }
 
 
-              
-        
 
-            if (News::create($news)) {
+        $newsData = News::create($news);
+
+            if ($newsData) {
+             $this->generateNewsPdf($newsData->id);
                 session()->flash('success', 'News is inserted Successfully!');
                 return redirect()->route('admin.managenews');
             } else {
@@ -184,7 +186,7 @@ class NewsController extends Controller
             ];
             $request->validate($requiredArr, $msgsArr);
 
-       
+
                     if ($request->hasFile('banner')) {
             $path = 'images/news/banner/';
             $news->banner = $this->storeImage($request->file('banner'), $path);
@@ -219,8 +221,8 @@ class NewsController extends Controller
         }
 
         // ✅ CATEGORY IDS FIX
-        $news->category_ids = $request->category_ids 
-            ? implode(',', $request->category_ids) 
+        $news->category_ids = $request->category_ids
+            ? implode(',', $request->category_ids)
             : null;
 
         // ✅ OTHER FIELDS
@@ -247,6 +249,11 @@ class NewsController extends Controller
 
         // ✅ SAVE
         if ($news->save()) {
+
+            if ($news) {
+
+            $this->generateNewsPdf($news->id);
+            }
             session()->flash('success', 'News updated successfully!');
             return redirect()->route('admin.managenews');
         } else {
@@ -264,6 +271,35 @@ class NewsController extends Controller
         }
     }
 
+
+    public function generateNewsPdf($newsId)
+{
+    $news = News::find($newsId);
+
+    if (!$news) {
+        return false;
+    }
+
+    $pdf = Pdf::loadView('pdf.news', ['news' => $news]);
+    $pdf->setPaper('A4', 'portrait');
+
+    $pdfPath = public_path('pdf/news/');
+
+    if (!file_exists($pdfPath)) {
+        mkdir($pdfPath, 0777, true);
+    }
+
+    $fileName = $news->slug . '.pdf';
+
+    $pdf->save($pdfPath . $fileName);
+
+    // save path
+    $news->update([
+        'pdf_file' => 'pdf/news/' . $fileName
+    ]);
+
+    return true;
+}
 
       function managenewsCategory()
     {
@@ -314,9 +350,9 @@ class NewsController extends Controller
 
        function addnewsCategory(Request $request)
     {
-        
+
         if ($request->isMethod('post')) {
-                // dd($request->all()); 
+                // dd($request->all());
             $requiredArr = [
                 'name' => 'required',
                 'slug' => 'required|unique:news_category,slug',
@@ -369,7 +405,7 @@ class NewsController extends Controller
             ];
             $request->validate($requiredArr, $msgsArr);
 
-       
+
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;

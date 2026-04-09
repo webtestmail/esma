@@ -378,7 +378,7 @@
 
 @push('page-wise-js')
 <script>
-document.getElementById('name').addEventListener('input', function() {
+document.getElementById('header_footer_name').addEventListener('input', function() {
     let slug = this.value
         .toLowerCase()
         .trim()

@@ -34,6 +34,7 @@ class News extends Model
             'published_by',
             'breadcrumb_image',
             'website_name',
-            'header_footer_name'
+            'header_footer_name',
+            'pdf_file'
         ];
 }

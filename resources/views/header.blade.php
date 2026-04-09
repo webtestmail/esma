@@ -79,6 +79,20 @@ input.is-invalid, select.is-invalid {
 </head>
 
 <body class="preload">
+    <div id="copyToast" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    z-index: 9999;
+    display: none;
+">
+    <span id="copyToastMsg"></span>
+</div>
     <header class="header">
         <div class="container">
             <div class="logo"><a href="{{ route('home') }}"><img src="{{ !empty($headerData['company']->company_logo) ? asset($headerData['company']->company_logo) : asset('imgs/logo.png') }}" alt=""></a></div>
