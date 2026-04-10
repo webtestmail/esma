@@ -56,6 +56,7 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     // Route::match(['get', 'post'], '/edit_quick_module/{quick_module}', [QuickModulesController::class, 'editQuickModule'])->name('edit.quick_module');
 
     Route::get('/get_pages_page', [PagesController::class, 'getPagesPage'])->name('get.pages.page');
+    Route::get('/pages-data', [PagesController::class, 'pages_data'])->name('pages.data');
     Route::post('/pages_sequence', [PagesController::class, 'savePagesSequence'])->name('save.pages.sequence');
     Route::get('/check-page-link/{link}/{id?}', [PagesController::class, 'checkPageLink'])->name('check.page.link');
     Route::get('/manage_pages', [PagesController::class, 'managePages'])->name('manage_pages');
@@ -63,9 +64,11 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/edit_page/{page}', [PagesController::class, 'editPage'])->name('edit.page');
 
     Route::get('/get_sections_page/{page}/{section}', [PagesController::class, 'getSectionsPage'])->name('get.sections.page');
+    Route::get('/pagesection-data', [PagesController::class, 'pagesection_data'])->name('pagesection.data');
     Route::post('/sections_sequence', [PagesController::class, 'saveSectionsSequence'])->name('save.sections.sequence');
     Route::match(['get', 'post'], '/add_page_section/{page}', [PagesController::class, 'addPageSection'])->name('add.page.section');
     Route::match(['get', 'post'], '/edit_page_section/{page}/{section}', [PagesController::class, 'editPageSection'])->name('edit.page.section');
+     Route::get('/pagesubsection-data', [PagesController::class, 'pagesubsection_data'])->name('pagesubsection.data');
     Route::match(['get', 'post'], '/add_page_subsection/{page}/{section}', [PagesController::class, 'addPageSubSection'])->name('add.page.subsection');
     Route::match(['get', 'post'], '/edit_page_subsection/{page}/{section}/{subsection}', [PagesController::class, 'editPageSubSection'])->name('edit.page.subsection');
 
@@ -126,10 +129,12 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/edit_featurePlan/{plan}', [PlansController::class, 'editFeaturePlan'])->name('edit.featurePlan');
 
     Route::get('/manage_faqs', [FaqsController::class, 'manageFaqs'])->name('manage_faqs');
+    Route::get('/faqs-data', [FaqsController::class, 'faqs_data'])->name('faqs.data');
     Route::match(['get', 'post'], '/add_faq', [FaqsController::class, 'addFaq'])->name('add.faq');
     Route::match(['get', 'post'], '/edit_faq/{faq}', [FaqsController::class, 'editFaq'])->name('edit.faq');
 
     Route::get('/manage_faq_category', [FaqsController::class, 'manageFaqCategory'])->name('manage_faqcategory');
+    Route::get('/faq_category_data', [FaqsController::class, 'faq_category_data'])->name('faq_category.data');  
     Route::match(['get', 'post'], '/add_faq_catetgory', [FaqsController::class, 'addFaqcategory'])->name('add.faqcategory');
     Route::match(['get', 'post'], '/edit_faq_catetgory/{faqcategory}', [FaqsController::class, 'editFaqcategory'])->name('edit.faqcategory');
 
@@ -209,14 +214,17 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::delete('/delete-document', [DocumentController::class, 'document_delete'])->name('document.delete');
 
     Route::get('/manage_news_category', [NewsController::class, 'managenewsCategory'])->name('managenewsCategory');
+    Route::get('/news_category_data', [NewsController::class, 'news_category_data'])->name('news_category_data'); 
     Route::match(['get', 'post'], '/add_newsCategory', [NewsController::class, 'addnewsCategory'])->name('add.newsCategory');
     Route::match(['get', 'post'], '/editnewscategory/{category}', [NewsController::class, 'editnewscategory'])->name('edit.newscategory');
    
 
     Route::get('/manage_news', [NewsController::class, 'managenews'])->name('managenews');
+    Route::get('/news_data', [NewsController::class, 'news_data'])->name('news_data');
     Route::match(['get', 'post'], '/add_news', [NewsController::class, 'addnews'])->name('add.news');
     Route::match(['get', 'post'], '/editnews/{news}', [NewsController::class, 'editnews'])->name('edit.news');
 
       //Forms
     Route::get('/manage_subscriber', [FormController::class, 'manage_subscriber'])->name('manage_subscriber');
+    Route::get('/newsletter-data', [FormController::class, 'newsletter_data'])->name('newsletter.data');
 });

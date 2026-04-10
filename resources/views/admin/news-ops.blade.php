@@ -71,6 +71,12 @@
                             <div class="card-body">
                                 {{-- @if (Auth::guard('admin')->user()->role == 1) --}}
                                    {{-- NAME --}}
+
+                            <div class="mb-4">
+                                <label class="form-label">Header Footer Name </label>
+                                <input type="text" class="form-control" id="header_footer_name" name="header_footer_name" placeholder="Enter Header Footer Name" value="{{ !empty($news->encrypted_id) ? $news->header_footer_name : old('header_footer_name') }}" />
+                            </div>
+
                             <div class="mb-4">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="name" name="name"placeholder="Enter Name" />{{ !empty($news->encrypted_id) ? $news->name : old('name') }}</textarea>
@@ -317,6 +323,20 @@
                             </div>
 
 
+                             <div class="mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="active"
+                                            {{ (!empty($news->encrypted_id) ? $news->status : old('status', 'active')) == 'active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ (!empty($news->encrypted_id) ? $news->status : old('status')) == 'inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
+
                              {{-- <div class="mb-4">
                                 <label class="form-label">Post Meta</label>
                                 <textarea class="form-control" name="post_meta">{{ $news->post_meta ?? old('post_meta') }}</textarea>
@@ -358,7 +378,7 @@
 
 @push('page-wise-js')
 <script>
-document.getElementById('name').addEventListener('input', function() {
+document.getElementById('header_footer_name').addEventListener('input', function() {
     let slug = this.value
         .toLowerCase()
         .trim()

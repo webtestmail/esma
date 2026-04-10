@@ -69,6 +69,7 @@
                         @endif
                         <div class="card stretch stretch-full">
                             <div class="card-body">
+                                <input type="hidden" name="page_id" value="{{ !empty($page->encrypted_id) ? $page->encrypted_id : ''}}" id="page_id">
                                 @if (Auth::guard('admin')->user()->role == 1)
                                     <div class="mb-4">
                                         <label for="client_page_link" class="form-label">Client Page Link <span
@@ -143,7 +144,7 @@
                                     @enderror
                                 </div>
 
-                              @if(isset($page) && !empty($page->encrypted_id) && $page->id == 6)
+                                @if(isset($page) && !empty($page->encrypted_id) && $page->id == 6)
                                   <div class="mb-4">
                                     <label for="description" class="form-label">Video Link</label>
                                     <input type="text" name="video_link" class="form-control"
@@ -151,6 +152,20 @@
                                  
                                 </div>
                                 @endif
+
+                                     <div class="mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="active"
+                                            {{ (!empty($page->encrypted_id) ? $page->status : old('status', 'active')) == 'active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ (!empty($page->encrypted_id) ? $page->status : old('status')) == 'inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
                                 <div class="mb-4">
                                     <label for="meta_title" class="form-label">Meta Title <span
                                             class="text-danger">*</span></label>
@@ -267,131 +282,66 @@
                 </div>
             </div>
             <!-- [ Main Content ] start -->
-            <div class="main-content">
+                 <div class="main-content">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="card stretch stretch-full">
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-hover" id="proposalList">
-                                        <thead>
-                                            <tr>
-                                                {{-- <th class="wd-30">
-                                                    <div class="btn-group mb-1">
-                                                        <div class="custom-control custom-checkbox ms-1">
-                                                            <input type="checkbox" class="custom-control-input"
-                                                                id="checkAllProposal">
-                                                            <label class="custom-control-label"
-                                                                for="checkAllProposal"></label>
-                                                        </div>
-                                                    </div>
-                                                </th> --}}
-                                                <th>S. No.</th>
-                                                <th>Section Title</th>
-                                                <th>Section Headline</th>
-                                                <th>Section Position</th>
-                                                <th>Section Image</th>
-                                                <th>More Images</th>
-                                                <th>Status</th>
-                                                <th class="text-end">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php $sno = 1; @endphp
-                                            @foreach ($sectionsData as $sections)
-                                                <tr class="single-item">
-                                                    {{-- <td>
-                                                    <div class="item-checkbox ms-1">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input checkbox"
-                                                                id="checkBox_1">
-                                                            <label class="custom-control-label" for="checkBox_1"></label>
-                                                        </div>
-                                                    </div>
-                                                </td> --}}
-                                                    <td>@php echo $sno; @endphp</td>
-                                                    <td>{{ $sections->section_title }}</td>
-                                                    <td>{{ $sections->section_headline }}</td>
-                                                    <td>{{ $sections->position_order }}</td>
-                                                    <td>
-                                                        @if (!empty($sections->section_image))
-                                                            <a href="javascript:void(0)" class="hstack gap-3">
-                                                                <div class="avatar-image avatar-md">
-                                                                    <img src="{{ asset($sections->section_image) }}"
-                                                                        alt="{{ $sections->section_headline }}"
-                                                                        class="img-fluid">
-                                                                </div>
-                                                            </a>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <ul
-                                                            class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                                            @php
-                                                                $more_images = json_decode($sections->more_images);
-                                                            @endphp
-                                                            @if (!empty($more_images))
-                                                                <div
-                                                                    class="img-group lh-0 ms-3 justify-content-start d-none d-sm-flex">
-                                                                    @foreach ($more_images as $image)
-                                                                        <a href="javascript:void(0)"
-                                                                            class="avatar-image avatar-md"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-trigger="hover"
-                                                                            title="{{ $sections->section_headline }}">
-                                                                            <img src="{{ asset($image) }}"
-                                                                                class="img-fluid"
-                                                                                alt="{{ $sections->section_headline }}" />
-                                                                        </a>
-                                                                    @endforeach
-                                                                </div>
-                                                            @endif
-                                                        </ul>
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input c-pointer"
-                                                            onclick="change_status('<?= $model ?>', <?= $sno ?>, '<?= $sections->encrypted_id ?>');"
-                                                            type="checkbox" id="status<?= $sno ?>"
-                                                            <?= $sections->status == 'active' ? 'checked' : '' ?>>
-                                                    </td>
-                                                    <td>
-                                                        <div class="hstack gap-2 justify-content-end">
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0)" class="avatar-text avatar-md"
-                                                                    data-bs-toggle="dropdown" data-bs-offset="0,21">
-                                                                    <i class="feather feather-more-horizontal"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item"
-                                                                            href="{{ route('admin.edit.page.section', ['page' => $page->encrypted_id, 'section' => $sections->encrypted_id]) }}">
-                                                                            <i class="feather feather-edit-3 me-3"></i>
-                                                                            <span>Edit</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="dropdown-divider"></li>
-                                                                    <li>
-                                                                        <button class="dropdown-item"
-                                                                            onclick="delete_item('<?= $model ?>', '<?= $sections->encrypted_id ?>');">
-                                                                            <i class="feather feather-trash-2 me-3"></i>
-                                                                            <span>Delete</span>
-                                                                        </button>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                @php $sno++; @endphp
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                          <div class="card stretch stretch-full">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="pagesection_table">
+                                    <thead>
+                                        <tr>
+                                            <th>S. No.</th>
+                                            <th>SECTION TITLE</th>
+                                            <th>SECTION HEADLINE </th>
+                                            <th>SECTION POSITION </th>
+                                            <th>SECTION IMAGE </th>
+                                            <th>MORE IMAGES </th>
+                                            <th>STATUS</th>
+                                            <th class="text-end">ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
         @endif
     </div>
+  <script>
+    $(document).ready(function () {
+        new DataTable('#pagesection_table', {
+            responsive: true,
+            paging: true,
+            searching: true,
+            ordering: true,
+            order: [[8, "desc"]],
+            info: true,
+            lengthChange: true,
+            pageLength: 10,
+            ajax: {
+                url: '{{ route("admin.pagesection.data") }}',
+                type: 'GET',
+                data: function (d) {
+                    d.page_id = $('#page_id').val(); // send encrypted page_id
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'section_title', name: 'section_title' },
+                { data: 'section_headline', name: 'section_headline' },
+                { data: 'position_order', name: 'position_order' },
+                { data: 'section_image', name: 'section_image' },
+                { data: 'more_images', name: 'more_images' },
+                { data: 'is_active', name: 'is_active' },
+                { data: 'action', orderable: false, searchable: false }
+            ]
+        });
+    });
+</script>
 @endsection

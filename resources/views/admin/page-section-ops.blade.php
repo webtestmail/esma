@@ -70,6 +70,8 @@
                         @endif
                         <div class="card stretch stretch-full">
                             <div class="card-body">
+                                <input type="hidden" name="page_id" value="{{ !empty($section->encrypted_id) ? $section->encrypted_id : ''}}" id="page_id">
+                                  <input type="hidden" name="section_id" value="{{ !empty($page_enc_id) ? $page_enc_id : ''}}" id="section_id">
                                 @if (Auth::guard('admin')->user()->role == 1)
                                     <div class="mb-4">
                                         <label for="default_section_name" class="form-label">Default Section Name <span
@@ -192,6 +194,20 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                 <div class="mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="active"
+                                            {{ (!empty($section->encrypted_id) ? $section->status : old('status', 'active')) == 'active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ (!empty($section->encrypted_id) ? $section->status : old('status')) == 'inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -238,7 +254,7 @@
                         <div class="card stretch stretch-full">
                             <div class="card-body p-0">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="proposalList">
+                                    <table class="table table-hover" id="pagesubsection_table">
                                         <thead>
                                             <tr>
                                                 {{-- <th class="wd-30">
@@ -261,69 +277,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php $sno = 1; @endphp
-                                            @foreach ($subSectionsData as $subSections)
-                                                <tr class="single-item">
-                                                    {{-- <td>
-                                                    <div class="item-checkbox ms-1">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input checkbox"
-                                                                id="checkBox_1">
-                                                            <label class="custom-control-label" for="checkBox_1"></label>
-                                                        </div>
-                                                    </div>
-                                                </td> --}}
-                                                    <td>@php echo $sno; @endphp</td>
-                                                    <td>{{ $subSections->section_title }}</td>
-                                                    <td>{{ $subSections->section_headline }}</td>
-                                                    <td>{{ $subSections->position_order }}</td>
-                                                    <td>
-                                                        @if (!empty($subSections->section_image))
-                                                            <a href="javascript:void(0)" class="hstack gap-3">
-                                                                <div class="avatar-image avatar-md">
-                                                                    <img src="{{ asset($subSections->section_image) }}"
-                                                                        alt="{{ $subSections->section_headline }}"
-                                                                        class="img-fluid">
-                                                                </div>
-                                                            </a>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-check-input c-pointer"
-                                                            onclick="change_status('<?= $model ?>', <?= $sno ?>, '<?= $subSections->encrypted_id ?>');"
-                                                            type="checkbox" id="status<?= $sno ?>"
-                                                            <?= $subSections->status == 'active' ? 'checked' : '' ?>>
-                                                    </td>
-                                                    <td>
-                                                        <div class="hstack gap-2 justify-content-end">
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0)" class="avatar-text avatar-md"
-                                                                    data-bs-toggle="dropdown" data-bs-offset="0,21">
-                                                                    <i class="feather feather-more-horizontal"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li>
-                                                                        <a class="dropdown-item"
-                                                                            href="{{ route('admin.edit.page.subsection', ['page' => $page_enc_id, 'section' => $section->encrypted_id, 'subsection' => $subSections->encrypted_id]) }}">
-                                                                            <i class="feather feather-edit-3 me-3"></i>
-                                                                            <span>Edit</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="dropdown-divider"></li>
-                                                                    <li>
-                                                                        <button class="dropdown-item"
-                                                                            onclick="delete_item('<?= $model ?>', '<?= $subSections->encrypted_id ?>');">
-                                                                            <i class="feather feather-trash-2 me-3"></i>
-                                                                            <span>Delete</span>
-                                                                        </button>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                @php $sno++; @endphp
-                                            @endforeach
+                                          
                                         </tbody>
                                     </table>
                                 </div>
@@ -334,4 +288,36 @@
             </div>
         @endif
     </div>
+
+      <script>
+    $(document).ready(function () {
+        new DataTable('#pagesubsection_table', {
+            responsive: true,
+            paging: true,
+            searching: true,
+            ordering: true,
+            order: [[8, "desc"]],
+            info: true,
+            lengthChange: true,
+            pageLength: 10,
+            ajax: {
+                url: '{{ route("admin.pagesubsection.data") }}',
+                type: 'GET',
+                data: function (d) {
+                    d.page_id = $('#page_id').val();
+                    d.section_id = $('#section_id').val(); // send encrypted page_id
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'section_title', name: 'section_title' },
+                { data: 'section_headline', name: 'section_headline' },
+                { data: 'position_order', name: 'position_order' },
+                { data: 'section_image', name: 'section_image' },
+                { data: 'is_active', name: 'is_active' },
+                { data: 'action', orderable: false, searchable: false }
+            ]
+        });
+    });
+</script>
 @endsection

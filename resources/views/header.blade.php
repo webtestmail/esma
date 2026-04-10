@@ -57,12 +57,48 @@ input.is-invalid, select.is-invalid {
     color: white;
 }
 
+
+/* newsletter */
+#newsletterForm {
+    position: relative;
+}
+#newsletterForm .error {
+    position: absolute !important;
+    bottom: -25px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+#newsletterForm .loading {
+    position: absolute !important;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
+
+
 </style>
  @stack('page-css')
 
 </head>
 
 <body class="preload">
+    <div id="copyToast" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    z-index: 9999;
+    display: none;
+">
+    <span id="copyToastMsg"></span>
+</div>
     <header class="header">
         <div class="container">
             <div class="logo"><a href="{{ route('home') }}"><img

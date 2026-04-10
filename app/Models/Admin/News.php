@@ -33,6 +33,8 @@ class News extends Model
             'tags',
             'published_by',
             'breadcrumb_image',
-            'website_name'
+            'website_name',
+            'header_footer_name',
+            'pdf_file'
         ];
 }

@@ -573,7 +573,7 @@
                 clearErrors();
                 $successText.addClass('d-none');
                 $signupText.show();
-                $btn.html('<i class="bi bi-megaphone"></i> <span class="signup-text">Sign Up</span>');
+                $btn.html('<i class="bi bi-megaphone"></i> <span class="signup-text">Subscribe</span>');
             }, 2000);
             },
             error: function(xhr) {

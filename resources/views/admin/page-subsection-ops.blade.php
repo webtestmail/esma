@@ -197,6 +197,20 @@
                                         accept="image/*" />
                                   
                                 </div>
+
+                                <div class="mb-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="active"
+                                            {{ (!empty($subsection->encrypted_id) ? $subsection->status : old('status', 'active')) == 'active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ (!empty($subsection->encrypted_id) ? $subsection->status : old('status')) == 'inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

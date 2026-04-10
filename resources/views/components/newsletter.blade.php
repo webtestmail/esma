@@ -20,7 +20,7 @@
                                      style="right: 10px; top: 50%; transform: translateY(-50%); display: none; width: 1rem; height: 1rem;">
                                 </div>
                         <button type="submit" class="btn">
-                            <i class="bi bi-megaphone"></i>  <span class="signup-text">Sign Up</span>
+                            <i class="bi bi-megaphone"></i>  <span class="signup-text">Subscribe</span>
                                 <span class="success-text d-none">✓ Done!</span>
                         </button>
                     </form>
