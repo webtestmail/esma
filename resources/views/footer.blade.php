@@ -578,6 +578,7 @@
                 if (xhr.status === 422) {
                     $error.text(xhr.responseJSON.errors.email[0]).addClass('text-danger');
                 }
+                  $signupText.show();
             },
             complete: function() {
                 $btn.prop('disabled', false);

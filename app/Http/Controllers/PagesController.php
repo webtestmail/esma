@@ -13,6 +13,7 @@ use App\Models\Admin\Faqs;
 use App\Models\Admin\Services;
 use App\Models\Admin\ServiceSections;
 use App\Models\Admin\FaqCategory;   
+use App\Models\Admin\Report;   
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -336,7 +337,7 @@ class PagesController extends Controller
         }
     }
 
-     public function resource_news_view()
+     public function resource_news_view(Request $request)
     {
         $page = Pages::where(["id" => 12, "status" => 'active'])->first();
         if ($page) {
@@ -349,10 +350,42 @@ class PagesController extends Controller
             $data['breadcrumb_headline'] = $page->breadcrumb_headline;
             $data['breadcrumb_image'] = $page->page_image;
             $data['breadcrumb_description'] = $page->breadcrumb_description;
+
+             $query  = News::select('id', 'category_ids', 'title', 'header_footer_name', 'created_at', 'slug', 'banner')->where('status', 'active');
+              $selectedCategoryName = $request->get('category_name');
+                $selectedCatId = null;
+
+                if ($selectedCategoryName) {
+                    // Find category ID by name
+                    $category = NewsCategory::where('name', $selectedCategoryName)
+                                            ->where('status', 'active')
+                                            ->first();
+                    
+                    if ($category) {
+                        $selectedCatId = $category->id;
+                        // Filter news where category_ids contains this ID
+                        $query->whereRaw("FIND_IN_SET(?, category_ids)", [$selectedCatId]);
+                    }
+                }
+
+                $news = $query->paginate(6);
+              foreach ($news as $item) {
+                $catidArr = !empty($item->category_ids)
+                    ? explode(',', $item->category_ids)
+                    : [];
+
+                $item->categories = NewsCategory::whereIn('id', $catidArr)
+                                                ->where('status', 'active')
+                                                ->pluck('name')
+                                                ->toArray();
+                  }
+
+
+            $categories = NewsCategory::where('status', 'active')->get();
             $headerData = $this->header();
             $footerData = $this->footer();
             $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
-            return response()->view('resource_news', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
+            return response()->view('resource_news', compact('page', 'page_name', 'data', 'headerData', 'footerData','news', 'categories'), 200);
         } else {
             return redirect()->route('page.not.found');
         }
@@ -432,18 +465,46 @@ class PagesController extends Controller
     ]);
 }
 
-// In your NewsController
-        // public function show($slug)
-        // {
-        //     $news = News::where('slug', $slug)->where('status', 'active')->firstOrFail();
-            
-        //     // Pass share data
-        //     $shareData = [
-        //         'url' => url()->current(),
-        //         'title' => $news->name,
-        //         'image' => $news->image ? asset($news->banner) : asset('images/og-image.jpg')
-        //     ];
-            
-        //     return view('news.show', compact('news', 'shareData'));
-        // }
+
+     public function resource_reports_view(Request $request)
+    {
+        $page = Pages::where(["id" => 15, "status" => 'active'])->first();
+        if ($page) {
+            $page_name = 'resources_reports';
+            $data['company'] = Company::where('id', 1)->first();
+
+            $data['meta_title'] = $page->meta_title;
+            $data['meta_keyword'] = $page->meta_keyword;
+            $data['meta_description'] = $page->meta_description;
+            $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            $data['breadcrumb_image'] = $page->page_image;
+            $data['breadcrumb_description'] = $page->breadcrumb_description;
+            $headerData = $this->header();
+            $footerData = $this->footer();
+      
+            $allYears = Report::where('status', 'active')
+            ->selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->all();
+               $query = Report::where('status', 'active');
+            if ($request->filled('year')) {
+                $query->whereYear('created_at', $request->year);
+            }
+
+            $reports = $query->orderBy('created_at', 'desc')
+                ->get()
+                ->groupBy(fn($r) => $r->created_at->format('Y'))
+                ->sortKeysDesc();
+
+               
+
+            $data['category'] = Pages::select('header_footer_name')->where(["id" => 11, "status" => 'active'])->first();
+            return response()->view('resource_reports', compact('page', 'page_name', 'data', 'headerData', 'footerData', 'reports', 'allYears'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
+
 }

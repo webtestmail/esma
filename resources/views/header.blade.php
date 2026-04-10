@@ -12,10 +12,7 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     <link rel="shortcut icon" href="{{ asset($company->company_icon) }}" type="image/x-icon">
-
     <link rel="stylesheet" href="{{ asset('css/outer.css') }}">
-   
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
        {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
@@ -110,6 +107,7 @@ input.is-invalid, select.is-invalid {
                 @php 
               $resources_hub = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 11]);
                 $news = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 12]);
+                 $reportData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 15]);
                 @endphp
                  @if(isset($resources_hub))
                 <li class="has-dropdown">
@@ -119,7 +117,9 @@ input.is-invalid, select.is-invalid {
                         @if(isset($news))
                         <li><a href="{{ $news->client_page_urls }}">{{ $news->header_footer_name }}</a></li>
                         @endif
-                        <li><a href="">Articles & Reports</a></li>
+                        @if(isset($reportData))
+                        <li><a href="{{ $reportData->client_page_urls }}">{{ $reportData->header_footer_name }}</a></li>
+                        @endif
                         <li><a href="">Document Library</a></li>
                         <li><a href="">Regulatory Updates</a></li>
                     </ul>
@@ -135,9 +135,10 @@ input.is-invalid, select.is-invalid {
 
                         $memberData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 9]);
 
-                         $contactData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 7]);
+                        $contactData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 7]);
 
-                          $help_centerData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 10]);
+                        $help_centerData = app()->call('App\Http\Controllers\PagesController@get_pagesection', ['id' => 10]);
+
                     @endphp
                     <ul class="dropdown-menu">
                         @if(isset($aboutData))

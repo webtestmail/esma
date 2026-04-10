@@ -145,10 +145,14 @@
                          <li class="nxl-item">
                             <a class="nxl-link" href="{{ route('admin.managenews') }}">Manage News</a>
                         </li>
-                        
-                        <li class="nxl-item">
-                            <a class="nxl-link" href="{{ route('admin.manage_services') }}">Manage Services</a>
+
+                         <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.managereports') }}">Manage Reports</a>
                         </li>
+                        
+                        {{-- <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_services') }}">Manage Services</a>
+                        </li> --}}
                     </ul>
                 </li>
                 <li class="nxl-item nxl-hasmenu">

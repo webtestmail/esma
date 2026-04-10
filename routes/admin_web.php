@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\MasterController;
 use App\Http\Controllers\Admin\FormController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Middleware\AdminChangeStatusMiddleware;
 use App\Http\Middleware\AdminChangeVisibilityMiddleware;
 use App\Http\Middleware\AdminDeleteMiddleware;
@@ -212,6 +213,11 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::get('/news_data', [NewsController::class, 'news_data'])->name('news_data');
     Route::match(['get', 'post'], '/add_news', [NewsController::class, 'addnews'])->name('add.news');
     Route::match(['get', 'post'], '/editnews/{news}', [NewsController::class, 'editnews'])->name('edit.news');
+
+    Route::get('/manage_reports', [ReportController::class, 'managereports'])->name('managereports');
+    Route::get('/reports_data', [ReportController::class, 'reports_data'])->name('reports_data');
+    Route::match(['get', 'post'], '/add_report', [ReportController::class, 'addreport'])->name('add.report');
+    Route::match(['get', 'post'], '/editreport/{report}', [ReportController::class, 'editreport'])->name('edit.report');
 
 
     //Forms

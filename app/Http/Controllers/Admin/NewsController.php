@@ -266,7 +266,7 @@ class NewsController extends Controller
             $news = News::where('id', $ids)->firstOrFail();
             $news->encrypted_id = $id;
             $categories = NewsCategory::where('status', 'active')->get();
-            $currentPage = "manage_faq_category";
+            $currentPage = "manage_news";
             return view('admin.news-ops', ["categories" => $categories, "currentPage" => $currentPage, "news" => $news]);
         }
     }

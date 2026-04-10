@@ -1101,6 +1101,7 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                     errorMsg = xhr.responseJSON.errors.email[0];
                 }
                 showError(errorMsg);
+                  $signupText.show();
             },
             complete: function() {
                 $loading.hide();
