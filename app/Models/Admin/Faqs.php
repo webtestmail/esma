@@ -33,6 +33,10 @@ class Faqs extends Model
         'answer' => 'string',
         'status' => 'string',
     ];
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
 
     
 }

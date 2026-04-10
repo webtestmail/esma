@@ -232,7 +232,7 @@
                             <a class="nxl-link" href="{{ route('admin.manage_document_categories') }}">Documents Categories</a>
                         </li>
                         <li class="nxl-item">
-                            <a class="nxl-link" href="{{ route('admin.manage_faqs') }}">Manage documents</a>
+                            <a class="nxl-link" href="{{ route('admin.manage_documents') }}">Manage documents</a>
                         </li>
                     </ul>
                 </li>

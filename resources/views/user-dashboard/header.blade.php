@@ -27,6 +27,9 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 
 <body class="dashboard-body">
@@ -86,7 +89,7 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
                     <div class="dropdown-item-wrapper">
                         <a href="#" class="dropdown-toggle-btn">
                             <svg class="svg-icon">
-                                <use href="../images/icons/icons-sprite.svg#icon-search"></use>
+                                <use href="images/icons/icons-sprite.svg#icon-user-outline"></use>
                             </svg>
                         </a>
                         <div class="custom-dropdown search-dropdown">
@@ -120,9 +123,9 @@ $company = \App\Models\Admin\Company::select('company_logo', 'company_name','com
                                 <a href="#" class="p-4" style="color: var(--primary-400); font-weight: 600;">Clear</a>
                                 <button class="search-btn btn-style-2 text-end">
                                     <svg class="svg-icon">
-                                        <use href="../images/icons/icons-sprite.svg#icon-arrow-box-right"></use>
+                                        <use href="{{ asset('/images/icons/icons-sprite.svg#icon-arrow-box-right') }}"></use>
                                     </svg> Search <svg class="svg-icon arrow-svg">
-                                        <use href="../images/icons/icons-sprite.svg#icon-arrow-right"></use>
+                                        <use href="{{ asset('/images/icons/icons-sprite.svg#icon-arrow-right') }}"></use>
                                     </svg>
                                 </button>
                             </div>

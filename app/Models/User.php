@@ -114,4 +114,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(CompanyLink::class, 'user_id');
     }
+    public function companycontacts(){
+        return $this->hasMany(MemberCompanyContact::class, 'user_id');
+    }
+    public function mainPointOfContact(){
+        return $this->hasOne(PointOfContact::class, 'user_id')->where('is_primary', 1);
+    }
+    public function pointOfContact(){
+        return $this->hasMany(PointOfContact::class, 'user_id')->where('is_primary', 0);
+    }
 }

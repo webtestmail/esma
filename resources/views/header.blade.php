@@ -259,7 +259,7 @@ input.is-invalid, select.is-invalid {
                                 <li><a href="{{ route('events') }}">Events</a></li>
                                 <li><a href="{{ route('library') }}">Library</a></li>
                                 <li><a href="{{ route('users') }}">Users</a></li>
-                                <li><a href="{{ route('help.center') }}">Help Center</a></li>
+                                <li><a href="{{ route('member-help-center') }}">Help Center</a></li>
                                 <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                             </ul>
 

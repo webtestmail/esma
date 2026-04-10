@@ -11,6 +11,8 @@ use App\Models\Temperature;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserProfile;
+use App\Models\Document;
+use App\Models\Admin\DocumentCategory;
 
 class MemberController extends Controller
 {
@@ -31,11 +33,15 @@ class MemberController extends Controller
     }
     public function library(){
         $user = auth()->user();
-        return view('user-dashboard.library', compact('user'));
+        $documents = Document::active()->get();
+        $documentCategories = DocumentCategory::has('documents')->get();
+        return view('user-dashboard.library', compact('user', 'documents', 'documentCategories'));
     }
 
     public function help_center(){
         $user = auth()->user();
-        return view('user-dashboard.help-center', compact('user'));
+        $faqs = \App\Models\Admin\Faqs::active()->get();
+        $faqsCategory = \App\Models\Admin\FaqCategory::has('faqs')->get();
+        return view('user-dashboard.help-center', compact('user', 'faqs', 'faqsCategory'));
     }
 }

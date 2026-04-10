@@ -270,6 +270,50 @@ class PagesController extends Controller
             return redirect()->route('page.not.found');
         }
     }   
+
+     public function membership_view()
+    {
+        $page = Pages::where(["id" => 9, "status" => 'active'])->first();
+        if ($page) {
+            $page_name = 'membership';
+
+            $data['meta_title'] = $page->meta_title;
+            $data['meta_keyword'] = $page->meta_keyword;
+            $data['meta_description'] = $page->meta_description;
+            // $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            // $data['breadcrumb_image'] = $page->page_image;
+            // $data['breadcrumb_description'] = $page->breadcrumb_description;
+            $headerData = $this->header();
+            $footerData = $this->footer();
+            return response()->view('membership', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
+
+
+    public function help_center_view()
+    {
+        $page = Pages::where(["id" => 10, "status" => 'active'])->first();
+        if ($page) {
+            $page_name = 'help_center';
+            $data['company'] = Company::where('id', 1)->first();
+
+            $data['meta_title'] = $page->meta_title;
+            $data['meta_keyword'] = $page->meta_keyword;
+            $data['meta_description'] = $page->meta_description;
+            $data['breadcrumb_headline'] = $page->breadcrumb_headline;
+            $data['breadcrumb_image'] = $page->page_image;
+            $data['breadcrumb_description'] = $page->breadcrumb_description;
+            $faqcategory = FaqCategory::with('faqs')->where('status', 'active')->orderBy('position_order')->get();
+            $faqs = Faqs::where('status', 'active')->get();
+            $headerData = $this->header();
+            $footerData = $this->footer();
+            return response()->view('help_center', compact('page', 'page_name', 'data', 'headerData', 'footerData', 'faqcategory'), 200);
+        } else {
+            return redirect()->route('page.not.found');
+        }
+    }
      public function view_profile($slug)
     {
         // 1. Fetch the profile first

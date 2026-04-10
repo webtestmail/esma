@@ -8,45 +8,122 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserProfile;
 use Illuminate\Support\Str;
 use App\Models\CompanyLink;
+use App\Models\PointOfContact;
 use App\Models\MemberCompanyContact;
+use DB;
 
 class MemberProfileController extends Controller
 {
-    public function contact_details_store(Request $request){
-        try {
-            $user_id = auth()->id();
-            $data = $request->all();
+    public function store_point_of_contact(Request $request) {
+    try {
+        $user_id = auth()->id();
 
-            foreach ($data as $key => $value) {
-       
-            if (strpos($key, 'extra_address_') === 0) {
-                $id = str_replace('extra_address_', '', $key);
+        return \DB::transaction(function () use ($request, $user_id) {
+            
+            // 1. Handle Main Contact (is_primary = 1)
+            $mainContact = PointOfContact::updateOrCreate(
+                ['user_id' => $user_id, 'is_primary' => 1],
+                [
+                    'contact_name'     => $request->contact_name,
+                    'contact_surname'  => $request->contact_surname,
+                    'contact_position' => $request->contact_position,
+                    'contact_gender'   => $request->contact_gender,
+                    'contact_email'    => $request->contact_email,
+                    'contact_phone'    => $request->contact_phone,
+                    ''
+                ]
+            );
 
-                MemberCompanyContact::create([
-                    'user_id'         => $user_id,
-                    'main_address'    => $value, // The address string
-                    'google_map_link' => $data["extra_map_{$id}"] ?? null,
-                    'country'         => $data["extra_country_{$id}"] ?? null,
-                    'is_active'       => 1,
-                ]);
+            if ($request->hasFile('main_contact_image')) {
+                $path = $request->file('main_contact_image')->store('contacts', 'public');
+                $mainContact->update(['image' => $path]);
+
             }
+
+            PointOfContact::where('user_id', $user_id)->where('is_primary', 0)->delete();
+
+            if ($request->has('extra_names')) {
+                foreach ($request->extra_names as $key => $name) {
+                    if (!empty($name)) {
+                        $contact = PointOfContact::create([
+                            'user_id'    => $user_id,
+                            'is_primary' => 0,
+                            'contact_name'       => $name,
+                            'contact_surname'    => $request->extra_surnames[$key] ?? null,
+                            'contact_position'   => $request->extra_positions[$key] ?? null,
+                            'contact_email'      => $request->extra_emails[$key] ?? null,
+                            "contact_gender"   => $request->extra_genders[$key] ?? null,
+                            'contact_phone'     => $request->extra_phones[$key] ?? null,
+                            'is_active'        => 1,
+                        ]);
+
+                        // Handle individual file uploads for extra contacts
+                        if ($request->hasFile("extra_images.$key")) {
+                            $path = $request->file("extra_images.$key")->store('contacts', 'public');
+                            $contact->update(['image' => $path]);
+                        }
+                    }
+                }
+            }
+
+            return response()->json(['success' => true]);
+        });
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+    }
+}
+   public function contact_details_store(Request $request) {
+    try {
+        $user_id = auth()->id();
+
+        return \DB::transaction(function () use ($request, $user_id) {
+            
+            MemberCompanyContact::updateOrCreate(
+                ['user_id' => $user_id, 'is_main' => 1], 
+                [
+                    'main_address'    => $request->main_address,
+                    'google_map_link' => $request->map_url,
+                    'country'         => $request->country,
+                    'is_active'       => 1,
+                ]
+            );
+
+            // 2. Remove old EXTRA addresses before adding new ones
+            // This prevents duplicate rows every time the user saves
+            MemberCompanyContact::where('user_id', $user_id)
+                                ->where('is_main', 0)
+                                ->delete();
+
+            // 3. Handle Extra Addresses from the arrays
+            if ($request->has('extra_addresses')) {
+                foreach ($request->extra_addresses as $index => $address) {
+                    if (!empty($address)) {
+                        MemberCompanyContact::create([
+                            'user_id'         => $user_id,
+                            'main_address'    => $address,
+                            'google_map_link' => $request->extra_map_urls[$index] ?? null,
+                            'country'         => $request->extra_countries[$index] ?? null,
+                            'is_active'       => 1,
+                            'is_main'         => 0, // Mark as extra
+                        ]);
+                    }
+                }
             }
 
             return response()->json([
                 'success' => true, 
                 'message' => 'Contact details updated successfully'
             ]);
+        });
 
-        
-        } catch (\Exception $e) {
-            \Log::error("Contact Details Update Error: " . $e->getMessage());
-
-            return response()->json([
-                'success' => false, 
-                'message' => 'An error occurred while updating contact details'
-            ], 500);
-        }
+    } catch (\Exception $e) {
+        \Log::error("Contact Details Update Error: " . $e->getMessage());
+        return response()->json([
+            'success' => false, 
+            'message' => 'An error occurred: ' . $e->getMessage()
+        ], 500);
     }
+}
     public function product_category_store(Request $request)
     {
         // 1. Validation

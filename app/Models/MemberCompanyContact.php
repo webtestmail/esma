@@ -11,6 +11,7 @@ class MemberCompanyContact extends Model
         'main_address',
         'google_map_link',
         'country',
+        'is_main',
         'is_active'
     ];
 

@@ -32,12 +32,9 @@
                                 </button>
                                 <ul class="library-filter-category list-unstyled mb-0">
                                     <li class="active" data-filter="all">All</li>
-                                    <li data-filter="cat1">Category 01</li>
-                                    <li data-filter="cat2">Category 02</li>
-                                    <li data-filter="cat3">Category 03</li>
-                                    <li data-filter="cat4">Category 04</li>
-                                    <li data-filter="cat5">Category 05</li>
-                                    <li data-filter="cat6">Category 06</li>
+                                    @foreach($documentCategories as $category)
+                                        <li data-filter="cat{{ $category->id }}">{{ $category->name }}</li>
+                                    @endforeach
                                 </ul>
                                 <button class="nextvarrow">
                                     <svg class="svg-icon arrow-svg"><use href="../images/icons/icons-sprite.svg#icon-angle-right"></use></svg>
@@ -47,168 +44,28 @@
 
                             <!-- FILTERED CONTENT -->
                             <ul class="library-filtered-content list-unstyled mt-4">
-
-                                <li data-category="cat1">
+                            @foreach($documents as $document)
+                                <li data-category="cat{{ $document->documentcategory->id }}">
                                     <div class="icon"><svg class="svg-icon">
                                             <use href="../images/icons/icons-sprite.svg#icon-megaphone"></use>
                                         </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
+                                    <div class="text">{{ $document->title }}</div>
                                     <div class="text-info">
                                         <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
+                                            <i class="bi bi-calendar-check"></i>{{ $document->created_at->format('M d, Y') }}
                                         </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
+                                        <div class="file-size">{{ $document->file_size }}</div>
+                                        <div class="file-format">.{{ $document->file_type }}</div>
                                     </div>
                                     <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
+                                        <a href="{{ $document->file_path }}" target="_blank"> <svg class="svg-icon me-2">
                                                 <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
                                                 </use>
                                             </svg> Download</a>
                                     </div>
                                 </li>
-
-                                <li data-category="cat2">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-piechart"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-                                <li data-category="cat5">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-docs"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-                                <li data-category="cat6">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-globe"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-                                 <li data-category="cat1">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-megaphone"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-                                <li data-category="cat2">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-piechart"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-                                <li data-category="cat3">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-docs"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-                                <li data-category="cat1">
-                                    <div class="icon"><svg class="svg-icon">
-                                            <use href="../images/icons/icons-sprite.svg#icon-globe"></use>
-                                        </svg></div>
-                                    <div class="text">Lorem ipsum dolor sit amet, adiscpling elet</div>
-                                    <div class="text-info">
-                                        <div class="date-info">
-                                            <i class="bi bi-calendar-check"></i> Jan, 2026
-                                        </div>
-                                        <div class="file-size">550kb</div>
-                                        <div class="file-format">.pdf</div>
-                                    </div>
-                                    <div class="file-btn">
-                                        <a href="#"> <svg class="svg-icon me-2">
-                                                <use href="../images/icons/icons-sprite.svg#icon-down-arrow-circle">
-                                                </use>
-                                            </svg> Download</a>
-                                    </div>
-                                </li>
-
-
+                            @endforeach
+                      
                             </ul>
                         </div>
 

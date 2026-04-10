@@ -71,6 +71,10 @@ Route::post('/register',[AuthController::class,'register'])->name('register');
 Route::get('/email/verify',[AuthController::class,'email_verify_notice'])->name('verification.notice');
 Route::post('/application/submit',[AuthController::class,'application_submit'])->name('application.submit');
 
+Route::post('/contact/verify', [ContactController::class, 'sendVerification'])->name('contact.verify');
+Route::get('/contact/verify/{token}', [ContactController::class, 'verifyToken'])->name('contact.verify.token');
+Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
+
 Route::get('/view-profile/{slug}',[PagesController::class,'view_profile'])->name('view-profile');
 
 

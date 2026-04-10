@@ -101,7 +101,7 @@
                                         <div id="products" class="accordion-collapse collapse"
                                             aria-labelledby="headingProducts" data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form id="productsBrandsForm" >
+                                                <form id="productsBrandsForm">
                                                     <!-- Trade Sectors -->
                                                     <div class="mb-4">
                                                         <label class="form-label fw-semibold">Trade Sectors <span
@@ -120,7 +120,8 @@
 
                                                                     <input type="checkbox" class="form-check-label"
                                                                         id="trade_{{ \Illuminate\Support\Str::slug($value['name']) }}"
-                                                                        name="trade[]" value="{{ $value['id'] }}">
+                                                                        name="trade[]" value="{{ $value['id'] }}"
+                                                                        {{ !empty($user->tradeSectors) && in_array($value['id'], $user->tradeSectors->pluck('id')->toArray()) ? 'checked' : ''  }}>
 
                                                                     <label class="form-check-label"
                                                                         for="trade_{{ \Illuminate\Support\Str::slug($value['name']) }}">
@@ -150,7 +151,10 @@
                                                                 @foreach($column as $value)
                                                                 <div class="form-check">
                                                                     <input type="checkbox"
-                                                                        id="product_{{ \Illuminate\Support\Str::slug($value['name']) }}" name="product_category[]" value="{{ $value['id'] }}">
+                                                                        id="product_{{ \Illuminate\Support\Str::slug($value['name']) }}"
+                                                                        name="product_category[]"
+                                                                        value="{{ $value['id'] }}"
+                                                                        {{ !empty($user->productCategories) && in_array($value['id'], $user->productCategories->pluck('id')->toArray()) ? 'checked' : ''  }}>
                                                                     <label class="form-check-label"
                                                                         for="product_{{ \Illuminate\Support\Str::slug($value['name']) }}">
                                                                         {{ $value['name'] }}
@@ -172,30 +176,37 @@
                                                             <div class="col-md-4">
                                                                 @foreach($column as $value)
                                                                 <div class="form-check">
-                                                                    <input type="checkbox" id="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}" name="temperature[]" value="{{ $value['id'] }}">
+                                                                    <input type="checkbox"
+                                                                        id="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}"
+                                                                        name="temperature[]" value="{{ $value['id'] }}"
+                                                                        {{ !empty($user->temperatures) && in_array($value['id'], $user->temperatures->pluck('id')->toArray()) ? 'checked' : ''  }}>
                                                                     <label class="form-check-label"
-                                                                        for="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}" name="temperature[]" value="{{ $value['id'] }}">
+                                                                        for="temperature_{{ \Illuminate\Support\Str::slug($value['name']) }}"
+                                                                        name="temperature[]" value="{{ $value['id'] }}">
                                                                         {{ $value['name'] }}
                                                                     </label>
                                                                 </div>
                                                                 @endforeach
                                                             </div>
 
-                                                       @endforeach
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                     <!-- Highlight Your Brands -->
-                                                   <div class="mb-4">
-                                                        <label class="form-label fw-semibold">Highlight Your Brands</label>
-                                                        <select class="form-control select2-brands" name="brands[]" multiple="multiple">
+                                                    <div class="mb-4">
+                                                        <label class="form-label fw-semibold">Highlight Your
+                                                            Brands</label>
+                                                        <select class="form-control select2-brands" name="brands[]"
+                                                            multiple="multiple">
                                                             @foreach($brands as $brand)
-                                                                <option value="{{ $brand->id }}" 
-                                                                    {{ in_array($brand->id, $user->brands->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                                                    {{ $brand->name }}
-                                                                </option>
+                                                            <option value="{{ $brand->id }}"
+                                                                {{ !empty($user->brands) && in_array($brand->id, $user->brands->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                                {{ $brand->name }}
+                                                            </option>
                                                             @endforeach
                                                         </select>
-                                                        <span class="text-muted form-span"><em>Search and select your brands from the list</em></span>
+                                                        <span class="text-muted form-span"><em>Search and select your
+                                                                brands from the list</em></span>
                                                     </div>
                                                     <div class="col-lg-12 text-end">
                                                         <button type="submit" class="form-submit-btn"> <svg
@@ -224,39 +235,55 @@
                                         <div id="links" class="accordion-collapse collapse"
                                             aria-labelledby="headingLinks" data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form id="companyLinksForm" >
+                                                <form id="companyLinksForm">
                                                     <div class="row g-4">
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Website URL</label>
-                                                            <input type="url" placeholder="" name="website_url" class="form-control">
+                                                            <input type="url" placeholder="" name="website_url"
+                                                                value="{{ $user->companylinks->website_url }}"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Linkedin URL</label>
-                                                            <input type="url" placeholder="" name="linkedin_url" class="form-control">
+                                                            <input type="url" placeholder="" name="linkedin_url"
+                                                                value="{{ $user->companylinks->linkedin_url }}"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Facebook URL</label>
-                                                            <input type="url" placeholder="" name="facebook_url" class="form-control">
+                                                            <input type="url" placeholder="" name="facebook_url"
+                                                                value="{{ $user->companylinks->facebook_url }}"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">X URL</label>
-                                                            <input type="url" placeholder="" name="twitter_urls" class="form-control">
+                                                            <input type="url" placeholder="" name="twitter_urls"
+                                                                value="{{ $user->companylinks->twitter_url }}"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Instagram URL</label>
-                                                            <input type="url" placeholder="" name="instagram_url" class="form-control">
+                                                            <input type="url" placeholder="" name="instagram_url"
+                                                                value="{{ $user->companylinks->instagram_url }}"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Youtube URL</label>
-                                                            <input type="url" placeholder="" name="youtube_url" class="form-control">
+                                                            <input type="url" placeholder="" name="youtube_url"
+                                                                class="form-control"
+                                                                value="{{ $user->companylinks->youtube_url }}">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Pinterest URL</label>
-                                                            <input type="url" placeholder="" name="pinterest_url" class="form-control">
+                                                            <input type="url" placeholder="" name="pinterest_url"
+                                                                class="form-control"
+                                                                value="{{ $user->companylinks->pinterest_url }}">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Whatsapp URL or Number</label>
-                                                            <input type="text" placeholder="" name="whatsapp_url_or_number" class="form-control">
+                                                            <input type="text" placeholder=""
+                                                                name="whatsapp_url_or_number" class="form-control"
+                                                                value="{{ $user->companylinks->whatsapp_url_or_number }}">
                                                         </div>
                                                         <!-- If add btn is click this is for that container  -->
                                                         <div id="customLinksContainerLinks" class="m-0"></div>
@@ -303,19 +330,22 @@
                                                     <div class="row g-4">
                                                         <div class="col-lg-12 form-box">
                                                             <label for="">Main Address</label>
-                                                            <input type="text" name="main_address" placeholder="" class="form-control">
+                                                            <input type="text" name="main_address" placeholder=""
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Google Maps URL</label>
-                                                            <input type="url" placeholder="" name="map_url" class="form-control">
+                                                            <input type="url" placeholder="" name="map_url"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Country</label>
-                                                            <input type="text" placeholder="" name="country" class="form-control">
+                                                            <input type="text" placeholder="" name="country"
+                                                                class="form-control">
                                                         </div>
 
                                                         <!-- If add btn is click this is for that container  -->
-                                                        <div id="customLinksContainerAddress"  class="m-0"></div>
+                                                        <div id="customLinksContainerAddress" class="m-0"></div>
                                                         <div class="d-flex align-items-center justify-content-between">
                                                             <div class="col-lg-4 text-start">
                                                                 <button type="button" id="addCustomLinkBtnAddress"
@@ -355,12 +385,12 @@
                                         <div id="poc" class="accordion-collapse collapse" aria-labelledby="headingPOC"
                                             data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form class="profile-form">
+                                                <form id="point-of-contact" enctype="multipart/form-data">
                                                     <div class="row g-4">
                                                         <div class="col-lg-12 form-box">
                                                             <!-- file uplaod class (image-upload) do not change it  -->
                                                             <div class="image-upload form-control">
-                                                                <input type="file" accept="image/*" hidden>
+                                                                <input type="file" accept="image/*" name="main_contact_image" hidden>
                                                                 <div class="upload-placeholder">
                                                                     <button type="button" class="select-btn"> <svg
                                                                             class="svg-icon"
@@ -370,8 +400,8 @@
                                                                             </use>
                                                                         </svg> Select Photo</button>
                                                                 </div>
-                                                                <div class="image-preview">
-                                                                    <img src="" alt="preview">
+                                                                <div class="image-preview" @if($user->mainPointOfContact && $user->mainPointOfContact->image) style="display: block;" @endif>
+                                                                    <img src="@if($user->mainPointOfContact && $user->mainPointOfContact->image){{ asset('storage/' . $user->mainPointOfContact->image) }}@else {{ asset('images/default-profile.png') }}@endif" alt="preview">
                                                                     <span class="file-name"></span>
                                                                     <div class="actions">
                                                                         <button type="button" class="edit-btn"><svg
@@ -394,27 +424,27 @@
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Contact Name <span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="contact_name" value="{{ old('contact_name',$user->mainPointOfContact->contact_name) }}" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Surname <span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="contact_surname" value="{{ old('contact_surname',$user->mainPointOfContact->contact_surname) }}" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Contact Position <span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="contact_position" value="{{ old('contact_position',$user->mainPointOfContact->contact_position) }}" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Contact Gender <span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="contact_gender" value="{{ old('contact_gender',$user->mainPointOfContact->contact_gender) }}" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Email <span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="contact_email" value="{{ old('contact_email',$user->mainPointOfContact->contact_email) }}" class="form-control">
                                                         </div>
                                                         <div class="col-lg-6 form-box">
                                                             <label for="">Phone<span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="contact_phone" value="{{ old('contact_phone',$user->mainPointOfContact->contact_phone) }}" class="form-control">
                                                         </div>
 
                                                         <!-- JS injected contacts & extra feilds-->
@@ -672,16 +702,64 @@
 
 @push('user-custom-js')
 <script>
-    $(document).ready(function() {
-  $('.profile-form').on('submit', function(e) {
+$(document).ready(function() {
+    $('.select2-brands').select2({
+        placeholder: "Search or type to add brands",
+        allowClear: true,
+        tags: true, // This allows users to create new tags
+        tokenSeparators: [',', ' '], // Allows adding tags by pressing comma or space
+        width: '100%' // Ensures it fills the container
+    });
+});
+
+$('#point-of-contact').validate({
+    rules: {
+        // Main Contact Rules
+        contact_name: { required: true, maxlength: 255 },
+        contact_surname: { required: true, maxlength: 255 },
+        contact_position: { required: true, maxlength: 255 },
+        main_contact_image: { extension: "jpg|jpeg|png|gif" },
+        contact_email :{ required:true, email: true },
+        contact_phone : { required:true,digits:true, minlength:10,maxlength:15 }
+    },
+    messages: {
+        contact_name: { required: "Contact name is required" },
+        contact_surname: { required: "Surname is required" },
+        contact_position: { required: "Position is required" }
+    },
+    submitHandler: function(form) {
+        let formData = new FormData(form);
+
+        $.ajax({
+            url: '{{ route("member.point_of_contact.store") }}',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                alertify.success(res.message || 'Point of contact saved successfully!');
+            },
+            error: function(err) {
+                console.error(err);
+                alertify.error('An error occurred while saving.');
+            }
+        });
+    }
+});
+
+$(document).ready(function() {
+    $('.profile-form').on('submit', function(e) {
         e.preventDefault();
         // Reference the form element
         var $form = $(this);
-        
+
         $.ajax({
             url: "{{ route('member.company.contact_details') }}",
             method: "POST",
-            data: $form.serialize(), 
+            data: $form.serialize(),
             headers: {
                 // Ensure this meta tag exists in your <head>
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -715,130 +793,130 @@
     });
 });
 
-    $(document).ready(function() {
-       $("#companyLinksForm").validate({
-            rules: {
-                facebook_url: {
-                    url: true
-                },
-                twitter_urls: {
-                    url: true
-                },
-                instagram_url: {
-                    url: true
-                },
-                youtube_url: {
-                    url: true
-                },
-                pinterest_url: {
-                    url: true
-                },
-                website_url:{
-                  url:true
-                },
-                whatsapp_url_or_number: {
-                    required: true
-                }
+$(document).ready(function() {
+    $("#companyLinksForm").validate({
+        rules: {
+            facebook_url: {
+                url: true
             },
-            messages: {
-                facebook_url: {
-                    url: "Please enter a valid URL"
-                },
-                twitter_urls: {
-                    url: "Please enter a valid URL"
-                },
-                instagram_url: {
-                    url: "Please enter a valid URL"
-                },
-                youtube_url: {
-                    url: "Please enter a valid URL"
-                },
-                pinterest_url: {
-                    url: "Please enter a valid URL"
-                },
-                whatsapp_url_or_number: {
-                    required: "Whatsapp URL or number is required"
-                }
+            twitter_urls: {
+                url: true
             },
-            submitHandler: function(form) {
-                
-                $.ajax({
-                    url: "{{ route('member.company.link') }}",
-                    type: "POST",
-                    data: $(form).serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(res) {
-                        if (res.success === false) {
-                            alertify.error(res.message);
-                            return;
-                        }
-                        alertify.success("Company profile updated successfully");
-                    },
-                    error: function(xhr, status, error) {
-                        alertify.error("Something went wrong");
-                    }
-                });
+            instagram_url: {
+                url: true
+            },
+            youtube_url: {
+                url: true
+            },
+            pinterest_url: {
+                url: true
+            },
+            website_url: {
+                url: true
+            },
+            whatsapp_url_or_number: {
+                required: true
             }
-    });   
-    });
-    $(document).ready(function() {
-        $('#productsBrandsForm').submit(function(e) {
-            e.preventDefault();
-
-            let tradeSectors = $('input[name="trade[]"]:checked').length;
-            let productCats = $('input[name="product_category[]"]:checked').length;
-            let temps = $('input[name="temperature[]"]:checked').length;
-
-            if (tradeSectors === 0 ) {
-                alertify.error('Please select at least one item from Trade sector section.');
-                return false;
+        },
+        messages: {
+            facebook_url: {
+                url: "Please enter a valid URL"
+            },
+            twitter_urls: {
+                url: "Please enter a valid URL"
+            },
+            instagram_url: {
+                url: "Please enter a valid URL"
+            },
+            youtube_url: {
+                url: "Please enter a valid URL"
+            },
+            pinterest_url: {
+                url: "Please enter a valid URL"
+            },
+            whatsapp_url_or_number: {
+                required: "Whatsapp URL or number is required"
             }
-            if (productCats === 0) {
-                alertify.error('Please select at least one item from Product category section.');
-                return false;
-            }
-            if (temps === 0) {
-                alertify.error('Please select at least one item from Temperature section.');
-                return false;
-            }
-
-            let formData = new FormData(this);
+        },
+        submitHandler: function(form) {
 
             $.ajax({
-                url: "{{ route('member.profile.product_category.store') }}", 
-                method: "POST",
-                data: formData,
-                headers:{
+                url: "{{ route('member.company.link') }}",
+                type: "POST",
+                data: $(form).serialize(),
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    // Disable button to prevent double clicks
-                    $('.form-submit-btn').prop('disabled', true).text('Saving...');
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alertify.success(response.message);
-                        
+                success: function(res) {
+                    if (res.success === false) {
+                        alertify.error(res.message);
+                        return;
                     }
+                    alertify.success("Company profile updated successfully");
                 },
-                error: function(xhr) {
-                    $('.form-submit-btn').prop('disabled', false).html('Save & Publish');
-                    
-                    if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        $.each(errors, function(key, value) {
-                            alertify.error(value[0]);
-                        });
-                    } else {
-                        alertify.error('Something went wrong. Please try again.');
-                    }
+                error: function(xhr, status, error) {
+                    alertify.error("Something went wrong");
                 }
             });
+        }
+    });
+});
+$(document).ready(function() {
+    $('#productsBrandsForm').submit(function(e) {
+        e.preventDefault();
+
+        let tradeSectors = $('input[name="trade[]"]:checked').length;
+        let productCats = $('input[name="product_category[]"]:checked').length;
+        let temps = $('input[name="temperature[]"]:checked').length;
+
+        if (tradeSectors === 0) {
+            alertify.error('Please select at least one item from Trade sector section.');
+            return false;
+        }
+        if (productCats === 0) {
+            alertify.error('Please select at least one item from Product category section.');
+            return false;
+        }
+        if (temps === 0) {
+            alertify.error('Please select at least one item from Temperature section.');
+            return false;
+        }
+
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: "{{ route('member.profile.product_category.store') }}",
+            method: "POST",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                // Disable button to prevent double clicks
+                $('.form-submit-btn').prop('disabled', true).text('Saving...');
+            },
+            success: function(response) {
+                if (response.success) {
+                    alertify.success(response.message);
+
+                }
+            },
+            error: function(xhr) {
+                $('.form-submit-btn').prop('disabled', false).html('Save & Publish');
+
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        alertify.error(value[0]);
+                    });
+                } else {
+                    alertify.error('Something went wrong. Please try again.');
+                }
+            }
         });
+    });
 });
 </script>
 <script>
@@ -950,15 +1028,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <label>Main Address</label>
-                            <input type="text" class="form-control" name="extra_address_${addressCount}" placeholder="">
+                            <input type="text" class="form-control" name="extra_addresses[]" placeholder="">
                         </div>
                         <div class="col-lg-6">
                             <label>Google Maps URL</label>
-                            <input type="url" class="form-control" name="extra_map_${addressCount}" placeholder="">
+                            <input type="url" class="form-control" name="extra_map_urls[]" placeholder="">
                         </div>
                         <div class="col-lg-6">
                             <label>Country</label>
-                            <input type="text" class="form-control" name="extra_country_${addressCount}" placeholder="">
+                            <input type="text" class="form-control" name="extra_countries[]" placeholder="">
                         </div>
                         <div class="col-12 text-end">
                             <button type="button" class="btn btn-sm btn-danger removeAddress"><i class="bi bi-trash"></i></button>
@@ -989,7 +1067,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="col-lg-12 form-box">
             <div class="image-upload form-control">
-                <input type="file" accept="image/*" hidden>
+                <input type="file" accept="image/*" name="extra_images[]" hidden>
 
                 <div class="upload-placeholder">
                     <button type="button" class="select-btn">
@@ -1011,32 +1089,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="col-lg-6 form-box">
             <label>Contact Name</label>
-            <input type="text" class="form-control">
+            <input type="text" name="extra_names[]" class="form-control">
         </div>
 
         <div class="col-lg-6 form-box">
             <label>Surname</label>
-            <input type="text" class="form-control">
+            <input type="text" name="extra_surnames[]" class="form-control">
         </div>
 
         <div class="col-lg-6 form-box">
             <label>Contact Position</label>
-            <input type="text" class="form-control">
+            <input type="text" name="extra_positions[]" class="form-control">
         </div>
 
         <div class="col-lg-6 form-box">
             <label>Contact Gender</label>
-            <input type="text" class="form-control">
+            <input type="text" name="extra_genders[]" class="form-control">
         </div>
 
         <div class="col-lg-6 form-box">
             <label>Email</label>
-            <input type="text" class="form-control">
+            <input type="text" name="extra_emails[]" class="form-control">
         </div>
 
         <div class="col-lg-6 form-box">
             <label>Phone</label>
-            <input type="text" class="form-control">
+            <input type="text" name="extra_phones[]" class="form-control">
         </div>
 
         <div class="col-12 text-end">
@@ -1143,6 +1221,38 @@ document.querySelectorAll(".image-upload").forEach(upload => {
     });
 
 });
+$('#company-contact-detail').on('submit', function(e) {
+        e.preventDefault();
+        
+        let form = $(this);
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: "{{ route('member.company.contact_details') }}",
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function() {
+                $('.form-submit-btn').prop('disabled', true).text('Saving...');
+            },
+            success: function(response) {
+                if(response.success) {
+                    alertify.success('Profile updated successfully!');
+                }
+            },
+            error: function(xhr) {
+                $('.form-submit-btn').prop('disabled', false).html('Save & Publish');
+                let errors = xhr.responseJSON.errors;
+                if (errors) {
+                    Object.values(errors).forEach(err => alertify.error(err[0]));
+                }
+            }
+        });
+    });
 </script>
 @endpush
 @endsection

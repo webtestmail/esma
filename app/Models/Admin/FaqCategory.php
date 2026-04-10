@@ -19,4 +19,8 @@ class FaqCategory extends Model
     {
         return $this->hasMany(Faqs::class, 'category_id')->orderBy('position_order', 'asc'); ;
     }
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
 }

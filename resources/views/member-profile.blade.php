@@ -458,35 +458,46 @@
                     </div>
                     @endif
                     <div class="content mb-5 wow fadeInUp">
+                      
+                        @php
+                            $mainContact = $user->companycontacts->where('is_main', 1)->first();
+                            $contactAddress = \App\Models\MemberCompanyContact::where('user_id', $user->id)->where('is_main', 0)->get();
+                        @endphp
                         <div class="member-profile-span">Address</div>
+                        
                         <div class="point-of-contact-box-2">
-                            <span> <i class="bi bi-geo-alt"></i> Citytower Bolzano </span>
+                            <span> <i class="bi bi-geo-alt"></i>{{ $mainContact->main_address ?? '' }} {{ $mainContact->country ?? '' }}</span>
                             <div class="map">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12370318.242641078!2d2.1272835062355053!3d40.80385719960297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d4fe82448dd203%3A0xe22cf55c24635e6f!2sItaly!5e0!3m2!1sen!2sin!4v1770803319516!5m2!1sen!2sin"
+                                    src="{{ $mainContact->google_map_link ?? '' }}"
                                     width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"
                                     referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
-                            <p class="m-0">Via Macello 30/A - 39100 Bolzano - Italy</p>
+                            <!-- <p class="m-0">Via Macello 30/A - 39100 Bolzano - Italy</p> -->
                             <hr class="my-1">
                             <a href="#" target="_blank"> Open Map <svg class="svg-icon arrow-svg ms-1">
                                     <use href="images/icons/icons-sprite.svg#icon-short-arrow-right"></use>
                                 </svg> </a>
                         </div>
+                        @if($contactAddress->count() > 0)
+                         @foreach($contactAddress as $contact)
                         <div class="point-of-contact-box-2">
-                            <span> <i class="bi bi-geo-alt"></i> Citytower Bolzano </span>
+                            <span> <i class="bi bi-geo-alt"></i> {{ $contact->main_address }} {{ $contact->country }}</span>
                             <div class="map">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12370318.242641078!2d2.1272835062355053!3d40.80385719960297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d4fe82448dd203%3A0xe22cf55c24635e6f!2sItaly!5e0!3m2!1sen!2sin!4v1770803319516!5m2!1sen!2sin"
+                                    src="{{ $contact->google_map_link }}"
                                     width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"
                                     referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
-                            <p class="m-0">Via Macello 30/A - 39100 Bolzano - Italy</p>
+                            <!-- <p class="m-0"> - Italy</p> -->
                             <hr class="my-1">
                             <a href="#" target="_blank"> Open Map <svg class="svg-icon arrow-svg ms-1">
                                     <use href="images/icons/icons-sprite.svg#icon-short-arrow-right"></use>
                                 </svg> </a>
                         </div>
+                        @endforeach
+                        @endif
+                        
                     </div>
                     @if($user->companylinks)
                     <div class="content mb-5 wow fadeInUp">
