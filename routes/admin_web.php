@@ -24,8 +24,8 @@ use App\Http\Controllers\Admin\TestimonialsController;
 use App\Http\Controllers\Admin\VisibilityController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\FormController;
 use App\Http\Controllers\Admin\EventController;
-use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Middleware\AdminChangeStatusMiddleware;
 use App\Http\Middleware\AdminChangeVisibilityMiddleware;
 use App\Http\Middleware\AdminDeleteMiddleware;
@@ -193,10 +193,4 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_event', [EventController::class, 'addEvent'])->name('add.event');
     Route::match(['get', 'post'], '/edit_event/{event}', [EventController::class, 'event_edit'])->name('event.edit');
     Route::delete('/delete-event', [EventController::class, 'deleteData'])->name('event.delete');
-
-    Route::get('/manage_document_categories', [DocumentController::class, 'manageDocumentCategories'])->name('manage_document_categories');
-    Route::get('/document-category-data', [DocumentController::class, 'document_category_data'])->name('documents-categories.data');
-    Route::match(['get','post'], '/document-category-edit/{id}', [DocumentController::class, 'document_category_edit'])->name('document_category.edit');
-    Route::match(['get','post'],'/add-document-category', [DocumentController::class, 'addDocumentCategory'])->name('add.document_category');
-    Route::delete('/delete-document-category', [DocumentController::class, 'deleteData'])->name('document_category.delete');
 });

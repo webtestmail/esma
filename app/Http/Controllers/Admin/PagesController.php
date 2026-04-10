@@ -546,4 +546,5 @@ class PagesController extends Controller
 
         return $page_section;
     }
+
 }

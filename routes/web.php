@@ -57,7 +57,7 @@ Route::get('/pricing', [PagesController::class, 'pricing_view'])->name('pricing'
 Route::get('/services', [PagesController::class, 'services_view'])->name('services');
 Route::get('/service/{service_url}', [PagesController::class, 'single_service_view'])->name('single.service');
 Route::get('/page-not-found', [PagesController::class, 'page_not_found_view'])->name('page.not.found');
-
+Route::get('/help-center', [PagesController::class, 'help_center_view'])->name('help_center');
 
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 

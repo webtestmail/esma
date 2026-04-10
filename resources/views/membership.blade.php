@@ -7,10 +7,6 @@
 
 
 @section('content')
-
-
-
-
 <section class="inner-banner membership-inner-banner">
     <video autoplay muted loop playsinline class="hero-bg-video" style="height: 100%;">
         <source src="{{ asset($page->page_image ?? '') }}" type="video/mp4">
