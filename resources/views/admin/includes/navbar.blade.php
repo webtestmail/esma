@@ -316,6 +316,10 @@
                         <li class="nxl-item">
                             <a class="nxl-link" href="{{ route('admin.manage_subscriber') }}">Manage Subscribers</a>
                         </li>
+
+                         <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_contact_form') }}">Manage Contact Query</a>
+                        </li>
                        
                     </ul>
                 </li>

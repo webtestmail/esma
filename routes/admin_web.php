@@ -228,4 +228,9 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     //Forms
     Route::get('/manage_subscriber', [FormController::class, 'manage_subscriber'])->name('manage_subscriber');
     Route::get('/newsletter-data', [FormController::class, 'newsletter_data'])->name('newsletter.data');
+
+    Route::get('/manage_contact_form', [FormController::class, 'manage_contact_form'])->name('manage_contact_form');
+    Route::get('/contactform-data', [FormController::class, 'contactform_data'])->name('contactform.data');
+    Route::get('/contactform-data/{id}', [FormController::class, 'contactform_detail'])->name('contactform_detail');
+    
 });
