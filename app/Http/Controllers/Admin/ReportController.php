@@ -30,13 +30,8 @@ class ReportController extends Controller
 
     return DataTables::of($reports)
         ->addIndexColumn()
-        ->addColumn('name', function($report){  // Single item, not collection
-            if ($report->file) {
-                $fileUrl = asset($report->file);  // Fixed: add storage/
-                return '<a href="' . $fileUrl . '" target="_blank" class="btn-link">' 
-                       . htmlspecialchars($report->name) . ' <i class="fas fa-download"></i></a>';
-            }
-            return htmlspecialchars($report->name);
+        ->addColumn('name', function($report){  
+           return strip_tags($report->name); 
         })
         ->addColumn('is_active', function($report){  // Fixed: $reports → $report
             return $report->status == 'active' ? 'Active' : 'Inactive';  // Fixed typo
@@ -96,6 +91,9 @@ class ReportController extends Controller
         'tags' => $request->tags,
         'published_by' => $request->published_by,
         'status' => $request->status ?? 'active', // Default status
+        'meta_title' => $request->meta_title,
+        'meta_keyword' => $request->meta_keyword,
+        'meta_description' => $request->meta_description,
     ];
 
     // Handle file upload (rename your storeImage method if needed)
@@ -165,6 +163,9 @@ class ReportController extends Controller
         $report->description = $request->description;
         $report->file_name = $request->file_name;
         $report->status = $request->status;
+        $report->meta_title = $request->meta_title;
+        $report->meta_keyword = $request->meta_keyword;
+        $report->meta_description = $request->meta_description;
 
         
         if ($request->hasFile('file')) {
@@ -216,5 +217,136 @@ class ReportController extends Controller
     // Return relative path for DB
     return $path . $fileName;  // "images/report/123456_file.pdf"
 }
+
+
+  function managereportsCategory()
+    {
+        $category = ReportCategory::select('id', 'name','status')->orderBy('position_order')->get();
+        foreach ($category as $cat) {
+            $cat->encrypted_id = Crypt::encrypt($cat->id);
+        }
+        $currentPage = "manage_reports_category";
+        $model = Crypt::encrypt('ReportCategory');
+        return view('admin.manage_reports_category', ['category' => $category, 'model' => $model, 'currentPage' => $currentPage]);
+    }
+
+
+     public function reports_category_data() {
+
+          $category = ReportCategory::query();
+
+                return DataTables::of($category)
+            ->addIndexColumn()
+            ->addColumn('name', function($category){
+                return $category->name;
+            })
+            ->addColumn('is_active', function($category){
+                return $category->status == 'active' ? 'Active' : 'In active';
+            })
+            ->addColumn('action', function ($category) {
+                $encryptedId = Crypt::encrypt($category->id);
+                $model = Crypt::encrypt('ReportCategory');
+                return '<div class="dropdown">
+                            <a href="javascript:void(0);" class="avatar-text avatar-md ms-auto" data-bs-toggle="dropdown">
+                                <i class="feather-more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="' . route('admin.edit.reportscategory', encrypt($category->id)) . '" class="dropdown-item">Modify</a>
+                                     <button class="dropdown-item delete"
+                                    onclick="delete_item(\'' . $model . '\', \'' . $encryptedId . '\');"
+                                    data-id="' . $category->id . '">
+                                Delete category
+                            </button>
+                            </div>
+                        </div>';
+            })
+            // ->rawColumns(['action','question','is_active','category_name'])
+            ->make(true);
+    }
+
+
+     function addreportsCategory(Request $request)
+    {
+
+        if ($request->isMethod('post')) {
+                // dd($request->all());
+            $requiredArr = [
+                'name' => 'required',
+                'slug' => 'required|unique:report_categories,slug',
+            ];
+            $msgsArr = [
+                'name.required' => 'The Category Name is required',
+                'slug.required' => 'The Slug is required.',
+                'slug.unique' => 'This slug already exists.',
+            ];
+            $request->validate($requiredArr, $msgsArr);
+
+            $order = ReportCategory::max('position_order');
+            $position_order = ($order !== null) ? $order + 1 : 1;
+
+            $category = [
+                'position_order' => $position_order,
+                'name' => $request->name,
+                'slug' => $request->slug,
+                'status' => $request->status,
+            ];
+
+            if (ReportCategory::create($category)) {
+                session()->flash('success', 'Reports Category is inserted Successfully!');
+                return redirect()->route('admin.managereportsCategory');
+            } else {
+                session()->flash('error', 'Insertion Error!');
+                return redirect()->route('admin.add.reportsCategory');
+            }
+        } else {
+            $currentPage = "manage_reports_category";
+            return view('admin.reports_category-ops', ["currentPage" => $currentPage]);
+        }
+    }
+
+
+    function editreportscategory(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
+             $ids = Crypt::decrypt($id);
+            $category = ReportCategory::findOrFail($ids);
+        // dd($request->all());
+            $requiredArr = [
+                'name' => 'required|string',
+                'slug' => 'required|unique:report_categories,slug,' . $category->id,
+            ];
+            $msgsArr = [
+                'name.required' => 'The Category Name is required.',
+                'slug.required' => 'The Slug is required',
+                'slug.unique' => 'The Slug already exist'
+            ];
+            $request->validate($requiredArr, $msgsArr);
+
+
+            $category->name = $request->name;
+            $category->slug = $request->slug;
+            $category->status = $request->status;
+            $category->position_order = $request->position_order;
+
+            if ($category->save()) {
+                session()->flash('success', 'Reports Category is updated Successfully!');
+                return redirect()->route('admin.managereportsCategory');
+            } else {
+                session()->flash('error', 'Updation Error!');
+                return redirect()->route('admin.edit.reportscategory', $ids);
+            }
+        } else {
+            $ids = Crypt::decrypt($id);
+            $category = ReportCategory::where('id', $ids)->firstOrFail();
+            $category->encrypted_id = $id;
+
+            $currentPage = "manage_reports_category";
+            return view('admin.reports_category-ops', ["category" => $category, "currentPage" => $currentPage]);
+        }
+    }
 }
+
+
+
+
 

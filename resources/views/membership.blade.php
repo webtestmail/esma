@@ -437,68 +437,86 @@
                     </div>
                     <div class="steps-content">
                         <div class="join-form">
-                            <form action="">
+                            <form id="membershipForm" method="POST" action="javascript:void(0);">
+                                @csrf
                                 <div class="row">
                                     <div class="form-group col-lg-6">
                                         <label>Email <span>*</span></label>
-                                        <input type="text" placeholder="">
+                                        <input type="text" name="email" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-6">
                                         <label>Phone <span>*</span></label>
-                                        <input type="tel" placeholder="">
+                                        <input type="tel" name="phone" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-6">
                                         <label>Company Name <span>*</span></label>
-                                        <input type="text" placeholder="">
+                                        <input type="text" name="company_name" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-6">
                                         <label>Contact Name <span>*</span></label>
-                                        <input type="text" placeholder="">
+                                        <input type="text" name="contact_name" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-6">
                                         <label>Country <span>*</span></label>
-                                        <input type="text" placeholder="">
+                                        <input type="text" name="country" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-6">
                                         <label>Address <span>*</span></label>
-                                        <input type="text" placeholder="">
+                                        <input type="text" name="address" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-6">
+                                    <div class="form-group">
                                         <label>Organization Type <span>*</span></label>
-                                        <input type="text" placeholder="">
+                                        <div class="select-box">
+                                        <select name="organization_type" required>
+                                            <option value="" selected></option>
+                                            <option value="ngo">NGO</option>
+                                            <option value="company">Company</option>
+                                            <option value="startup">Startup</option>
+                                            <option value="government">Government</option>
+                                            <option value="educational">Educational Institution</option>
+                                            <option value="nonprofit">Non-Profit</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </div>
+                                </div>
                                     </div>
 
                                     <div class="form-group col-lg-6">
                                         <label>Website <span>*</span></label>
-                                        <input type="url" placeholder="">
+                                        <input type="url" name="website" placeholder="">
                                     </div>
 
                                     <div class="form-group col-lg-12">
                                         <label>Message </label>
-                                        <textarea name="" id=""></textarea>
+                                        <textarea name="message" id=""></textarea>
                                     </div>
                                 </div>
                                 <hr class="my-4">
                                 <!-- CHECKBOX -->
                                 <div class="infos">
                                     <label class="filter-checkbox d-flex align-items-center gap-2 mb-2">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="category[]" value="associates">
                                         <span class="label-text">I have read and understood the application
                                             rules.</span>
                                     </label>
                                     <label class="filter-checkbox d-flex align-items-center gap-2 mb-2">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="category[]" value="associates>
                                         <span class="label-text">I have read and accept the terms of use and privacy
                                             policies of the ESMA International Network website.</span>
                                     </label>
                                     <label class="filter-checkbox d-flex align-items-center gap-2 ">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="category[]" value="associates>
                                         <span class="label-text">Occasionally I would like to receive updates directly
                                             to my email (sign up for the newsletter).</span>
                                     </label>
@@ -508,7 +526,7 @@
                                     <a href="#" class="btn-style-5"> <svg class="svg-icon">
                                             <use href="images/icons/icons-sprite.svg#icon-captcha"></use>
                                         </svg> Click to verify</a>
-                                    <a href="#" class="btn-style-4"> <svg class="svg-icon">
+                                    <button type="submit" class="btn-style-4"> <svg class="svg-icon">
                                             <use href="images/icons/icons-sprite.svg#icon-plane"></use>
                                         </svg> Register Interest</a>
                                 </div>
@@ -785,3 +803,89 @@
 </section>
 
 @endsection
+
+@push('page-js')
+        <script>
+    $(document).ready(function() {
+        // 1. Initialize Validation
+        $("#membershipForm").validate({
+            errorElement: 'span',
+            errorClass: 'text-danger small',
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                phone: {
+                    required: true
+                },
+                company_name: {
+                    required: true
+                },
+                contact_name: {
+                    required: true
+                },
+                country: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+                organization_type: {
+                    required: true
+                },
+                website: {
+                    required: true
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            },
+
+            // 2. This handles the actual submission
+            submitHandler: function(form, event) {
+                event.preventDefault(); // Stop the page from reloading
+
+                // Show loading state on button
+                const submitBtn = $(form).find('button[type="submit"]');
+                submitBtn.prop('disabled', true).text('Processing...');
+
+                // 3. AJAX Submission
+                $.ajax({
+                    url: "{{ route('application.submit') }}", // Replace with your actual route
+                    type: "POST",
+                    data: $(form).serialize(),
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message ||
+                                'Application submitted successfully!',
+                            timer: 3000
+                        }).then(() => {
+                            window.location.reload(); // Or redirect
+                        });
+                    },
+                    error: function(xhr) {
+                        submitBtn.prop('disabled', false).text('Submit');
+
+                        let errorText = "Something went wrong.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorText = xhr.responseJSON.message;
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorText
+                        });
+                    }
+                });
+            }
+        });
+    });
+    </script>
+@endpush

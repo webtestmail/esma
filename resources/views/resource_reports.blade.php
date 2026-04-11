@@ -12,6 +12,164 @@
             color: ##262761; 
             text-decoration: underline; 
         }
+
+    /* Search Input */
+.search-input {
+    padding: 12px 50px 12px 45px;
+    border: 2px solid #e9ecef;
+    border-radius: 50px;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.search-input:focus + .search-icon,
+.search-input:not(:placeholder-shown) + .search-icon {
+    color: #007bff;
+}
+
+/* Results Dropdown */
+.search-results {
+    top: calc(100% + 8px);
+    left: 0;
+    border-top: 3px solid #007bff;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Result Items */
+.search-result-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: #212529;
+    display: block;
+}
+
+.search-result-item:hover,
+.search-result-item:focus {
+    background: linear-gradient(90deg, #f8f9ff 0%, #e8f4fd 100%);
+    border-left: 4px solid #007bff;
+    transform: translateX(4px);
+    box-shadow: inset 0 0 0 1px rgba(0,123,255,0.1);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+/* Result Content */
+.search-result-item h6 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+.search-result-preview {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-result-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.search-result-date {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.search-result-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.category-tag {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* No Results */
+.no-results {
+    padding: 40px 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.no-results svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.5;
+    margin-bottom: 16px;
+}
+
+.no-results h6 {
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+/* Loading */
+#searchLoading {
+    transition: opacity 0.2s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-results {
+        position: fixed;
+        top: auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 70vh;
+        border-radius: 20px 20px 0 0;
+        margin: 0;
+    }
+}
+
     </style>
 @endpush
 
@@ -57,13 +215,15 @@
     <!-- this for design prupose  the rounded corners -->
     <div class="rounded-corners-sec corner-sec-2"></div>
     <!-- Mobile-only category tabs — reuses mobile-cat-tabs CSS -->
+     @if(isset($category))
     <div class="mobile-cat-tabs d-lg-none mb-3" id="mobileCatTabs">
-        <button class="mobile-cat-tab active" onclick="filterReportCat(this, 'all')">All</button>
-        <button class="mobile-cat-tab" onclick="filterReportCat(this, 'category-01')">Category 01</button>
-        <button class="mobile-cat-tab" onclick="filterReportCat(this, 'category-02')">Category 02</button>
-        <button class="mobile-cat-tab" onclick="filterReportCat(this, 'category-03')">Category 03</button>
-        <button class="mobile-cat-tab" onclick="filterReportCat(this, 'category-04')">Category 04</button>
+        <a href="{{ route('resource_reports') }}"  class="mobile-cat-tab {{ !request('category_name') ? 'active' : '' }}">All</a>
+         @foreach($category as $cat)
+        <a href="?category_name={{ urlencode($cat->name) }}" class="mobile-cat-tab {{ request('category_name') == $cat->name ? 'active' : '' }}">{{ $cat->name ?? '' }}</a>
+        @endforeach
+
     </div>
+    @endif
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-lg-9 pe-lg-4">
@@ -91,7 +251,7 @@
                                                 <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-piechart"></use>
                                             </svg>
                                         </div>
-                                        <div class="report-text desk">{{ $report->name }}
+                                        <div class="report-text desk">{{ $report->file_name }}
                                         </div>
                                         <div class="meta-info desk">
                                             <svg class="svg-icon">
@@ -113,7 +273,7 @@
                                                 <svg class="svg-icon mob-icon">
                                                     <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-piechart"></use>
                                                 </svg>
-                                                <div class="report-text-mob">{{ Str::limit($report->name, 30) }}</div>
+                                                <div class="report-text-mob">{{ Str::limit($report->file_name, 30) }}</div>
                                             </div>
                                             <div class="mob-reportcard-info">
                                                 <div class="meta-info justify-content-center">
@@ -172,7 +332,19 @@
                             <svg class="svg-icon">
                                 <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-search"></use>
                             </svg>
-                            <input type="search" id="reportSearch" placeholder="Search by name or date">
+                            <input type="search" id="reportSearch" placeholder="Search by name">
+                             <div id="searchLoading" class="position-absolute top-50 end-0 translate-middle-y me-3" style="display: none;">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+
+                            <!-- Results Dropdown -->
+                            <div id="searchResults" class="search-results position-absolute w-100 bg-white shadow-lg border-0 rounded-3 mt-2 overflow-hidden" style="display: none; z-index: 1055; max-height: 450px; overflow-y: auto;">
+                                <div id="resultsContent">
+                                    <!-- Dynamic content here -->
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -189,7 +361,7 @@
                         @if(isset($allYears) && count($allYears) > 0)
                         <div class="years-grid">
                             @foreach($allYears as $year)
-                            <a href="?year={{ $year }}" class="year-btn {{ request('year') == $year ? 'active' : '' }}">{{ $year }}</a>
+                            <a href="?{{ http_build_query(array_merge(request()->except('year'), ['year' => $year])) }}" class="year-btn {{ request('year') == $year ? 'active' : '' }}">{{ $year }}</a>
                            @endforeach
 
                         </div>
@@ -198,6 +370,7 @@
 
                     <hr class="my-4">
 
+                    @if(isset($category) && count($category) > 0)
                     <div class="news-tags">
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <svg class="svg-icon">
@@ -206,14 +379,12 @@
                             <p class="m-0 news-p">Report Categories</p>
                         </div>
                         <ul>
-                            <li><a href="#">Report Category 01</a></li>
-                            <li><a href="#">Report Category 02</a></li>
-                            <li><a href="#">Report Category 03</a></li>
-                            <li><a href="#">Report Category 04</a></li>
-                            <li><a href="#">Report Category 05</a></li>
-                            <li><a href="#">Report Category 06</a></li>
+                            @foreach($category as $cat)
+                            <li><a href="?{{ http_build_query(array_merge(request()->except('category_name'), ['category_name' => $cat->name])) }}">{{ $cat->name }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
+                    @endif
 
                     <hr class="my-4">
 
@@ -277,5 +448,107 @@
             if (badge) badge.textContent = visibleCount < 10 ? '0' + visibleCount : visibleCount;
         });
     }
+</script>
+
+<script>
+$(document).ready(function() {
+    let searchTimeout;
+
+    $('#reportSearch').on('input', function() {
+        clearTimeout(searchTimeout);
+        const query = $(this).val().trim();
+
+        searchTimeout = setTimeout(function() {
+            if (query.length >= 2) {
+                performSearch(query);
+            } else {
+                $('#searchResults').hide();
+            }
+        }, 300); // 300ms debounce
+    });
+
+  function performSearch(query) {
+    $.ajax({
+        url: '{{ route("reports.search") }}',
+        method: 'GET',
+        data: { q: query },
+        success: function(response) {
+            // Add safety check
+            if (response && response.news && Array.isArray(response.news)) {
+                displayResults(response.news);
+            } else {
+                displayResults([]);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Search error:', error);
+            $('#searchResults').html('<div class="no-results">Search failed. Please try again.</div>').show();
+        }
+    });
+}
+
+function displayResults(news) {
+    // Safe guard - ensure news is always an array
+    if (!Array.isArray(news)) {
+        news = [];
+    }
+
+    let html = '';
+
+    if (news.length > 0) {
+        news.forEach(function(item) {
+            // Safe property access
+            const title = item.header_footer_name || 'No title';
+            const slug = item.slug || '';
+            const metaDesc = item.meta_description || item.content || 'No description';
+            const createdAt = item.created_at || item.updated_at || new Date().toISOString();
+
+            html += `
+                <a href="/reports/${slug}" class="text-decoration-none search-result-item">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+
+                                <svg class="svg-icon text-white" style="width: 20px; height: 20px;">
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-news"></use>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">${title}</h6>
+                            <small class="text-muted">${formatDate(createdAt)}</small>
+                        </div>
+                    </div>
+                </a>
+            `;
+        });
+    } else {
+        html = '<div class="no-results">No news found</div>';
+    }
+
+    $('#searchResults').html(html).show();
+}
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+    // Hide results when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.news-search').length) {
+            $('#searchResults').hide();
+        }
+    });
+
+    // Hide on Escape key
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape') {
+            $('#searchResults').hide();
+        }
+    });
+});
 </script>
 @endpush

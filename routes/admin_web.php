@@ -220,6 +220,11 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/editreport/{report}', [ReportController::class, 'editreport'])->name('edit.report');
 
 
+    Route::get('/manage_reports_category', [ReportController::class, 'managereportsCategory'])->name('managereportsCategory');
+    Route::get('/reports_category_data', [ReportController::class, 'reports_category_data'])->name('reports_category_data'); 
+    Route::match(['get', 'post'], '/add_reportsCategory', [ReportController::class, 'addreportsCategory'])->name('add.reportsCategory');
+    Route::match(['get', 'post'], '/editreportscategory/{category}', [ReportController::class, 'editreportscategory'])->name('edit.reportscategory');
+
     //Forms
     Route::get('/manage_subscriber', [FormController::class, 'manage_subscriber'])->name('manage_subscriber');
     Route::get('/newsletter-data', [FormController::class, 'newsletter_data'])->name('newsletter.data');

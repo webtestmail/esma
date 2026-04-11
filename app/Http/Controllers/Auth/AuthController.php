@@ -275,6 +275,9 @@ public function profile_update(Request $request)
     return redirect('/my-dashboard')->with('success', 'Profile updated successfully.');
 }
 
+
+
+
 // public function register(Request $request)
 // {
     

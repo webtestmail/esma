@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\ContactMail;
 use App\Mail\ContactVerificationMail;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Contact;
 
 class ContactController extends Controller
 {
@@ -49,23 +51,24 @@ class ContactController extends Controller
    
     public function submit(Request $request)
 {
-    if (!$request->session()->has('contact_verified')) {
-        return response()->json(['error' => 'Please verify your email first.'], 422);
-    }
+   $request->validate([
+    'name' => 'required',
+    'email' => 'required',
+   ]);
 
-    $token = session('contact_verified');
-    $data = Cache::pull('contact_verify_' . $token);
-
-    if (!$data) {
-        return response()->json(['error' => 'Verification expired or invalid.'], 422);
-    }
+   $data = [
+    'name' => $request->name,
+    'email' => $request->email,
+    'subject' => $request->subject,
+    'message' => $request->message,
+   ];
 
     Contact::create($data);  // Save to DB
 
     // Send admin notification
-    Mail::to(config('mail.contact_to', 'admin@yourapp.com'))->send(new ContactMail($data));
+   Mail::to('webtestmail736@gmail.com')  // Replace with your email
+    ->send(new ContactMail($data));
 
-    session()->forget('contact_verified');
 
     return response()->json(['success' => 'Form submitted successfully! Thank you.']);
 }

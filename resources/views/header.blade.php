@@ -115,10 +115,10 @@ input.is-invalid, select.is-invalid {
                     @if(isset($news))
                     <ul class="dropdown-menu">
                         @if(isset($news))
-                        <li><a href="{{ $news->client_page_urls }}">{{ $news->header_footer_name }}</a></li>
+                        <li><a href="{{ '/'.$news->client_page_urls }}">{{ $news->header_footer_name }}</a></li>
                         @endif
                         @if(isset($reportData))
-                        <li><a href="{{ $reportData->client_page_urls }}">{{ $reportData->header_footer_name }}</a></li>
+                        <li><a href="{{ '/'.$reportData->client_page_urls }}">{{ $reportData->header_footer_name }}</a></li>
                         @endif
                         <li><a href="">Document Library</a></li>
                         <li><a href="">Regulatory Updates</a></li>
@@ -142,16 +142,16 @@ input.is-invalid, select.is-invalid {
                     @endphp
                     <ul class="dropdown-menu">
                         @if(isset($aboutData))
-                        <li><a href="{{ $aboutData->client_page_urls }}">{{ $aboutData->header_footer_name }}</a></li>
+                        <li><a href="{{ '/'.$aboutData->client_page_urls }}">{{ $aboutData->header_footer_name }}</a></li>
                         @endif
                         @if(isset($memberData))
-                        <li><a href="{{ $memberData->client_page_urls }}">{{ $memberData->header_footer_name }}</a></li>
+                        <li><a href="{{ '/'.$memberData->client_page_urls }}">{{ $memberData->header_footer_name }}</a></li>
                         @endif
                         @if(isset($contactData))
-                        <li><a href="{{ $contactData->client_page_urls }}">{{ $contactData->header_footer_name }}</a></li>
+                        <li><a href="{{ '/'.$contactData->client_page_urls }}">{{ $contactData->header_footer_name }}</a></li>
                         @endif
                         @if(isset($help_centerData))
-                        <li><a href="{{ $help_centerData->client_page_urls }}">{{ $help_centerData->header_footer_name }}</a></li>
+                        <li><a href="{{ '/'.$help_centerData->client_page_urls }}">{{ $help_centerData->header_footer_name }}</a></li>
                         @endif
                     </ul>
                 </li>

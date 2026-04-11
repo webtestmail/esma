@@ -20,6 +20,9 @@ class Report extends Model
         'file_name',
         'description',
         'file',
-        'status'
+        'status',
+        'meta_title',
+        'meta_keyword',
+        'meta_description',
     ];
 }

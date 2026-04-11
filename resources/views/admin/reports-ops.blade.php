@@ -261,7 +261,26 @@
                                     </select>
                                 </div>
 
-                            
+                                <div class="mb-4">
+                                    <label for="meta_title" class="form-label">Meta Title </label>
+                                    <input type="text" class="form-control" id="meta_title" name="meta_title"
+                                        value="{{ !empty($report->encrypted_id) ? $report->meta_title : old('meta_title') }}"
+                                        placeholder="Enter Title" />
+                                    
+                                </div>
+                                <div class="mb-4">
+                                    <label for="meta_keyword" class="form-label">Meta Keyword </label>
+                                    <input type="text" class="form-control" id="meta_keyword" name="meta_keyword"
+                                        value="{{ !empty($report->encrypted_id) ? $report->meta_keyword : old('meta_keyword') }}"
+                                        placeholder="Enter Keywords" />
+                                   
+                                </div>
+                                <div class="mb-4">
+                                    <label for="meta_description" class="form-label">Meta Description </label>
+                                    <textarea name="meta_description" id="meta_description" cols="30" rows="10" class="form-control"
+                                        placeholder="Enter Meta Description">{{ !empty($report->encrypted_id) ? htmlspecialchars_decode($report->meta_description) : old('meta_description') }}</textarea>
+                                   
+                                </div>
 
                             </div>
                         </div>
