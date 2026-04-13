@@ -593,21 +593,17 @@ $contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getComp
                             <div class="news-newsletter-form">
                                 <img src="{{ asset($contact->newsletter_image) }}" alt="" class="py-3">
                                 <p class="m-0">{!! $contact->newsletter_description ?? '' !!}</p>
-                                <form id="newsForm" class="pt-3">
+                                <form id="reportdetailForm" class="pt-3">
                                     @csrf
                                       <div class="position-relative mb-3">
                                     <input type="email" name="email" placeholder="Enter your email">
                                      <div class="error invalid-feedback text-danger small"></div>
-
-                                        <!-- SPINNER -->
-                                        <div class="spinner-border spinner-border-sm loading position-absolute end-0 top-50 translate-middle-y"
-                                            style="display: none; width: 1rem; height: 1rem;">
-                                        </div>
                                     </div>
                                     <button type="submit" class="btn-style-2 mt-2 w-100">
                                         <svg class="svg-icon">
                                             <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-megaphone"></use>
                                         </svg> <span class="subscribe-text">Subscribe</span>
+                                        <span class="subscribing-text d-none">Subscribing...</span>
                                 <span class="success-text d-none">✓ Done!</span>
                                     </button>
                                 </form>
@@ -825,18 +821,25 @@ function displayResults(news) {
 </script>
 
 <script>
-    $(document).ready(function() {
-    const $form = $('#newsForm');
+$(document).ready(function() {
+
+    const $form = $('#reportdetailForm');
     const $input = $form.find('input[name="email"]');
     const $error = $form.find('.error');
-    const $loading = $form.find('.loading');
-    const $signupText = $form.find('.subscribe-text');
-    const $successText = $form.find('.success-text');
+
     const $btn = $form.find('button[type="submit"]');
+    const $subscribeText = $form.find('.subscribe-text');
+    const $successText = $form.find('.success-text');
+    const $subscribingText = $form.find('.subscribing-text'); // ✅ ADD THIS IN HTML
 
     function clearErrors() {
-        $error.text('').removeClass('text-danger');
+        $error.text('').removeClass('text-danger d-block');
         $input.removeClass('is-invalid');
+    }
+
+    function showError(msg) {
+        $error.text(msg).addClass('text-danger d-block');
+        $input.addClass('is-invalid');
     }
 
     $form.submit(function(e) {
@@ -844,59 +847,75 @@ function displayResults(news) {
         clearErrors();
 
         const email = $input.val().trim();
-        let hasError = false;
 
-        // Client validation
+        // ✅ VALIDATION
         if (!email) {
             showError('Email is required.');
-            hasError = true;
-        } else if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            showError('Please enter valid email.');
-            hasError = true;
+            return;
         }
 
-        if (hasError) return;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showError('Please enter valid email.');
+            return;
+        }
 
-        // Show loading
+        // 🔄 STEP 1: SHOW "SUBSCRIBING..."
         $btn.prop('disabled', true);
-        $loading.show();
-        $signupText.hide();
+
+        $subscribeText.addClass('d-none');
+        $successText.addClass('d-none');
+        $subscribingText.removeClass('d-none');
 
         $.ajax({
             url: '{{ route("newsletter.subscribe") }}',
             method: 'POST',
             data: { email: email },
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+
             success: function(data) {
-                $error.removeClass('text-danger').addClass('text-success').text('✓ ' + data.message);
-                $successText.removeClass('d-none').show();
-                $input.val('');
+
+                // ✅ STEP 2: SHOW SUCCESS TEXT
+                $subscribingText.addClass('d-none');
+                $successText.removeClass('d-none');
+
+                // Optional SweetAlert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: data.message || 'Subscribed successfully!',
+                    timer: 3000,
+                });
+
+                // Optional: reset after 3 sec
                 setTimeout(() => {
-                    clearErrors();
-                    $successText.addClass('d-none').hide();
-                    $signupText.show();
+                    $successText.addClass('d-none');
+                    $subscribeText.removeClass('d-none');
                     $btn.prop('disabled', false);
+                    $form[0].reset();
                 }, 3000);
             },
+
             error: function(xhr) {
+
                 let errorMsg = 'Something went wrong.';
-                if (xhr.status === 422 && xhr.responseJSON?.errors?.email) {
+
+      if (xhr.status === 422 && xhr.responseJSON?.errors?.email) {
                     errorMsg = xhr.responseJSON.errors.email[0];
                 }
+
                 showError(errorMsg);
-                  $signupText.show();
-            },
-            complete: function() {
-                $loading.hide();
-                $btn.prop('disabled', false);
+
+                // ❌ RESET UI
+                $subscribingText.addClass('d-none');
+                $subscribeText.removeClass('d-none');
+                $btn.prop('disabled', false);          
             }
         });
     });
 
-    function showError(msg) {
-        $error.text(msg).addClass('text-danger d-block');
-        $input.addClass('is-invalid');
-    }
 });
 </script>
+
 @endpush

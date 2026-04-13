@@ -111,7 +111,7 @@ input.is-invalid, select.is-invalid {
                 @endphp
                  @if(isset($resources_hub))
                 <li class="has-dropdown">
-                    <a href="{{ $resources_hub->client_page_urls }}">{{ $resources_hub->header_footer_name }}</a>
+                    <a href="{{ '/' .$resources_hub->client_page_urls }}">{{ $resources_hub->header_footer_name }}</a>
                     @if(isset($news))
                     <ul class="dropdown-menu">
                         @if(isset($news))

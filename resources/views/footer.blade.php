@@ -99,9 +99,19 @@
             <div class="col-lg-3">
                 <ul>
                     <h4>Knowledge Hub</h4>
+                     @php
+
+                        $news = app()->call('App\Http\Controllers\PagesController@get_footer_page', ['id' => 12]);
+                        $reportData = app()->call('App\Http\Controllers\PagesController@get_footer_page', ['id' => 15]);
+
+                    @endphp
                     <ul>
-                        <li><a href="#">News & Announcements</a></li>
-                        <li><a href="#">Articles & Reports</a></li>
+                        @if(isset($news))
+                         <li><a href="{{ '/'.$news->client_page_urls }}">{{ $news->header_footer_name }}</a></li>
+                        @endif
+                        @if(isset($reportData))
+                         <li><a href="{{ '/'.$reportData->client_page_urls }}">{{ $reportData->header_footer_name }}</a></li>
+                        @endif
                         <li><a href="#">Document Library</a></li>
                         <li><a href="#">Regulatory Updates</a></li>
                     </ul>
@@ -109,11 +119,28 @@
             </div>
             <div class="col-lg-3">
                 <ul>
-                    <h4>ESMA International Network</h4>
+                    <h4>About</h4>
+                       @php
+                        
+                        $aboutData = app()->call('App\Http\Controllers\PagesController@get_footer_page', ['id' => 6]);
+
+                        $memberData = app()->call('App\Http\Controllers\PagesController@get_footer_page', ['id' => 9]);
+
+                        $contactData = app()->call('App\Http\Controllers\PagesController@get_footer_page', ['id' => 7]);
+
+                        $help_centerData = app()->call('App\Http\Controllers\PagesController@get_footer_page', ['id' => 10]);
+
+                    @endphp
                     <ul>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Help Center</a></li>
+                        @if(isset($news))
+                          <li><a href="{{ '/'.$aboutData->client_page_urls }}">{{ $aboutData->header_footer_name }}</a></li>
+                        @endif
+                        @if(isset($contactData))
+                          <li><a href="{{ '/'.$contactData->client_page_urls }}">{{ $contactData->header_footer_name }}</a></li>
+                        @endif
+                        @if(isset($help_centerData))
+                          <li><a href="{{ '/'.$help_centerData->client_page_urls }}">{{ $help_centerData->header_footer_name }}</a></li>
+                        @endif
                         <li><a href="#">Terms & Conditions</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                     </ul>
@@ -518,19 +545,26 @@
 
 
 
-   <script>
-   $(document).ready(function() {
+  <script>
+$(document).ready(function() {
+
     const $form = $('#newsletterForm');
     const $input = $form.find('input[name="email"]');
-    const $btn = $form.find('button[type="submit"]');
     const $error = $form.find('.error');
-    const $loading = $form.find('.loading');
-    const $signupText = $form.find('.signup-text');
+
+    const $btn = $form.find('button[type="submit"]');
+    const $subscribeText = $form.find('.subscribe-text');
     const $successText = $form.find('.success-text');
+    const $subscribingText = $form.find('.subscribing-text'); // ✅ ADD THIS IN HTML
 
     function clearErrors() {
-        $error.text('').removeClass('text-danger');
+        $error.text('').removeClass('text-danger d-block');
         $input.removeClass('is-invalid');
+    }
+
+    function showError(msg) {
+        $error.text(msg).addClass('text-danger d-block');
+        $input.addClass('is-invalid');
     }
 
     $form.submit(function(e) {
@@ -538,57 +572,76 @@
         clearErrors();
 
         const email = $input.val().trim();
-        let hasError = false;
 
-        // Client validation
+        // ✅ VALIDATION
         if (!email) {
-            $error.text('Email is required.').addClass('text-danger');
-            $input.addClass('is-invalid');
-            hasError = true;
-        } else if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            $error.text('Please enter valid email.').addClass('text-danger');
-            $input.addClass('is-invalid');
-            hasError = true;
+            showError('Email is required.');
+            return;
         }
 
-        if (hasError) return;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showError('Please enter valid email.');
+            return;
+        }
 
-        // AJAX submit
+        // 🔄 STEP 1: SHOW "SUBSCRIBING..."
         $btn.prop('disabled', true);
-        $loading.show();
-        $signupText.hide();
+
+        $subscribeText.addClass('d-none');
+        $successText.addClass('d-none');
+        $subscribingText.removeClass('d-none');
 
         $.ajax({
             url: '{{ route("newsletter.subscribe") }}',
             method: 'POST',
             data: { email: email },
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+
             success: function(data) {
-                $error.removeClass('text-danger').text('✓ ' + data.message);
-                $successText.removeClass('d-none').show();
-                $input.val('');
+
+                // ✅ STEP 2: SHOW SUCCESS TEXT
+                $subscribingText.addClass('d-none');
+                $successText.removeClass('d-none');
+
+                // Optional SweetAlert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: data.message || 'Subscribed successfully!',
+                    timer: 3000,
+                });
+
+                // Optional: reset after 3 sec
                 setTimeout(() => {
-                clearErrors();
-                $successText.addClass('d-none');
-                $signupText.show();
-                $btn.html('<i class="bi bi-megaphone"></i> <span class="signup-text">Subscribe</span>');
-            }, 2000);
+                    $successText.addClass('d-none');
+                    $subscribeText.removeClass('d-none');
+                    $btn.prop('disabled', false);
+                    $form[0].reset();
+                }, 3000);
             },
+
             error: function(xhr) {
-                if (xhr.status === 422) {
-                    $error.text(xhr.responseJSON.errors.email[0]).addClass('text-danger');
+
+                let errorMsg = 'Something went wrong.';
+
+                if (xhr.status === 422 && xhr.responseJSON?.errors?.email) {
+                    errorMsg = xhr.responseJSON.errors.email[0];
                 }
-                  $signupText.show();
-            },
-            complete: function() {
+
+                showError(errorMsg);
+
+                // ❌ RESET UI
+                $subscribingText.addClass('d-none');
+                $subscribeText.removeClass('d-none');
                 $btn.prop('disabled', false);
-                $loading.hide();
-                $signupText.show();
             }
         });
     });
+
 });
-    </script>
+</script>
 <script>
     new WOW().init();
 </script>

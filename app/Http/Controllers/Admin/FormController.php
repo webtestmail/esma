@@ -77,7 +77,7 @@ class FormController extends Controller
         public function contactform_detail($id) {
 
         $decryptId = Crypt::decrypt($id);
-                $contact = Contact::select('id', 'name', 'email', 'subject', 'message')->where('id', $decryptId)>first();
+                $contact = Contact::select('id', 'name', 'email', 'subject', 'message')->where('id', $decryptId)->first();
              return view('admin.contact_form_detail', ['contact' => $contact]);
         }
 }

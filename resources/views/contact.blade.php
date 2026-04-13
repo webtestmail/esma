@@ -231,9 +231,14 @@ $(document).ready(function() {
             data: $form.serialize(),
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             success: function(response) {
-                showToast('🎉 Thank you! Your message has been sent successfully.');
-                $form[0].reset();
-                $submitBtn.prop('disabled', false).find('.spinner-border').hide();
+                  Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message || 'Form submitted successfully!',
+                        timer: 3000
+                    }).then(() => {
+                        window.location.reload(); // Or redirect
+                    });
             },
             error: function(xhr) {
                 $submitBtn.prop('disabled', false);

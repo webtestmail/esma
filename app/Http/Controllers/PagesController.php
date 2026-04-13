@@ -17,6 +17,7 @@ use App\Models\Admin\Report;
 use App\Models\Admin\ReportCategory;   
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB; 
 
 class PagesController extends Controller
 {
@@ -44,6 +45,12 @@ class PagesController extends Controller
     public function get_pagesection($id) {
         return Pages::select('header_footer_name', 'client_page_urls')
             ->whereIn('visibility', ['both', 'header'])
+            ->where('status', 'active')->where('id', $id)->first();
+    }
+
+    public function get_footer_page($id) {
+        return Pages::select('header_footer_name', 'client_page_urls')
+            ->whereIn('visibility', ['both', 'footer'])
             ->where('status', 'active')->where('id', $id)->first();
     }
 
@@ -317,7 +324,7 @@ class PagesController extends Controller
     }
 
 
-     public function resource_hub_view()
+     public function resource_hub_view(Request $request)
     {
         $page = Pages::where(["id" => 11, "status" => 'active'])->first();
         if ($page) {
@@ -330,9 +337,100 @@ class PagesController extends Controller
             $data['breadcrumb_headline'] = $page->breadcrumb_headline;
             $data['breadcrumb_image'] = $page->page_image;
             $data['breadcrumb_description'] = $page->breadcrumb_description;
+
+            $news = News::select('id', 'category_ids', 'title', 'header_footer_name', 'created_at', 'slug', 'banner')->where('status', 'active')->orderBy('created_at')->get();
+            foreach ($news as $item) {
+                $catidArr = !empty($item->category_ids)
+                    ? explode(',', $item->category_ids)
+                    : [];
+
+                $item->categories = NewsCategory::whereIn('id', $catidArr)
+                                                ->where('status', 'active')
+                                                ->pluck('name')
+                                                ->toArray();
+                  }
+
+               $currentYearPage = max(1, (int)$request->get('year_page', 1));
+$selectedYear = $request->get('selected_year');
+$activeYear = $selectedYear ?: $currentYears[0] ?? null;
+    // dd($selectedYear);
+
+    try {
+        // ✅ Get all unique years
+        $allYears = Report::where('status', 'active')
+            ->selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->values()
+            ->all();
+
+        // ✅ Move current year to top
+        $currentYear = date('Y');
+        if (in_array($currentYear, $allYears)) {
+            $allYears = array_values(array_diff($allYears, [$currentYear]));
+            array_unshift($allYears, $currentYear);
+        }
+
+        // ✅ Pagination setup
+        $yearsPerPage = 3;
+        $totalYearPages = ceil(count($allYears) / $yearsPerPage);
+
+        $startIndex = ($currentYearPage - 1) * $yearsPerPage;
+        $currentYears = array_slice($allYears, $startIndex, $yearsPerPage);
+
+        // ✅ Reports query
+        $reportsQuery = Report::where('status', 'active');
+
+       if ($selectedYear) {
+            $reportsQuery->whereYear('created_at', '=', $selectedYear);
+        } else {
+            $reportsQuery->whereIn(DB::raw('YEAR(created_at)'), $currentYears);
+        }
+
+        $reports = $reportsQuery->orderBy('created_at', 'desc')->get();
+
+        // ✅ Active year
+        $activeYear = $selectedYear ?? ($currentYears[0] ?? null);
+
+        // ✅ AJAX response
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'reports' => $reports->map(function ($report) {
+                    $filePath = public_path($report->file ?? '');
+                    $fileSize = ($filePath && file_exists($filePath))
+                        ? number_format(filesize($filePath) / 1024, 0)
+                        : 0;
+
+                  return [
+                        'id' => $report->id,
+                        'file_name' => $report->file_name ?? '',
+                        'file' => $report->file ?? '',
+                        'created_at' => $report->created_at?->format('Y-m-d H:i:s') ?? '',
+                        'created_at_formatted' => $report->created_at?->format('M, Y') ?? '',
+                        'file_size' => $fileSize,
+                        'extension' => $report->file ? pathinfo($report->file, PATHINFO_EXTENSION) : 'pdf',
+                         'download_url' => asset($report->file),
+                        'year' => $report->created_at?->year ?? 0  // ✅ ADDED for filtering
+                    ];
+                }),
+                'currentYears' => $currentYears,
+                'activeYear' => $activeYear,
+                'currentYearPage' => $currentYearPage,
+                'totalYearPages' => $totalYearPages
+            ]);
+        }
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    
+
             $headerData = $this->header();
             $footerData = $this->footer();
-            return response()->view('resources_hub', compact('page', 'page_name', 'data', 'headerData', 'footerData'), 200);
+            return response()->view('resources_hub', compact('page', 'page_name', 'data', 'headerData', 'footerData', 'news', 'reports',   'allYears', 'currentYears', 'currentYearPage', 'totalYearPages', 'yearsPerPage', 'activeYear'), 200);
         } else {
             return redirect()->route('page.not.found');
         }

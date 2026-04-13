@@ -6,11 +6,11 @@
         <div class="page-header">
             <div class="page-header-left d-flex align-items-center">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">Subscribers</h5>
+                    <h5 class="m-b-10">Contact Querires</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('admin.my-dashboard') }}">Home</a></li>
-                    <li class="breadcrumb-item">Manage Subscribers</li>
+                    <li class="breadcrumb-item">Manage Contact Querires</li>
                 </ul>
             </div>
             <div class="page-header-right ms-auto">
@@ -50,7 +50,7 @@
                     <div class="card stretch stretch-full">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="subscriber_table">
+                                <table class="table table-hover" id="contact_form_table">
                                     <thead>
                                         <tr>
                                             {{-- <th class="wd-30">
@@ -85,7 +85,7 @@
 
      <script>
             $(document).ready(function () {
-            new DataTable('#subscriber_table', {
+            new DataTable('#contact_form_table', {
                 responsive: true,
                 paging: true,
                 searching: true,
@@ -94,7 +94,7 @@
                 info: true,
                 lengthChange: true,
                 pageLength: 10,
-                ajax: '{{ route("admin.newsletter.data") }}',
+                ajax: '{{ route("admin.contactform.data") }}',
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                     { data: 'name', name: 'name'},

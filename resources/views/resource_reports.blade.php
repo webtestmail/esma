@@ -173,6 +173,10 @@
     </style>
 @endpush
 
+@php
+$contact = resolve(App\Http\Controllers\Admin\CompanyController::class)->getCompanyData();
+@endphp
+
 @section('content')
 <section class="inner-banner">
     <video autoplay muted loop playsinline class="hero-bg-video" style="height: 100%;">
@@ -397,18 +401,23 @@
                         </div>
                         <div class="side-newsletter">
                             <div class="news-newsletter-form">
-                                <img src="images/journal-blue.png" alt="" class="py-3">
-                                <p class="m-0">Subscribe to receive handpicked luxury listings, exclusive previews, and
-                                    market insights — all delivered straight to your inbox. Stay effortlessly connected
-                                    to the finest properties, tailored to your taste.</p>
-                                <form class="pt-3">
-                                    <input type="email" placeholder="Enter your email">
+                                <img src="{{ asset($contact->newsletter_image) }}" alt="" class="py-3">
+                                <p class="m-0">{!! $contact->newsletter_description ?? '' !!}</p>
+                                <form id="reportsubscribeForm" class="pt-3">
+                                     @csrf
+                                    <div class="position-relative mb-3">
+                                      <input name="email" type="email" placeholder="Enter your email">
+                                      <div class="error invalid-feedback text-danger small"></div>
+                                    </div>
                                     <button type="submit" class="btn-style-2 mt-2 w-100">
                                         <svg class="svg-icon">
                                             <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-megaphone"></use>
-                                        </svg> Sign Up
+                                        </svg> <span class="subscribe-text">Subscribe</span>
+                                         <span class="subscribing-text d-none">Subscribing...</span>
+                                <span class="success-text d-none">✓ Done!</span>
                                     </button>
                                 </form>
+                                <div id="responseMsg" class="mt-3"></div>
                             </div>
                         </div>
                     </div>
@@ -549,6 +558,104 @@ function displayResults(news) {
             $('#searchResults').hide();
         }
     });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+
+    const $form = $('#reportsubscribeForm');
+    const $input = $form.find('input[name="email"]');
+    const $error = $form.find('.error');
+
+    const $btn = $form.find('button[type="submit"]');
+    const $subscribeText = $form.find('.subscribe-text');
+    const $successText = $form.find('.success-text');
+    const $subscribingText = $form.find('.subscribing-text'); // ✅ ADD THIS IN HTML
+
+    function clearErrors() {
+        $error.text('').removeClass('text-danger d-block');
+        $input.removeClass('is-invalid');
+    }
+
+    function showError(msg) {
+        $error.text(msg).addClass('text-danger d-block');
+        $input.addClass('is-invalid');
+    }
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        const email = $input.val().trim();
+
+        // ✅ VALIDATION
+        if (!email) {
+            showError('Email is required.');
+            return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showError('Please enter valid email.');
+            return;
+        }
+
+        // 🔄 STEP 1: SHOW "SUBSCRIBING..."
+        $btn.prop('disabled', true);
+
+        $subscribeText.addClass('d-none');
+        $successText.addClass('d-none');
+        $subscribingText.removeClass('d-none');
+
+        $.ajax({
+            url: '{{ route("newsletter.subscribe") }}',
+            method: 'POST',
+            data: { email: email },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+
+            success: function(data) {
+
+                // ✅ STEP 2: SHOW SUCCESS TEXT
+                $subscribingText.addClass('d-none');
+                $successText.removeClass('d-none');
+
+                // Optional SweetAlert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: data.message || 'Subscribed successfully!',
+                    timer: 3000,
+                });
+
+                // Optional: reset after 3 sec
+                setTimeout(() => {
+                    $successText.addClass('d-none');
+                    $subscribeText.removeClass('d-none');
+                    $btn.prop('disabled', false);
+                    $form[0].reset();
+                }, 3000);
+            },
+
+            error: function(xhr) {
+
+                let errorMsg = 'Something went wrong.';
+
+                if (xhr.status === 422 && xhr.responseJSON?.errors?.email) {
+                    errorMsg = xhr.responseJSON.errors.email[0];
+                }
+
+                showError(errorMsg);
+
+                // ❌ RESET UI
+                $subscribingText.addClass('d-none');
+                $subscribeText.removeClass('d-none');
+                $btn.prop('disabled', false);
+            }
+        });
+    });
+
 });
 </script>
 @endpush
