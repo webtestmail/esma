@@ -28,4 +28,8 @@ class UserProfile extends Model
         // Links this profile to TradeSectors using the shared user_id
         return $this->hasMany(TradeSector::class, 'user_id', 'user_id');
     }
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 }

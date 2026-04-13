@@ -1,4 +1,4 @@
-@extends('Layouts.MainLayouts')
+@extends('layouts.MainLayouts')
 
 @section('title')
     {{ $data['meta_title'] }}
@@ -2460,7 +2460,3 @@
 
 @endsection
 
-@push('page-js')
- 
-
-@endpush
