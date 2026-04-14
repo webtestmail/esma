@@ -18,19 +18,13 @@ class Testimonials extends Model
         'client_designation',
         'description',
         'client_image',
-        'review_date',
-        'status'
+        'status',
+        'company_name'
     ];
 
     protected $casts = [
         'id' => 'integer',
         'position_order' => 'integer',
-        'rating_quantity' => 'integer',
-        'client_name' => 'string',
-        'client_designation' => 'string',
-        'description' => 'string',
-        'client_image' => 'string',
-        'review_date' => 'date',
-        'status' => 'string',
+
     ];
 }

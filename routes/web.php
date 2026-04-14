@@ -82,6 +82,8 @@ Route::post('/application/submit',[AuthController::class,'application_submit'])-
 // Route::get('/contact/verify/{token}', [ContactController::class, 'verifyToken'])->name('contact.verify.token');
 Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 
+Route::post('/click/to/verify', [AuthController::class, 'clickToVerify'])->name('click.to.verify');
+
 
 
 Route::get('/password/request',[ForgotPasswordController::class,'password_request'])->name('password.request'); 

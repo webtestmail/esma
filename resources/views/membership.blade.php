@@ -155,7 +155,7 @@
 
                 <div class="outer-side arrow-l d-none d-lg-flex">
                     <svg class="svg-icon">
-                        <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                        <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                     </svg>
                 </div>
 
@@ -173,7 +173,7 @@
 
                 <div class="outer-side outer-label arrow-h d-flex d-lg-none py-5">
                     <svg class="svg-icon">
-                        <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                        <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                     </svg>
                     <span class="side-label"> Keep scrolling to know the benefits</span>
                 </div>
@@ -422,7 +422,7 @@
 
                 <!-- Mobile arrow  -->
                 <svg class="d-lg-none step-out-arrow">
-                    <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                 </svg>
 
                 <div class="step-flow">
@@ -432,7 +432,7 @@
                             <p class="m-0">Fill out the application form</p>
                         </div>
                         <svg class="svg-icon">
-                            <use href="images/icons/icons-sprite.svg#icon-arrow-right-large"></use>
+                            <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-arrow-right-large"></use>
                         </svg>
                     </div>
                     <div class="steps-content">
@@ -523,11 +523,11 @@
                                 </div>
                                 <hr class="my-4">
                                 <div class="button-row">
-                                    <a href="#" class="btn-style-5"> <svg class="svg-icon">
-                                            <use href="images/icons/icons-sprite.svg#icon-captcha"></use>
+                                    <a href="javascript:void(0)" class="btn-style-5" onclick="clickToVerify()"> <svg class="svg-icon">
+                                            <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-captcha"></use>
                                         </svg> Click to verify</a>
                                     <button type="submit" class="btn-style-4"> <svg class="svg-icon">
-                                            <use href="images/icons/icons-sprite.svg#icon-plane"></use>
+                                            <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-plane"></use>
                                         </svg> Register Interest</a>
                                 </div>
                             </form>
@@ -560,19 +560,19 @@
                         <div class="testimonial-card text-white">
                             <div class="test-star">
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                             </div>
                             <span class="test-name">A.G. Barr p.l.c.</span>
@@ -593,19 +593,19 @@
                         <div class="testimonial-card text-white">
                             <div class="test-star">
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                             </div>
                             <span class="test-name">Consivo Group AB</span>
@@ -626,19 +626,19 @@
                         <div class="testimonial-card text-white ">
                             <div class="test-star">
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                                 <svg class="svg-icon">
-                                    <use href="images/icons/icons-sprite.svg#icon-star"></use>
+                                    <use href="{{ asset('images/icons/icons-sprite.svg') }}#icon-star"></use>
                                 </svg>
                             </div>
                             <span class="test-name">A.G. Barr p.l.c.</span>
@@ -887,5 +887,52 @@
             }
         });
     });
+    </script>
+
+    <script>
+ 
+function clickToVerify() {
+    let btn = $('.btn-style-5');
+    let email = $('#membershipForm input[name="email"]').val();
+    let phone = $('#membershipForm input[name="phone"]').val();
+ 
+    if (!email || !phone) {
+        Swal.fire('Error', 'Please enter both email and phone.', 'error');
+        return;
+    }
+ 
+    $.ajax({
+        url: "{{ route('click.to.verify') }}",
+        type: "POST",
+        data: {
+            email: email,
+            phone: phone,
+            _token: "{{ csrf_token() }}"
+        },
+        beforeSend: function() {
+            // Disable button and show loading state
+            btn.addClass('disabled').css('pointer-events', 'none').text('Verifying...');
+        },
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Verified!',
+                    text: response.message,
+                    timer: 2000
+                });
+                // Change button to show completion
+                btn.html('<i class="fa fa-check"></i> Verified').addClass('bg-success text-white');
+            } else {
+                Swal.fire('Failed', response.message, 'error');
+                btn.removeClass('disabled').css('pointer-events', 'auto').text('Click to verify');
+            }
+        },
+        error: function() {
+            Swal.fire('Error', 'Server error. Please try again.', 'error');
+            btn.removeClass('disabled').css('pointer-events', 'auto').text('Click to verify');
+        }
+    });
+}
     </script>
 @endpush

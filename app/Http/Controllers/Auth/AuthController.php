@@ -421,4 +421,31 @@ public function profile_update(Request $request)
         // 4. Redirect the user to the login page (or home)
         return redirect('/')->with('status', 'You have been successfully logged out.');
     }
+
+
+        public function clickToVerify(Request $request)
+    {
+        if (!$request->email || !$request->phone) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email and Phone are required.'
+            ], 422);
+        }
+ 
+        $exists = User::where('email', $request->email)
+                    ->orWhere('phone', $request->phone)
+                    ->exists();
+ 
+        if ($exists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This email or phone number is already registered.'
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Verification successful! You can now proceed.'
+        ]);
+    }
+ 
 }

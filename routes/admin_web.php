@@ -147,6 +147,7 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/edit_brand/{brand}', [BrandsController::class, 'editBrand'])->name('edit.brand');
 
     Route::get('/manage_testimonials', [TestimonialsController::class, 'manageTestimonials'])->name('manage_testimonials');
+    Route::get('/testimonial_data', [TestimonialsController::class, 'testimonial_data'])->name('testimonial.data'); 
     Route::match(['get', 'post'], '/add_testimonial', [TestimonialsController::class, 'addTestimonial'])->name('add.testimonial');
     Route::match(['get', 'post'], '/edit_testimonial/{testimonial}', [TestimonialsController::class, 'editTestimonial'])->name('edit.testimonial');
 

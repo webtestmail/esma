@@ -239,6 +239,10 @@
             </div>
         </div>
     </div>
+                @php
+                    $testimonials = resolve(App\Http\Controllers\Admin\TestimonialsController::class)->getAllTestimonials();
+                @endphp
+   @if(isset($testimonials) && count($testimonials) > 0)
     <div class="container">
         <div class="testimonials-home">
             <div class="row align-items-center">
@@ -250,82 +254,57 @@
                             <use href="images/icons/icons-sprite.svg#icon-arrow-right"></use>
                         </svg></a>
                 </div>
+
+                 
                 <div class="col-lg-9">
-                    <div class="testimonial-slider row">
-                        <div class="col-lg-6">
-                            <div class="testimonial-card text-white wow fadeInUp" data-wow-delay="0.2s">
-                                <div class="test-star">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                </div>
-                                <span class="test-name">A.G. Barr p.l.c.</span>
-                                <p>Partnering with this team was the best decision we made. Their innovative
-                                    approach
-                                    transformed our business operations and boosted our efficiency by 40%.</p>
-                                <hr>
-                                <div class="test-flex">
-                                    <img src="images/t-1.webp" alt="">
-                                    <div>
-                                        <span class="fw-semibold">Gavan Morris</span>
-                                        <p class="m-0">International Business Unit Director</p>
+                        @if(isset($testimonials) && count($testimonials) > 0)
+                        <div class="testimonial-slider row">
+                            @foreach($testimonials as $val)
+                            <div class="col-lg-6">
+                                <div class="testimonial-card text-white wow fadeInUp" data-wow-delay="0.2s">
+                                    <div class="test-star">
+                                    @php
+                                        $rating = (float) ($val->rating_quantity ?? 0); // e.g. 3.5, 4.0
+                                        $fullStars = floor($rating);      // 3
+                                        $hasHalf = ($rating - $fullStars) >= 0.5;
+                                        $emptyStars = 5 - $fullStars - ($hasHalf ? 1 : 0);
+                                    @endphp
+
+                                    {{-- Full stars --}}
+                                    @for($i = 0; $i < $fullStars; $i++)
+                                        <i class="bi bi-star-fill"></i>
+                                    @endfor
+
+                                    {{-- Half star --}}
+                                    @if($hasHalf)
+                                        <i class="bi bi-star-half"></i>
+                                    @endif
+
+                                    {{-- Empty stars --}}
+                                    @for($i = 0; $i < $emptyStars; $i++)
+                                        <i class="bi bi-star"></i>
+                                    @endfor
+                                    </div>
+                                    <span class="test-name">{{ $val->company_name ?? '' }}</span>
+                                    <p>{!! html_entity_decode($val->description) !!}</p>
+                                    <hr>
+                                    <div class="test-flex">
+                                        <img src="{{ asset($val->client_image) }}" alt="{{ $val->client_name ?? '' }}">
+                                        <div>
+                                            <span class="fw-semibold">{{ $val->client_name ?? '' }}</span>
+                                            <p class="m-0">{{ $val->client_designation ?? '' }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        @endforeach
                         </div>
-                        <div class="col-lg-6">
-                            <div class="testimonial-card text-white wow fadeInUp" data-wow-delay="0.4s">
-                                <div class="test-star">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                </div>
-                                <span class="test-name">Consivo Group AB</span>
-                                <p>Partnering with this team was the best decision we made. Their innovative
-                                    approach
-                                    transformed our business operations and boosted our efficiency by 40%.</p>
-                                <hr>
-                                <div class="test-flex">
-                                    <img src="images/t-2.webp" alt="">
-                                    <div>
-                                        <span class="fw-semibold">Niklas Eriksson</span>
-                                        <p class="m-0">COO</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="testimonial-card text-white wow fadeInUp" data-wow-delay="0.2s">
-                                <div class="test-star">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                </div>
-                                <span class="test-name">A.G. Barr p.l.c.</span>
-                                <p>Partnering with this team was the best decision we made. Their innovative
-                                    approach
-                                    transformed our business operations and boosted our efficiency by 40%.</p>
-                                <hr>
-                                <div class="test-flex">
-                                    <img src="images/t-1.webp" alt="">
-                                    <div>
-                                        <span class="fw-semibold">Gavan Morris</span>
-                                        <p class="m-0">International Business Unit Director</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
+     </div>
+     @endif
 </section>
 <!--ABout video Modal -->
 <!-- Modal -->
