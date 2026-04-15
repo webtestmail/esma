@@ -21,7 +21,7 @@
                 <div class="page-header-right ms-auto">
                     <div class="page-header-right-items">
                         <div class="d-flex d-md-none">
-                            <a href="{{ route('admin.managenewsCategory') }}" class="page-header-right-close-toggle">
+                            <a href="{{ route('admin.managenews') }}" class="page-header-right-close-toggle">
                                 <i class="feather-arrow-left me-2"></i>
                                 <span>Back</span>
                             </a>

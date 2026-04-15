@@ -296,7 +296,7 @@ input.is-invalid, select.is-invalid {
                                 <li><a href="{{ route('library') }}">Library</a></li>
                                 <li><a href="{{ route('users') }}">Users</a></li>
                                 <li><a href="{{ route('member-help-center') }}">Help Center</a></li>
-                                <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                                <li><a href="{{ route('logout') }}" >Logout</a></li>
                             </ul>
 
                         </div>
@@ -483,7 +483,7 @@ input.is-invalid, select.is-invalid {
                             </label>
                         </div>
                         <div class="button-row mt-4">
-                            <a href="#" class="btn-style-5"> <svg class="svg-icon">
+                            <a href="javascript:void(0)" class="btn-style-5" onclick="clickToVerify()" > <svg class="svg-icon">
                                     <use href="images/icons/icons-sprite.svg#icon-captcha"></use>
                                 </svg> Click to verify</a>
                             <button type="submit" class="btn-style-4 btn"> <svg class="svg-icon">
@@ -581,5 +581,51 @@ input.is-invalid, select.is-invalid {
             }
         });
     });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+function clickToVerify() {
+    let btn = $('.btn-style-5');
+    let email = $('#registerForm input[name="email"]').val();
+    let phone = $('#registerForm input[name="phone"]').val();
+
+    if (!email || !phone) {
+        Swal.fire('Error', 'Please enter both email and phone.', 'error');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('click.to.verify') }}",
+        type: "POST",
+        data: {
+            email: email,
+            phone: phone,
+            _token: "{{ csrf_token() }}"
+        },
+        beforeSend: function() {
+            // Disable button and show loading state
+            btn.addClass('disabled').css('pointer-events', 'none').text('Verifying...');
+        },
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Verified!',
+                    text: response.message,
+                    timer: 2000
+                });
+                // Change button to show completion
+                btn.html('<i class="fa fa-check"></i> Verified').addClass('bg-success text-white');
+            } else {
+                Swal.fire('Failed', response.message, 'error');
+                btn.removeClass('disabled').css('pointer-events', 'auto').text('Click to verify');
+            }
+        },
+        error: function() {
+            Swal.fire('Error', 'Server error. Please try again.', 'error');
+            btn.removeClass('disabled').css('pointer-events', 'auto').text('Click to verify');
+        }
+    });
+}
     </script>
     @endpush

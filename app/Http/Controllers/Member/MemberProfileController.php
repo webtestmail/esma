@@ -9,11 +9,64 @@ use App\Models\UserProfile;
 use Illuminate\Support\Str;
 use App\Models\CompanyLink;
 use App\Models\PointOfContact;
+use App\Models\Appearance;
 use App\Models\MemberCompanyContact;
+use Illuminate\Support\Facades\Log;
 use DB;
 
 class MemberProfileController extends Controller
 {
+ 
+    public function store_appearance(Request $request)
+{
+    $request->validate([
+        'company_logo' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        'promo_banner_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        'promo_banner_image_mobile' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+    ]);
+
+    Log::info("Received Appearance Update Request", [
+        'user_id' => auth()->id(),
+        'request_data' => $request->all()
+    ] );
+    // Find the profile for the logged-in user
+    $profile = Appearance::updateOrCreate(
+            ['user_id' => auth()->id()]
+        );
+    // Handle Company Logo
+    if ($request->hasFile('company_logo')) {
+        $profile->company_logo = $request->file('company_logo')->store('logos', 'public');
+    }
+
+    // Handle Cover Image
+    if ($request->hasFile('cover_image')) {
+        $profile->company_cover_image = $request->file('cover_image')->store('covers', 'public');
+    }
+
+    // Handle Promotional Banners
+    if ($request->promo_banner === 'yes') {
+        if ($request->hasFile('promo_banner_image')) {
+            $profile->promotional_banner = $request->file('promo_banner_image')->store('banners', 'public');
+        }
+        if ($request->hasFile('promo_banner_image_mobile')) {
+            $profile->promotional_banner_mobile = $request->file('promo_banner_image_mobile')->store('banners/mobile', 'public');
+        }
+        $profile->promotional_banner_link = $request->promo_banner_link;
+    }
+
+    // Handle Display Toggle for Cover Image
+    $profile->display_cover_image = $request->has('promo_banner') == 'yes' ? true : false;
+
+    $userprofile = UserProfile::updateOrCreate(['user_id' => auth()->id()],['is_active' => 1]);
+
+    $profile->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Appearance settings updated successfully!'
+    ]);
+}
     public function store_point_of_contact(Request $request) {
     try {
         $user_id = auth()->id();

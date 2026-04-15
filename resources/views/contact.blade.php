@@ -192,13 +192,10 @@
     </div>
 </section>
 @push('page-js')
-   <script>
+ <script>
 $(document).ready(function() {
     const $form = $('#contactForm');
     const $submitBtn = $('#submitBtn');
-    const $verifyBtn = $('#verifyBtn');
-    let verified = false;  // Track verification state
-    let emailSent = false; // Track if verification email was sent
 
     // Clear errors function
     function clearErrors() {
@@ -213,60 +210,18 @@ $(document).ready(function() {
         });
     }
 
-    // Verify button - Client validation first
-    $verifyBtn.click(function() {
-        clearErrors();
-        
-        // Client-side required check
-        if (!$form[0].checkValidity()) {
-            alert('Please fill all required fields (*) before verifying.');
-            $form[0].reportValidity();  // Show browser native errors
-            return;
-        }
-
-        $.ajax({
-            url: '{{ route("contact.verify") }}',
-            method: 'POST',
-            data: $form.serialize(),
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            success: function(response) {
-                alert('✅ Verification email sent! Check your inbox and click the link.');
-                emailSent = true;
-                $submitBtn.prop('disabled', false);
-            },
-            error: function(xhr) {
-                if (xhr.status === 422) {
-                    showFieldErrors(xhr.responseJSON.errors);
-                } else {
-                    alert('❌ Error sending verification. Try again.');
-                }
-            }
-        });
-    });
-
-    // Submit button - 3-step validation: client → verify check → server
+    // Simple form submission
     $form.submit(function(e) {
         e.preventDefault();
         clearErrors();
 
-        // Step 1: Client-side validation
+        // Client-side validation
         if (!$form[0].checkValidity()) {
-            alert('Please fill all required fields (*) first.');
             $form[0].reportValidity();
             return;
         }
 
-        // Step 2: Check if verified (email clicked)
-        if (!verified) {
-            if (!emailSent) {
-                alert('Please click "Click to verify" first to receive verification email.');
-            } else {
-                alert('Please check your email and click the verification link before submitting.');
-            }
-            return;
-        }
-
-        // Step 3: Server submission
+        // Server submission
         $submitBtn.prop('disabled', true);
         $('.spinner-border', $submitBtn).show();
 
@@ -276,36 +231,47 @@ $(document).ready(function() {
             data: $form.serialize(),
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             success: function(response) {
-                alert('🎉 Thank you! Your message has been sent successfully.');
-                $form[0].reset();
-                $submitBtn.prop('disabled', true).find('.spinner-border').hide();
-                verified = false;
-                emailSent = false;
+                  Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message || 'Form submitted successfully!',
+                        timer: 3000
+                    }).then(() => {
+                        window.location.reload(); // Or redirect
+                    });
             },
             error: function(xhr) {
                 $submitBtn.prop('disabled', false);
                 $('.spinner-border', $submitBtn).hide();
                 
                 if (xhr.status === 422) {
-                    const data = xhr.responseJSON;
-                    if (data.error) {
-                        alert('❌ ' + data.error);  // "Please verify your email first."
-                    } else {
-                        showFieldErrors(data.errors);
-                    }
+                    showFieldErrors(xhr.responseJSON.errors);
                 } else {
-                    alert('❌ Submission failed. Please try again.');
+                    showToast('❌ Submission failed. Please try again.');
                 }
             }
         });
     });
-
-    // Enable if page reload after verification (from email link)
-    @if(session('verified'))
-        verified = true;
-        emailSent = true;
-        $submitBtn.prop('disabled', false);
-    @endif
 });
+</script>
+
+<script>
+function showToast(message) {
+
+    const toast = document.getElementById('copyToast');
+    const msg = document.getElementById('copyToastMsg');
+
+    if (!toast || !msg) {
+        console.log('Toast div not found');
+        return;
+    }
+
+    msg.textContent = message;
+    toast.style.display = 'block';
+
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2000);
+}
 </script>
 @endpush

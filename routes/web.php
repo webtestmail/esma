@@ -62,6 +62,9 @@ Route::get('/resources-hub', [PagesController::class, 'resource_hub_view'])->nam
 Route::get('/resources-news', [PagesController::class, 'resource_news_view'])->name('resource_news');
 Route::get('/news/{slug}', [PagesController::class, 'news_detail_view'])->name('news_detail');
 Route::get('/news-detail/search', [PagesController::class, 'searchNews'])->name('news.search');
+Route::get('/resouces-reports', [PagesController::class, 'resource_reports_view'])->name('resource_reports');
+Route::get('/reports/{report}', [PagesController::class, 'reports_detail_view'])->name('reports_detail');
+Route::get('/report-detail/search', [PagesController::class, 'searchReports'])->name('reports.search');
 
 Route::post('/newsletter-subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
@@ -75,8 +78,8 @@ Route::post('/register',[AuthController::class,'register'])->name('register');
 Route::get('/email/verify',[AuthController::class,'email_verify_notice'])->name('verification.notice');
 Route::post('/application/submit',[AuthController::class,'application_submit'])->name('application.submit');
 
-Route::post('/contact/verify', [ContactController::class, 'sendVerification'])->name('contact.verify');
-Route::get('/contact/verify/{token}', [ContactController::class, 'verifyToken'])->name('contact.verify.token');
+// Route::post('/contact/verify', [ContactController::class, 'sendVerification'])->name('contact.verify');
+// Route::get('/contact/verify/{token}', [ContactController::class, 'verifyToken'])->name('contact.verify.token');
 Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/view-profile/{slug}',[PagesController::class,'view_profile'])->name('view-profile');
@@ -88,6 +91,8 @@ Route::get('/password/request',[ForgotPasswordController::class,'password_reques
 Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
 Route::post('/profile.password.update',[AuthController::class,'profile_password_update'])->name('profile.password.update');
+
+Route::post('/click/to/verify', [AuthController::class, 'clickToVerify'])->name('click.to.verify');
 
 
 

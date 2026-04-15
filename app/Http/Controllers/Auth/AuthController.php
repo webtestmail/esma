@@ -18,6 +18,32 @@ use App\Models\Application;
 
 class AuthController extends Controller
 {
+
+
+    public function clickToVerify(Request $request)
+    {
+        if (!$request->email || !$request->phone) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Email and Phone are required.'
+            ], 422);
+        }
+
+        $exists = User::where('email', $request->email)
+                    ->orWhere('phone', $request->phone)
+                    ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This email or phone number is already registered.'
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Verification successful! You can now proceed.'
+        ]);
+    }
     public function edit_profile(){
         $headerData = $this->header();
         $footerData = $this->footer();
@@ -274,6 +300,9 @@ public function profile_update(Request $request)
 
     return redirect('/my-dashboard')->with('success', 'Profile updated successfully.');
 }
+
+
+
 
 // public function register(Request $request)
 // {

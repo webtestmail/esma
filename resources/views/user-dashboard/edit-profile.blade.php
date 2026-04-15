@@ -490,12 +490,12 @@
                                         <div id="appearance" class="accordion-collapse collapse"
                                             aria-labelledby="headingAppearance" data-bs-parent="#accordionProfile">
                                             <div class="accordion-body">
-                                                <form class="appearance-form">
+                                                <form id="appearanceForm" class="appearance-form">
                                                     <div class="row g-4">
                                                         <div class="col-lg-12 form-box">
                                                             <label for="">Company Logo</label>
                                                             <div class="image-upload form-control">
-                                                                <input type="file" accept="image/*" hidden>
+                                                                <input type="file" accept="image/*" name="company_logo" hidden>
                                                                 <div class="upload-placeholder">
                                                                     <button type="button" class="select-btn"> <svg
                                                                             class="svg-icon"
@@ -505,8 +505,8 @@
                                                                             </use>
                                                                         </svg> Select Photo</button>
                                                                 </div>
-                                                                <div class="image-preview">
-                                                                    <img src="" alt="preview">
+                                                                <div class="image-preview" @if($user->appearance && $user->appearance->company_logo) style="display: block;" @endif>
+                                                                    <img src="{{ $user->appearance->company_logo ? asset('storage/' . $user->appearance->company_logo) : '' }}" alt="preview" >
                                                                     <span class="file-name"></span>
                                                                     <div class="actions">
                                                                         <button type="button" class="edit-btn"><svg
@@ -533,7 +533,7 @@
                                                         <div class="col-lg-12 form-box">
                                                             <label for="">Cover Image</label>
                                                             <div class="image-upload form-control">
-                                                                <input type="file" accept="image/*" hidden>
+                                                                <input type="file" accept="image/*" name="cover_image" hidden>
                                                                 <div class="upload-placeholder">
                                                                     <button type="button" class="select-btn"> <svg
                                                                             class="svg-icon"
@@ -543,8 +543,8 @@
                                                                             </use>
                                                                         </svg> Select Photo</button>
                                                                 </div>
-                                                                <div class="image-preview">
-                                                                    <img src="" alt="preview">
+                                                                <div class="image-preview" @if($user->appearance && $user->appearance->company_cover_image) style="display: block;" @endif>
+                                                                    <img src="{{ $user->appearance->company_cover_image ? asset('storage/' . $user->appearance->company_cover_image) : '' }}" alt="preview">
                                                                     <span class="file-name"></span>
                                                                     <div class="actions">
                                                                         <button type="button" class="edit-btn"><svg
@@ -573,14 +573,14 @@
                                                             <div class="radio-group d-flex align-items-center gap-2">
                                                                 <label
                                                                     class="radio-box d-inline-flex align-items-center gap-1">
-                                                                    <input type="radio" name="promo_banner" value="yes">
+                                                                    <input type="radio" name="promo_banner" value="yes" {{ $user->appearance && $user->appearance->display_cover_image ==  true ? 'checked' : '' }}>
                                                                     <span class="custom-radio"></span>
                                                                     Yes
                                                                 </label>
 
                                                                 <label
                                                                     class="radio-box d-inline-flex align-items-center gap-1">
-                                                                    <input type="radio" name="promo_banner" value="no">
+                                                                    <input type="radio" name="promo_banner" value="no" {{ $user->appearance && $user->appearance->display_cover_image == false ? 'checked' : '' }}>
                                                                     <span class="custom-radio"></span>
                                                                     No
                                                                 </label>
@@ -590,7 +590,7 @@
                                                         <div class="col-lg-12 form-box">
                                                             <label for="">Promotional Banner</label>
                                                             <div class="image-upload form-control">
-                                                                <input type="file" accept="image/*" hidden>
+                                                                <input type="file" accept="image/*" name="promo_banner_image" hidden>
                                                                 <div class="upload-placeholder">
                                                                     <button type="button" class="select-btn"> <svg
                                                                             class="svg-icon"
@@ -600,8 +600,8 @@
                                                                             </use>
                                                                         </svg> Select Photo</button>
                                                                 </div>
-                                                                <div class="image-preview">
-                                                                    <img src="" alt="preview">
+                                                                <div class="image-preview" @if($user->appearance && $user->appearance->promotional_banner) style="display: block;" @endif>
+                                                                    <img src="{{ $user->appearance->promotional_banner ? asset('storage/' . $user->appearance->promotional_banner) : '' }}" alt="preview">
                                                                     <span class="file-name"></span>
                                                                     <div class="actions">
                                                                         <button type="button" class="edit-btn"><svg
@@ -629,7 +629,7 @@
                                                             <label for="">Promotional Banner (For mobile
                                                                 devices)</label>
                                                             <div class="image-upload form-control">
-                                                                <input type="file" accept="image/*" hidden>
+                                                                <input type="file" accept="image/*" name="promo_banner_image" hidden>
                                                                 <div class="upload-placeholder">
                                                                     <button type="button" class="select-btn"> <svg
                                                                             class="svg-icon"
@@ -639,8 +639,8 @@
                                                                             </use>
                                                                         </svg> Select Photo</button>
                                                                 </div>
-                                                                <div class="image-preview">
-                                                                    <img src="" alt="preview">
+                                                                <div class="image-preview" @if($user->appearance && $user->appearance->promotional_banner_mobile) style="display: block;" @endif>
+                                                                    <img src="{{ $user->appearance->promotional_banner_mobile ?? '' }}" alt="preview">
                                                                     <span class="file-name"></span>
                                                                     <div class="actions">
                                                                         <button type="button" class="edit-btn"><svg
@@ -667,7 +667,7 @@
                                                         <div class="col-lg-12 form-box">
                                                             <label for="">Link For Promotional Banner
                                                                 <span>*</span></label>
-                                                            <input type="text" placeholder="" class="form-control">
+                                                            <input type="text" placeholder="" name="promo_banner_link" value="{{ $user->appearance->promotional_banner_link ?? '' }}" class="form-control">
                                                         </div>
 
                                                         <div class="col-lg-12 text-end">
@@ -1253,6 +1253,64 @@ $('#company-contact-detail').on('submit', function(e) {
             }
         });
     });
+</script>
+<script>
+$(document).ready(function() {
+    $('#appearanceForm').validate({
+        rules: {
+            company_logo: { required: true, extension: "jpg|jpeg|png|gif" },
+            cover_image: { required: true, extension: "jpg|jpeg|png|gif" },
+            promo_banner: { required: true },
+            promo_banner_image: { 
+                extension: "jpg|jpeg|png|gif", 
+                required: function() {
+                    return $("input[name='promo_banner']:checked").val() === "yes";
+                } 
+            },
+            promo_banner_link: { 
+                url: true, // Recommended to validate the URL format
+                required: function() {
+                    return $("input[name='promo_banner']:checked").val() === "yes";
+                }
+            }
+        },
+        messages: {
+            company_logo: { required: "Company logo is required" },
+            cover_image: { required: "Cover image is required" },
+            promo_banner: { required: "Please select a promo banner option" }
+        },
+        submitHandler: function(form, event) {
+            event.preventDefault(); // Correctly prevent default form submission
+            
+            let formData = new FormData(form);
+
+            $.ajax({
+                url: '{{ route("member.appearance.store") }}',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $('.form-submit-btn').prop('disabled', true).text('Saving...');
+                },
+                success: function(res) {
+                    $('.form-submit-btn').prop('disabled', false).html('Save & Publish');
+                    if(res.success) {
+                        alertify.success(res.message || 'Appearance saved successfully!');
+                    }
+                },
+                error: function(err) {
+                    $('.form-submit-btn').prop('disabled', false).html('Save & Publish');
+                    console.error(err);
+                    alertify.error('An error occurred while saving.');
+                }
+            });
+        }
+    });
+});
 </script>
 @endpush
 @endsection

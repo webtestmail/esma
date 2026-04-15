@@ -123,4 +123,7 @@ class User extends Authenticatable
     public function pointOfContact(){
         return $this->hasMany(PointOfContact::class, 'user_id')->where('is_primary', 0);
     }
+    public function appearance(){
+        return $this->hasOne(Appearance::class, 'user_id');
+    }
 }

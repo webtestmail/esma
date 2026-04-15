@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\FormController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Middleware\AdminChangeStatusMiddleware;
 use App\Http\Middleware\AdminChangeVisibilityMiddleware;
 use App\Http\Middleware\AdminDeleteMiddleware;
@@ -224,7 +225,23 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth:admin', is_admin::cla
     Route::match(['get', 'post'], '/add_news', [NewsController::class, 'addnews'])->name('add.news');
     Route::match(['get', 'post'], '/editnews/{news}', [NewsController::class, 'editnews'])->name('edit.news');
 
+    Route::get('/manage_reports', [ReportController::class, 'managereports'])->name('managereports');
+    Route::get('/reports_data', [ReportController::class, 'reports_data'])->name('reports_data');
+    Route::match(['get', 'post'], '/add_report', [ReportController::class, 'addreport'])->name('add.report');
+    Route::match(['get', 'post'], '/editreport/{report}', [ReportController::class, 'editreport'])->name('edit.report');
+
+
+    Route::get('/manage_reports_category', [ReportController::class, 'managereportsCategory'])->name('managereportsCategory');
+    Route::get('/reports_category_data', [ReportController::class, 'reports_category_data'])->name('reports_category_data'); 
+    Route::match(['get', 'post'], '/add_reportsCategory', [ReportController::class, 'addreportsCategory'])->name('add.reportsCategory');
+    Route::match(['get', 'post'], '/editreportscategory/{category}', [ReportController::class, 'editreportscategory'])->name('edit.reportscategory');
+
       //Forms
     Route::get('/manage_subscriber', [FormController::class, 'manage_subscriber'])->name('manage_subscriber');
     Route::get('/newsletter-data', [FormController::class, 'newsletter_data'])->name('newsletter.data');
+
+    Route::get('/manage_contact_form', [FormController::class, 'manage_contact_form'])->name('manage_contact_form');
+    Route::get('/contactform-data', [FormController::class, 'contactform_data'])->name('contactform.data');
+    Route::get('/contactform-data/{id}', [FormController::class, 'contactform_detail'])->name('contactform_detail');
+    
 });

@@ -724,149 +724,26 @@
             </div>
             <div class="col-lg-9 more-member-slider-wrap">
                 <div class="more-member-slider">
+                    @foreach($otherMembers as $member)
                     <div class="col-lg-3 col-sm-6 col-6">
                         <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/A. Loacker SpaAG/Untitled-1.jpg"
+                            <div class="company-m-img"><img src="{{ $member->appearance ? asset('storage/' . $member->appearance->cover_image) : '' }}"
                                     alt="A. Loacker Spa/AG"></div>
-                            <div class="c-tag">Manufacturers</div>
+                            <div class="c-tag">{{ $member->company_type }}</div>
                             <div class="company-m-text">
                                 <div class="company-m-logo-both">
                                     <div class="company-m-logo">
-                                        <img src="images/c-brands__circles.png" alt="">
+                                        <img src="{{ $member->appearance ? asset('storage/' . $member->appearance->company_logo) : '' }}" alt="">
                                         <div class="company-m-country-logo"><img src="images/c-glyph-flags.png" alt="">
                                         </div>
                                     </div>
                                 </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
+                                <p>{{ $member->company_name }}</p>
+                                <span>{{ $member->appearance ? $member->appearance->slogan : '' }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/A.G. Barr p.l.c/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/A.G. Barr p.l.c/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img
-                                                src="images/A.G. Barr p.l.c/Untitled-3.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/Company Name/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/Company Name/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img
-                                                src="images/Company Name/Untitled-3.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/Consivo Group AB/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/Consivo Group AB/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img
-                                                src="images/Consivo Group AB/Untitled-3.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/Emco/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/Emco/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img src="images/Emco/Untitled-3.png"
-                                                alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/GRUPO HERDEZ/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/GRUPO HERDEZ/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img
-                                                src="images/GRUPO HERDEZ/Untitled-3.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/Gü/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/Gü/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img src="images/Gü/Untitled-3.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-6">
-                        <div class="member-company-boxes">
-                            <div class="company-m-img"><img src="images/Konings-Zuivel/Untitled-1.jpg" alt=""></div>
-                            <div class="c-tag">Manufacturers</div>
-                            <div class="company-m-text">
-                                <div class="company-m-logo-both">
-                                    <div class="company-m-logo">
-                                        <img src="images/Konings-Zuivel/Untitled-2.png" alt="">
-                                        <div class="company-m-country-logo"><img
-                                                src="images/Konings-Zuivel/Untitled-3.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>A. Loacker Spa/AG</p>
-                                <span>Pure goodness / Che bontà</span>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

@@ -16,11 +16,10 @@
                     <form  id="newsletterForm"  class="d-flex gap-2">
                         <input type="email" name="email" class="form-control" placeholder="Enter your email">
                          <span class="error text-danger small position-absolute" style="bottom: -25px; left: 0;"></span>
-                                <div class="spinner-border spinner-border-sm position-absolute loading" 
-                                     style="right: 10px; top: 50%; transform: translateY(-50%); display: none; width: 1rem; height: 1rem;">
-                                </div>
+                             
                         <button type="submit" class="btn">
-                            <i class="bi bi-megaphone"></i>  <span class="signup-text">Subscribe</span>
+                            <i class="bi bi-megaphone"></i>  <span class="subscribe-text">Subscribe</span>
+                            <span class="subscribing-text d-none">Subscribe...</span>
                                 <span class="success-text d-none">✓ Done!</span>
                         </button>
                     </form>

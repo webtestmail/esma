@@ -145,10 +145,19 @@
                          <li class="nxl-item">
                             <a class="nxl-link" href="{{ route('admin.managenews') }}">Manage News</a>
                         </li>
-                        
+
                         <li class="nxl-item">
-                            <a class="nxl-link" href="{{ route('admin.manage_services') }}">Manage Services</a>
+                            <a class="nxl-link" href="{{ route('admin.managereportsCategory') }}">Manage Reports Category</a>
                         </li>
+
+                        <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.managereports') }}">Manage Reports</a>
+                        </li>
+                        
+                      
+                        {{-- <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_services') }}">Manage Services</a>
+                        </li> --}}
                     </ul>
                 </li>
                 <li class="nxl-item nxl-hasmenu">
@@ -321,6 +330,10 @@
                     <ul class="nxl-submenu">
                         <li class="nxl-item">
                             <a class="nxl-link" href="{{ route('admin.manage_subscriber') }}">Manage Subscribers</a>
+                        </li>
+
+                         <li class="nxl-item">
+                            <a class="nxl-link" href="{{ route('admin.manage_contact_form') }}">Manage Contact Query</a>
                         </li>
                        
                     </ul>
